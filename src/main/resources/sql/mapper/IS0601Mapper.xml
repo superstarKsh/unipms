@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IS0601Mapper">
+    
+    <resultMap id="IS060101OVO" type="com.uni.unipms.model.Out.IS060101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="PRJT_STAGE"					property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"				property="sPRJT_STAGE_NM" />
+		<result column="TASK_ID"					property="sTASK_ID" />
+		<result column="TASK_NM"					property="sTASK_NM" />
+		<result column="ISSUE_ID"					property="sISSUE_ID" />
+		<result column="TITLE"						property="sTITLE" />
+		<result column="ISSUE_TYPE"					property="sISSUE_TYPE" />
+		<result column="ISSUE_TYPE_NM"				property="sISSUE_TYPE_NM" />
+		<result column="ISSUE_IMPT"					property="sISSUE_IMPT" />
+		<result column="ISSUE_IMPT_NM"				property="sISSUE_IMPT_NM" />
+		<result column="REG_USER_ID"				property="sREG_USER_ID" />
+		<result column="REG_USER_NM"				property="sREG_USER_NM" />
+		<result column="REG_DT"						property="sREG_DT" />
+		<result column="CHRG_USER_ID"				property="sCHRG_USER_ID" />
+		<result column="CHRG_USER_NM"				property="sCHRG_USER_NM" />
+		<result column="APPR_DT"					property="sAPPR_DT" />
+		<result column="COMPL_DT"					property="sCOMPL_DT" />
+		<result column="PROC_STAGE"					property="sPROC_STAGE" />
+		<result column="PROC_STAGE_NM"				property="sPROC_STAGE_NM" />
+		<result column="CONTENTS"					property="sCONTENTS" />
+		<result column="ISSUE_SOLTN"				property="sISSUE_SOLTN" />
+		<result column="CORRT_DESC"					property="sCORRT_DESC" />
+		<result column="FILE_NM"					property="sFILE_NM" />
+    </resultMap>
+    
+	<select id="IS060101" parameterType="com.uni.unipms.model.In.IS060101IVO" resultMap="IS060101OVO">
+		<![CDATA[
+			SELECT  IFNULL(A.DOMAIN_ID, B.DOMAIN_ID)                       DOMAIN_ID
+			      , IFNULL(A.PRJT_ID, B.PRJT_ID)                           PRJT_ID
+			      , IFNULL(CONCAT(MAX(SUBSTRING(A.ISSUE_ID, 1, LENGTH(A.ISSUE_ID) -4)), 
+                                  LPAD(MAX(SUBSTRING(A.ISSUE_ID, LENGTH(A.ISSUE_ID)-1, 4)) + 1, 4, '0'))  
+                         , CONCAT( 'IS' , '0001'))                         ISSUE_ID
+			FROM    PRJT_INFO B
+            		LEFT OUTER JOIN PRJT_ISSUE A
+			        ON      B.DOMAIN_ID     = A.DOMAIN_ID
+		          	AND     B.PRJT_ID       = A.PRJT_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID};
+		]]>
+	</select>
+	
+	<insert id="IS060102" parameterType="com.uni.unipms.model.In.IS060101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_ISSUE (
+					  DOMAIN_ID
+					, PRJT_ID
+					, PRJT_STAGE
+					, TASK_ID
+					, ISSUE_ID
+					, TITLE
+					, ISSUE_TYPE
+					, ISSUE_IMPT
+					, REG_USER_ID
+					, REG_DT
+					, CHRG_USER_ID
+					, APPR_DT
+					, COMPL_DT
+					, PROC_STAGE
+					, CONTENTS
+					, ISSUE_SOLTN
+					, CORRT_DESC
+					, FILE_NM )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sPRJT_STAGE}
+					, #{sTASK_ID}
+					, #{sISSUE_ID}
+					, #{sTITLE}
+					, #{sISSUE_TYPE}
+					, #{sISSUE_IMPT}
+					, #{sREG_USER_ID}
+					, REPLACE(#{sREG_DT}, '.', '')
+					, #{sCHRG_USER_ID}
+					, REPLACE(#{sAPPR_DT}, '.', '')
+					, REPLACE(#{sCOMPL_DT}, '.', '')
+					, #{sPROC_STAGE}
+					, #{sCONTENTS}
+					, #{sISSUE_SOLTN}
+					, #{sCORRT_DESC}
+					, #{sFILE_NM} );
+		]]>
+	</insert>
+	
+	<delete id="IS060103" parameterType="com.uni.unipms.model.In.IS060101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_ISSUE
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID}
+			AND    PRJT_STAGE    = #{sPRJT_STAGE}
+			AND    TASK_ID       = #{sTASK_ID}
+			AND    ISSUE_ID      = #{sISSUE_ID};
+		]]>
+	</delete>
+	
+	<select id="IS060104" parameterType="com.uni.unipms.model.In.IS060101IVO" resultMap="IS060101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PJST' 
+					 AND    CODE      = B.PRJT_STAGE)         PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , A.TASK_NM
+			      , B.ISSUE_ID
+			      , B.TITLE
+			      , B.ISSUE_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISTP' 
+					 AND    CODE      = B.ISSUE_TYPE)         ISSUE_TYPE_NM
+			      , B.ISSUE_IMPT
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISIM' 
+					 AND    CODE      = B.ISSUE_IMPT)         ISSUE_IMPT_NM
+			      , B.REG_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.REG_USER_ID)       REG_USER_NM
+			      , B.REG_DT
+			      , B.CHRG_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.CHRG_USER_ID)      CHRG_USER_NM
+			      , B.APPR_DT
+			      , B.COMPL_DT
+			      , B.PROC_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISST' 
+					 AND    CODE      = B.PROC_STAGE)         PROC_STAGE_NM
+			      , B.CONTENTS
+			      , B.ISSUE_SOLTN
+			      , B.CORRT_DESC
+			      , B.FILE_NM
+			FROM    PRJT_ISSUE B
+			        LEFT OUTER JOIN PRJT_TASK_INFO A
+			        ON   B.DOMAIN_ID = A.DOMAIN_ID
+			        AND  B.PRJT_ID   = A.PRJT_ID
+			        AND  B.TASK_ID   = A.TASK_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     B.PRJT_ID       = #{sPRJT_ID}
+			AND     B.PRJT_STAGE    = #{sPRJT_STAGE}
+			AND     B.TASK_ID       = #{sTASK_ID}
+			AND     B.ISSUE_ID      = #{sISSUE_ID}
+			GROUP 	BY B.TASK_ID;
+		]]>
+	</select>
+
+	<select id="IS060105" parameterType="com.uni.unipms.model.In.IS060101IVO" resultMap="IS060101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PJST' 
+					 AND    CODE      = B.PRJT_STAGE)         PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , A.TASK_NM
+			      , B.ISSUE_ID
+			      , B.TITLE
+			      , B.ISSUE_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISTP' 
+					 AND    CODE      = B.ISSUE_TYPE)         ISSUE_TYPE_NM
+			      , B.ISSUE_IMPT
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISIM' 
+					 AND    CODE      = B.ISSUE_IMPT)         ISSUE_IMPT_NM
+			      , B.REG_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.REG_USER_ID)       REG_USER_NM
+			      , B.REG_DT
+			      , B.CHRG_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.CHRG_USER_ID)      CHRG_USER_NM
+			      , B.APPR_DT
+			      , B.COMPL_DT
+			      , B.PROC_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISST' 
+					 AND    CODE      = B.PROC_STAGE)         PROC_STAGE_NM
+			      , B.CONTENTS
+			      , B.ISSUE_SOLTN
+			      , B.CORRT_DESC
+			      , B.FILE_NM
+			FROM    PRJT_ISSUE B
+			        LEFT OUTER JOIN PRJT_TASK_INFO A
+			        ON   B.DOMAIN_ID  = A.DOMAIN_ID
+			        AND  B.PRJT_ID    = A.PRJT_ID
+			        AND  B.PRJT_STAGE = A.PRJT_STAGE
+			        AND  B.TASK_ID    = A.TASK_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     B.PRJT_ID       = #{sPRJT_ID}
+			AND     B.PRJT_STAGE    LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+			AND     B.TASK_ID       LIKE CONCAT('%', #{sTASK_ID}, '%')
+			AND     B.ISSUE_ID      LIKE CONCAT('%', #{sISSUE_ID}, '%')
+			ORDER BY B.ISSUE_ID DESC, B.DOMAIN_ID, B.PRJT_ID, B.PRJT_STAGE, B.TASK_ID ASC;
+		]]>
+	</select>
+
+</mapper>

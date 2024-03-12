@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AD0401Mapper">
+
+    <resultMap id="AD040101OVO" type="com.uni.unipms.model.Out.AD040101OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_STAGE"				property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"			property="sPRJT_STAGE_NM" />
+		<result column="OUPUT_POOL_ID"			property="sOUPUT_POOL_ID" />
+		<result column="OUTPUT_NM"				property="sOUTPUT_NM" />
+		<result column="FILE_NM"				property="sFILE_NM" />
+		<result column="OUTPUT_DESC"			property="sOUTPUT_DESC" />
+    </resultMap>
+    
+    <select id="AD040102" parameterType="com.uni.unipms.model.In.AD040101IVO"  resultMap="AD040101OVO">
+        <![CDATA[
+			SELECT  IFNULL(B.DOMAIN_ID, #{sDOMAIN_ID})                DOMAIN_ID
+				  , IFNULL(B.PRJT_ID, #{sPRJT_ID})                    PRJT_ID
+				  , IFNULL(CONCAT('OP', #{sPRJT_STAGE}, LPAD(MAX(SUBSTRING(OUPUT_POOL_ID, 5, 4)) + 1, 4, '0')), CONCAT('OP', #{sPRJT_STAGE}, '0001'))   OUPUT_POOL_ID
+			FROM    PMS_RLT_COL A
+					LEFT OUTER JOIN OUTPUT_POOL B
+					ON    B.DOMAIN_ID  = #{sDOMAIN_ID}
+			        AND   B.PRJT_ID    = #{sPRJT_ID}
+			        AND   B.PRJT_STAGE = #{sPRJT_STAGE}
+			WHERE   A.NUM <= 1;
+         ]]>
+	</select>
+	
+	<select id="AD040111" parameterType="com.uni.unipms.model.In.AD040101IVO"  resultMap="AD040101OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PJST' 
+					 AND    CODE      = B.PRJT_STAGE)   PRJT_STAGE_NM
+			      , B.OUPUT_POOL_ID
+			      , B.OUTPUT_NM
+			      , B.FILE_NM
+			      , B.OUTPUT_DESC
+			FROM    OUTPUT_POOL B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     B.PRJT_ID       = #{sPRJT_ID}
+			AND     B.PRJT_STAGE    LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+			AND     B.OUPUT_POOL_ID LIKE CONCAT('%', #{sOUPUT_POOL_ID}, '%')
+			ORDER BY B.PRJT_ID, B.OUPUT_POOL_ID;
+         ]]>
+	</select>
+
+ 	<select id="AD040113" parameterType="com.uni.unipms.model.In.AD040101IVO"  resultMap="AD040101OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PJST' 
+					 AND    CODE      = B.PRJT_STAGE)   PRJT_STAGE_NM
+			      , B.OUPUT_POOL_ID
+			      , B.OUTPUT_NM
+			      , B.FILE_NM
+			      , B.OUTPUT_DESC
+			FROM    OUTPUT_POOL B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     B.PRJT_ID       = #{sPRJT_ID}
+			AND     B.PRJT_STAGE    = #{sPRJT_STAGE}
+			AND     B.OUPUT_POOL_ID = #{sOUPUT_POOL_ID};
+         ]]>
+	</select>
+
+    <insert id="AD040121" parameterType="com.uni.unipms.model.In.AD040101IVO">
+        <![CDATA[
+        	INSERT INTO OUTPUT_POOL (
+					DOMAIN_ID
+				  , PRJT_ID
+				  , PRJT_STAGE
+				  , OUPUT_POOL_ID
+				  , OUTPUT_NM
+				  , FILE_NM
+				  , OUTPUT_DESC )
+			VALUES ( 
+					#{sDOMAIN_ID}
+				  , #{sPRJT_ID}
+				  , #{sPRJT_STAGE}
+				  , #{sOUPUT_POOL_ID}
+				  , #{sOUTPUT_NM}
+				  , #{sFILE_NM}
+				  , #{sOUTPUT_DESC} );
+         ]]>
+	</insert>
+	
+    <delete id="AD040141" parameterType="com.uni.unipms.model.In.AD040101IVO">
+        <![CDATA[
+        	DELETE FROM OUTPUT_POOL
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID}
+			AND    PRJT_STAGE    = #{sPRJT_STAGE}
+			AND    OUPUT_POOL_ID = #{sOUPUT_POOL_ID};
+         ]]>
+	</delete>
+	
+	<delete id="AD040142" parameterType="com.uni.unipms.model.In.AD040102IVO">
+        <![CDATA[
+        	DELETE FROM OUTPUT_POOL
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID};
+         ]]>
+	</delete>
+
+</mapper>
+
+
+
+

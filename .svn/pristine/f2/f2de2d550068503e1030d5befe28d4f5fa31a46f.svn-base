@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CM0021Mapper">
+	
+    <insert id="CM002101" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[    
+        	INSERT INTO PMS_COMM_CD
+        	SELECT  #{sDOMAIN_ID}
+			   	  , #{sPRJT_ID}
+				  , A.CODE_TYPE
+				  , A.CODE
+				  , A.CODE_NAME
+				  , A.CODE_DESC
+				  , A.USE_YN
+				  , A.USE_ORDER
+				  , A.RPLC_CODE
+        	FROM    PMS_COMM_CD A
+        	WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = '00000000';
+         ]]>
+	</insert>
+	
+    <delete id="CM002102" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[
+        	DELETE FROM PMS_COMM_CD
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID};
+         ]]>
+	</delete>
+
+     <insert id="CM002111" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[    
+        	INSERT INTO PMS_MNG_STAGE
+        	SELECT  #{sDOMAIN_ID}
+				  , #{sPRJT_ID}
+				  , A.MNG_STAGE
+				  , A.MNG_STAGE_NM
+				  , A.MNG_STAGE_DESC
+				  , A.CMPL_DT
+				  , A.CMPL_YN
+        	FROM    PMS_MNG_STAGE A
+        	WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = '00000000';
+         ]]>
+	</insert>
+	
+	<delete id="CM002112" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[
+        	DELETE FROM PMS_MNG_STAGE
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID};
+         ]]>
+	</delete>
+
+     <insert id="CM002121" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[    
+        	INSERT INTO PMS_MNG_ACTIVITY
+        	SELECT  #{sDOMAIN_ID}
+				  , #{sPRJT_ID}
+				  , A.MNG_STAGE
+				  , A.ACTIVITY_ID
+				  , A.ACTIVITY_NM
+				  , A.ACTIVITY_BIT
+				  , A.ACTIVITY_DESC
+				  , A.CMPL_DT
+				  , A.CMPL_YN
+				  , A.DEF_FILE_NM
+				  , A.CMPL_FILE_VER
+				  , A.CMPL_FILE_NM
+        	FROM    PMS_MNG_ACTIVITY A
+        	WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = '00000000';
+         ]]>
+	</insert>
+	
+	<delete id="CM002122" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[
+        	DELETE FROM PMS_MNG_ACTIVITY
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID};
+         ]]>
+	</delete>
+
+    <insert id="CM002131" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[    
+        	INSERT INTO PMS_MNG_TASK
+        	SELECT  #{sDOMAIN_ID}
+				  , #{sPRJT_ID}
+				  , A.MNG_STAGE
+				  , A.ACTIVITY_ID
+				  , A.TASK_ID
+				  , A.TASK_NM
+				  , A.TASK_BIT
+				  , A.TASK_DESC
+				  , A.CMPL_DT
+				  , A.CMPL_YN
+				  , A.DEF_FILE_NM
+				  , A.CMPL_FILE_VER
+				  , A.CMPL_FILE_NM
+        	FROM    PMS_MNG_TASK A
+        	WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = '00000000';
+         ]]>
+	</insert>
+	
+	<delete id="CM002132" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[
+        	DELETE FROM PMS_MNG_TASK
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID};
+         ]]>
+	</delete>
+	
+	<delete id="CM002142" parameterType="com.uni.unipms.model.In.CM002101IVO">
+        <![CDATA[
+        	DELETE FROM PRJT_STAGE
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID};
+         ]]>
+	</delete>
+
+</mapper>

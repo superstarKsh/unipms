@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MG1101Mapper">
+
+    <resultMap id="MG110101OVO" type="com.uni.unipms.model.Out.MG110101OVO">
+		<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="MNG_STAGE"					property="sMNG_STAGE" />
+		<result column="MNG_STAGE_NM"				property="sMNG_STAGE_NM" />
+		<result column="MNG_STAGE_DESC"				property="sMNG_STAGE_DESC" />
+		<result column="CMPL_DT"					property="sCMPL_DT" />
+		<result column="CMPL_YN"					property="sCMPL_YN" />
+    </resultMap>
+
+    <resultMap id="MG110102OVO" type="com.uni.unipms.model.Out.MG110102OVO">
+		<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="MNG_STAGE"					property="sMNG_STAGE" />
+		<result column="ACTIVITY_ID"				property="sACTIVITY_ID" />
+		<result column="ACTIVITY_NM"				property="sACTIVITY_NM" />
+		<result column="ACTIVITY_BIT"				property="sACTIVITY_BIT" />
+		<result column="ACTIVITY_DESC"				property="sACTIVITY_DESC" />
+		<result column="CMPL_DT"					property="sCMPL_DT" />
+		<result column="CMPL_YN"					property="sCMPL_YN" />
+		<result column="DEF_FILE_NM"				property="sDEF_FILE_NM" />
+		<result column="CMPL_FILE_NM"				property="sCMPL_FILE_NM" />
+		<result column="CMPL_FILE_VER"				property="sCMPL_FILE_VER" />
+    </resultMap>
+ 
+	<select id="MG110102" parameterType="com.uni.unipms.model.In.MG110102IVO"  resultMap="MG110102OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , IFNULL(CONCAT( MAX(SUBSTRING(A.ACTIVITY_ID, 1, LENGTH(A.ACTIVITY_ID) - 4))
+			               , LPAD(MAX(SUBSTRING(A.ACTIVITY_ID, 2, LENGTH(A.ACTIVITY_ID) - 3)) + 1, 2, '0') ,'00') 
+				           , CONCAT(#{sMNG_STAGE}, '0100'))                                     ACTIVITY_ID
+			FROM    PRJT_INFO B
+				    LEFT OUTER JOIN PMS_MNG_ACTIVITY A
+				    ON      B.DOMAIN_ID   = A.DOMAIN_ID
+		            AND     B.PRJT_ID     = A.PRJT_ID  
+				    AND     A.MNG_STAGE   = #{sMNG_STAGE}
+			WHERE   B.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     B.PRJT_ID    = #{sPRJT_ID} ;
+		]]> 
+	</select>
+
+    <select id="MG110111" parameterType="com.uni.unipms.model.In.MG110101IVO" resultMap="MG110101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID             
+			      , PRJT_ID              
+			      , MNG_STAGE             
+			      , MNG_STAGE_NM          
+			      , MNG_STAGE_DESC        
+			      , CMPL_DT               
+			      , CMPL_YN                
+			FROM    PMS_MNG_STAGE
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = #{sPRJT_ID}
+			ORDER BY DOMAIN_ID, PRJT_ID, MNG_STAGE
+         ]]>
+	</select>
+ 
+    <select id="MG110112" parameterType="com.uni.unipms.model.In.MG110101IVO" resultMap="MG110102OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID             
+			      , PRJT_ID               
+			      , MNG_STAGE           
+			      , ACTIVITY_ID           
+			      , ACTIVITY_NM           
+			      , ACTIVITY_DESC         
+			      , CMPL_DT               
+			      , CMPL_YN     
+			      ,	DEF_FILE_NM
+				  , CMPL_FILE_NM   
+				  , CMPL_FILE_VER          
+			FROM    PMS_MNG_ACTIVITY
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = #{sPRJT_ID}
+			AND     MNG_STAGE    = #{sMNG_STAGE}
+			ORDER BY DOMAIN_ID, PRJT_ID, MNG_STAGE, ACTIVITY_ID
+         ]]>
+	</select>
+	
+    <insert id="MG110121" parameterType="com.uni.unipms.model.In.MG110102IVO">
+        <![CDATA[
+        	INSERT INTO PMS_MNG_ACTIVITY (
+				    DOMAIN_ID
+				  , PRJT_ID
+				  , MNG_STAGE
+				  , ACTIVITY_ID
+				  , ACTIVITY_NM
+				  , ACTIVITY_BIT
+				  , ACTIVITY_DESC
+				  , CMPL_DT
+				  , CMPL_YN
+				  , DEF_FILE_NM
+				  , CMPL_FILE_NM 
+				  , CMPL_FILE_VER)
+			VALUES ( 
+				    #{sDOMAIN_ID}
+				  , #{sPRJT_ID}
+				  , #{sMNG_STAGE}
+				  , #{sACTIVITY_ID}
+				  , #{sACTIVITY_NM}
+				  , #{sACTIVITY_BIT}
+				  , #{sACTIVITY_DESC}
+				  , #{sCMPL_DT}
+				  , #{sCMPL_YN}
+				  , #{sDEF_FILE_NM}
+				  , #{sCMPL_FILE_NM} 
+				  , #{sCMPL_FILE_VER} );
+         ]]>
+	</insert>
+	
+    <delete id="MG110141" parameterType="com.uni.unipms.model.In.MG110102IVO">
+        <![CDATA[
+        	DELETE FROM PMS_MNG_ACTIVITY
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID}
+			AND    MNG_STAGE     = #{sMNG_STAGE}
+			AND    ACTIVITY_ID   = #{sACTIVITY_ID};
+         ]]>
+	</delete>
+	
+    <delete id="MG110142" parameterType="com.uni.unipms.model.In.MG110103IVO">
+        <![CDATA[
+        	DELETE FROM PMS_MNG_ACTIVITY
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    PRJT_ID       = #{sPRJT_ID}
+			AND    MNG_STAGE     = #{sMNG_STAGE};
+         ]]>
+	</delete>
+	
+</mapper>

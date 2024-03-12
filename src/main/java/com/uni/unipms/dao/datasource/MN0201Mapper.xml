@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MN0201Mapper">
+
+    <resultMap id="MN020101OVO" type="com.uni.unipms.model.Out.MN020101OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_STAGE"				property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"			property="sPRJT_STAGE_NM" />
+		<result column="STRT_DT"				property="sSTRT_DT" />
+		<result column="END_DT"					property="sEND_DT" />
+		<result column="ETC_DISC"				property="sETC_DISC" />
+		<result column="CURR_STAGE"				property="sCURR_STAGE" />
+    </resultMap>
+
+    <resultMap id="MN020102OVO" type="com.uni.unipms.model.Out.MN020102OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"				property="sPRJT_ID"/>
+        <result column="TASK_LEVEL"				property="sTASK_LEVEL"/>
+        <result column="TASK_ID"				property="sTASK_ID"/>
+        <result column="SEQ"					property="sSEQ"/>
+        <result column="BEFORE_SEQ"				property="sBEFORE_SEQ"/>
+        <result column="UPPER_TASK_ID"			property="sUPPER_TASK_ID"/>
+        <result column="TASK_NM"				property="sTASK_NM"/>
+        <result column="TASK_DESC"				property="sTASK_DESC"/>
+        <result column="BEFORE_TASK_ID"			property="sBEFORE_TASK_ID"/>
+        <result column="STRT_DT"				property="sSTRT_DT"/>
+        <result column="END_DT"					property="sEND_DT"/>
+        <result column="PURPOSE_RT"				property="sPURPOSE_RT"/>
+        <result column="PROGRESS_RT"			property="sPROGRESS_RT"/>
+        <result column="USER_ID"				property="sUSER_ID"/>
+        <result column="OUTPUT_LIST"			property="sOUTPUT_LIST"/>
+        <result column="MEMO"					property="sMEMO"/>
+        <result column="FILE_NM"				property="sFILE_NM"/>
+    </resultMap>
+
+    <resultMap id="MN020103OVO" type="com.uni.unipms.model.Out.MN020103OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_STAGE"				property="sPRJT_STAGE" />
+		<result column="TASK_ID"				property="sTASK_ID" />
+		<result column="TASK_NM"				property="sTASK_NM" />
+		<result column="PRG_CNT"				property="sPRG_CNT" />
+		<result column="PRG_CMPL_CNT"			property="sPRG_CMPL_CNT" />
+		<result column="PRG_DLAY_CNT"			property="sPRG_DLAY_CNT" />
+		<result column="PRG_CURR_CNT"			property="sPRG_CURR_CNT" />
+		<result column="PRG_CMPL_PER"			property="sPRG_CMPL_PER" />
+    </resultMap>
+
+    <resultMap id="MN020104OVO"	type="com.uni.unipms.model.Out.MN020104OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_STAGE"				property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"			property="sPRJT_STAGE_NM" />
+		<result column="TASK_ID"				property="sTASK_ID" />
+		<result column="TASK_NM"				property="sTASK_NM" />
+		<result column="ISSUE_ID"				property="sISSUE_ID" />
+		<result column="TITLE"					property="sTITLE" />
+		<result column="ISSUE_TYPE"				property="sISSUE_TYPE" />
+		<result column="ISSUE_TYPE_NM"			property="sISSUE_TYPE_NM" />
+		<result column="ISSUE_IMPT"				property="sISSUE_IMPT" />
+		<result column="ISSUE_IMPT_NM"			property="sISSUE_IMPT_NM" />
+		<result column="REG_USER_ID"			property="sREG_USER_ID" />
+		<result column="REG_USER_NM"			property="sREG_USER_NM" />
+		<result column="REG_DT"					property="sREG_DT" />
+		<result column="CHRG_USER_ID"			property="sCHRG_USER_ID" />
+		<result column="CHRG_USER_NM"			property="sCHRG_USER_NM" />
+		<result column="APPR_DT"				property="sAPPR_DT" />
+		<result column="COMPL_DT"				property="sCOMPL_DT" />
+		<result column="PROC_STAGE"				property="sPROC_STAGE" />
+		<result column="PROC_STAGE_NM"			property="sPROC_STAGE_NM" />
+		<result column="CONTENTS"				property="sCONTENTS" />
+		<result column="ISSUE_SOLTN"			property="sISSUE_SOLTN" />
+		<result column="CORRT_DESC"				property="sCORRT_DESC" />
+		<result column="FILE_NM"				property="sFILE_NM" />
+    </resultMap>
+
+    <resultMap id="MN020105OVO" type="com.uni.unipms.model.Out.MN020105OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="SEQ_NO"					property="sSEQ_NO" />
+		<result column="TITLE"					property="sTITLE" />
+		<result column="CONTENTS"				property="sCONTENTS" />
+		<result column="FILE_NM"				property="sFILE_NM" />
+		<result column="REG_DT"					property="sREG_DT" />
+		<result column="REG_USER_ID"			property="sREG_USER_ID" />
+		<result column="REG_USER_NM"			property="sREG_USER_NM" />
+    </resultMap>
+
+    <select id="MN020111A" parameterType="com.uni.unipms.model.In.MN020101IVO" resultMap="MN020101OVO">
+        <![CDATA[
+			SELECT  IFNULL(A.DOMAIN_ID, B.DOMAIN_ID)        DOMAIN_ID
+			      , IFNULL(A.PRJT_ID, B.PRJT_ID)			PRJT_ID
+			      , IFNULL(A.PRJT_STAGE, B.CODE)			PRJT_STAGE
+			      , B.CODE_NAME								PRJT_STAGE_NM
+		          , A.STRT_DT                        		STRT_DT
+		          , A.END_DT                         		END_DT
+			      , A.ETC_DISC
+			      , (SELECT  CASE WHEN A.PRJT_STAGE = CURR_STAGE THEN '1' ELSE '0' END
+		             FROM    PRJT_INFO
+		             WHERE   DOMAIN_ID = B.DOMAIN_ID
+		             AND     PRJT_ID   = #{sPRJT_ID}
+		             AND     B.PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END) )    CURR_STAGE
+			FROM    PMS_COMM_CD B
+			        LEFT OUTER JOIN PRJT_STAGE A
+			        ON  B.DOMAIN_ID = A.DOMAIN_ID
+			        AND B.PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			        AND A.PRJT_ID   = #{sPRJT_ID}
+			        AND B.CODE      = A.PRJT_STAGE
+			WHERE   B.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     B.PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+			AND     B.CODE_TYPE  = 'PJST'
+			AND     B.CODE      != '0000'
+			AND     B.USE_YN     = 'Y'
+			ORDER BY B.USE_ORDER, B.CODE;
+         ]]>
+	</select>
+	
+	<select id="MN020111B" parameterType="com.uni.unipms.model.In.MN020101IVO" resultMap="MN020102OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , A.PRJT_ID
+			      , A.TASK_LEVEL
+			      , A.TASK_ID
+			      , A.SEQ
+			      , A.BEFORE_SEQ
+			      , A.UPPER_TASK_ID
+			      , A.TASK_NM
+			      , A.TASK_DESC
+			      , A.BEFORE_TASK_ID
+			      , A.STRT_DT
+			      , A.END_DT
+			      , A.PURPOSE_RT
+			      , A.PROGRESS_RT
+			      , A.USER_ID
+			      , A.OUTPUT_LIST
+			      , A.MEMO
+			      , A.FILE_NM
+			FROM    PRJT_MNG_INFO A
+			      , (SELECT  TASK_ID
+			               , STRT_DT
+			               , END_DT
+			               , PROGRESS_RT
+			         FROM    PRJT_MNG_INFO
+			         WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			         AND     PRJT_ID    = #{sPRJT_ID}
+			         AND     TASK_LEVEL = 2) B
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			AND     SUBSTRING(A.TASK_ID, 1, 2) = B.TASK_ID
+			AND     ( A.TASK_LEVEL = 2
+				      OR (A.TASK_LEVEL > 2 AND B.END_DT < DATE_FORMAT(NOW(), '%Y%m%d') AND B.PROGRESS_RT < 100) )
+			ORDER BY A.TASK_ID;
+         ]]>
+	</select>	
+
+	<select id="MN020111C" parameterType="com.uni.unipms.model.In.MN020101IVO" resultMap="MN020103OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , B.TASK_ID
+			      , B.TASK_NM
+			      , B.PRG_CNT
+			      , B.PRG_CMPL_CNT
+			      , B.PRG_DLAY_CNT
+			      , B.PRG_CURR_CNT
+			      , CONCAT((CASE WHEN B.PRG_CNT = 0 THEN 0 ELSE 
+			                  ROUND((B.PRG_CMPL_CNT / B.PRG_CNT) * 100, 0)
+			        END) , ' %')                                                          PRG_CMPL_PER
+			FROM    ( SELECT  B.DOMAIN_ID
+					        , B.PRJT_ID
+					        , B.PRJT_STAGE
+					        , '전체'          TASK_ID
+					        , ''            TASK_NM
+					        , ''            TASK_DESC
+					        , COUNT(A.PRG_ID)                                                                                     PRG_CNT
+					        , SUM(CASE WHEN LENGTH(A.PRJ_DEV_END_DT) > 0 THEN 1 ELSE 0 END)                                       PRG_CMPL_CNT
+					        , SUM(CASE WHEN SUBSTRING(NOW() + '0', 1, 8) > A.PRJ_DEV_END_DT AND LENGTH(A.PRJ_DEV_END_DT) = 0 THEN 1 ELSE 0 END)     PRG_DLAY_CNT
+					        , SUM(CASE WHEN SUBSTRING(NOW() + '0', 1, 8) BETWEEN A.PRJ_DEV_STRT_DT AND (CASE WHEN A.PRJ_DEV_END_DT = '' THEN '99999999' ELSE A.PRJ_DEV_END_DT END) THEN 1 ELSE 0 END)          PRG_CURR_CNT
+					  FROM    ( SELECT  B.DOMAIN_ID
+					                  , B.PRJT_ID
+					                  , B.PRJT_STAGE
+					                  , B.TASK_ID
+					                  , B.TASK_NM
+					                  , B.TASK_DESC
+					            FROM    PRJT_TASK_INFO B
+					                  , PMS_COMM_CD A
+					           WHERE   A.DOMAIN_ID   = #{sDOMAIN_ID}
+								AND     A.PRJT_ID     = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+								AND     B.PRJT_ID     = #{sPRJT_ID}
+								AND     A.DOMAIN_ID   = B.DOMAIN_ID
+					            AND     A.CODE_TYPE   = 'PJST'
+					            AND     A.CODE        = B.PRJT_STAGE
+					            AND     A.RPLC_CODE   = '03' ) B
+					          LEFT OUTER JOIN PRJT_DEV_SCHL A
+					          ON  B.DOMAIN_ID = #{sDOMAIN_ID}
+							  AND B.PRJT_ID   = #{sPRJT_ID}
+					          AND B.DOMAIN_ID = A.DOMAIN_ID
+					          AND B.PRJT_ID   = A.PRJT_ID
+					          AND B.TASK_ID   = A.TASK_ID
+					  GROUP BY B.DOMAIN_ID
+					        , B.PRJT_ID
+					        , B.PRJT_STAGE ) B;
+         ]]>
+	</select>
+	
+	<select id="MN020111D" parameterType="com.uni.unipms.model.In.MN020101IVO" resultMap="MN020103OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , B.TASK_ID
+			      , B.TASK_NM
+			      , B.PRG_CNT
+			      , B.PRG_CMPL_CNT
+			      , B.PRG_DLAY_CNT
+			      , B.PRG_CURR_CNT
+			      , (CASE WHEN B.PRG_CNT = 0 THEN 0 ELSE 
+			                  ROUND((B.PRG_CMPL_CNT / B.PRG_CNT) * 100, 0)
+			         END) + ' %'                                                          PRG_CMPL_PER
+			FROM    ( SELECT  B.DOMAIN_ID
+					        , B.PRJT_ID
+					        , B.PRJT_STAGE
+					        , B.TASK_ID
+					        , B.TASK_NM
+					        , B.TASK_DESC
+					        , COUNT(A.PRG_ID)                                                                                     PRG_CNT
+					        , SUM(CASE WHEN LENGTH(A.PRJ_DEV_END_DT) > 0 THEN 1 ELSE 0 END)                                       PRG_CMPL_CNT
+					        , SUM(CASE WHEN SUBSTRING(NOW() + '0', 1, 8) > A.PRJ_DEV_END_DT AND LENGTH(A.PRJ_DEV_END_DT) = 0 THEN 1 ELSE 0 END)     PRG_DLAY_CNT
+					        , SUM(CASE WHEN SUBSTRING(NOW() + '0', 1, 8) BETWEEN A.PRJ_DEV_STRT_DT AND (CASE WHEN A.PRJ_DEV_END_DT = '' THEN '99999999' ELSE A.PRJ_DEV_END_DT END) THEN 1 ELSE 0 END)          PRG_CURR_CNT
+					  FROM    ( SELECT  B.DOMAIN_ID
+					                  , B.PRJT_ID
+					                  , B.PRJT_STAGE
+					                  , B.TASK_ID
+					                  , B.TASK_NM
+					                  , B.TASK_DESC
+					            FROM    PRJT_TASK_INFO B
+					                  , PMS_COMM_CD A
+					            WHERE   A.DOMAIN_ID   = #{sDOMAIN_ID}
+								AND     A.DOMAIN_ID   = B.DOMAIN_ID
+					            AND     A.PRJT_ID     = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					            AND     B.PRJT_ID     = #{sPRJT_ID}
+					            AND     A.CODE_TYPE   = 'PJST'
+					            AND     A.CODE        = B.PRJT_STAGE
+					            AND     A.RPLC_CODE   = '03' ) B
+					          LEFT OUTER JOIN PRJT_DEV_SCHL A
+					          ON  B.DOMAIN_ID = #{sDOMAIN_ID}
+							  AND B.PRJT_ID   = #{sPRJT_ID}
+					          AND B.DOMAIN_ID = A.DOMAIN_ID				          
+					          AND B.TASK_ID   = A.TASK_ID
+					  GROUP BY B.DOMAIN_ID
+					        , B.PRJT_ID
+					        , B.PRJT_STAGE
+					        , B.TASK_ID
+					        , B.TASK_NM
+					        , B.TASK_DESC ) B;
+         ]]>
+	</select>
+	
+	<select id="MN020111E" parameterType="com.uni.unipms.model.In.MN020101IVO" resultMap="MN020104OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PJST' 
+					 AND    CODE      = B.PRJT_STAGE)         PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , A.TASK_NM
+			      , B.ISSUE_ID
+			      , B.TITLE
+			      , B.ISSUE_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISTP' 
+					 AND    CODE      = B.ISSUE_TYPE)         ISSUE_TYPE_NM
+			      , B.ISSUE_IMPT
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISIM' 
+					 AND    CODE      = B.ISSUE_IMPT)         ISSUE_IMPT_NM
+			      , B.REG_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.REG_USER_ID)       REG_USER_NM
+			      , B.REG_DT
+			      , B.CHRG_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.CHRG_USER_ID)      CHRG_USER_NM
+			      , B.APPR_DT
+			      , B.COMPL_DT
+			      , B.PROC_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'ISST' 
+					 AND    CODE      = B.PROC_STAGE)         PROC_STAGE_NM
+			      , B.CONTENTS
+			      , B.ISSUE_SOLTN
+			      , B.CORRT_DESC
+			      , B.FILE_NM
+			FROM    PRJT_ISSUE B
+			        LEFT OUTER JOIN PRJT_TASK_INFO A
+			        ON   B.DOMAIN_ID  = A.DOMAIN_ID
+			        AND  B.PRJT_ID    = A.PRJT_ID
+			        AND  B.PRJT_STAGE = A.PRJT_STAGE
+			        AND  B.TASK_ID    = A.TASK_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     B.PRJT_ID       = #{sPRJT_ID}
+			AND     B.COMPL_DT      = ''
+			ORDER BY B.ISSUE_ID DESC, B.DOMAIN_ID, B.PRJT_ID, B.PRJT_STAGE, B.TASK_ID ASC;
+         ]]>
+	</select>
+	
+	<select id="MN020111F" parameterType="com.uni.unipms.model.In.MN020101IVO" resultMap="MN020105OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.SEQ_NO
+			      , B.TITLE
+			      , B.CONTENTS
+			      , B.FILE_NM
+			      , B.REG_DT
+			      , B.REG_USER_ID
+			      , A.USER_NM      REG_USER_NM
+			FROM    PRJT_NOTICE B
+			        LEFT OUTER JOIN MEM_INFO A
+					ON B.REG_USER_ID = A.USER_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    ORDER BY B.SEQ_NO DESC, B.DOMAIN_ID, B.PRJT_ID ASC;
+         ]]>
+	</select>
+
+</mapper>

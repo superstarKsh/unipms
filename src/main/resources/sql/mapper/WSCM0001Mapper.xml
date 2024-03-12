@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WSCM0001Mapper">
+	
+    <resultMap id="CM000101OVO" type="com.uni.unipms.model.Out.CM000101OVO">
+        <result column="USER_ID"			property="sUSER_ID"/>
+        <result column="USER_NM"			property="sUSER_NM"/>
+        <result column="USER_NO"			property="sUSER_NO"/>
+        <result column="USER_PSTN"			property="sUSER_PSTN"/>
+        <result column="CURR_PRJT_ID"		property="sCURR_PRJT_ID"/>
+        <result column="PMS_AUTH"			property="sPMS_AUTH"/>
+        <result column="PRJT_ID"			property="sPRJT_ID"/>
+        <result column="PRJT_NM"			property="sPRJT_NM"/>
+        <result column="CURR_STAGE"			property="sCURR_STAGE"/>
+        <result column="PRJT_TYPE"			property="sPRJT_TYPE"/>
+        <result column="DEV_STAGE"			property="sDEV_STAGE"/>
+        <result column="TEST_STAGE"			property="sTEST_STAGE"/>
+    </resultMap>
+    
+    
+    <select id="CM000101" parameterType="com.uni.unipms.model.In.CM000101IVO"  resultMap="CM000101OVO">
+        <![CDATA[
+			SELECT  A.USER_ID
+				  , A.USER_NM
+				  , A.USER_NO
+				  , A.CURR_PRJT_ID
+			      , A.PMS_AUTH
+			      , B.PRJT_ID
+			      , B.PRJT_NM
+				  , B.CURR_STAGE
+				  , B.PRJT_TYPE
+				  , (SELECT CODE FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    RPLC_CODE = '03')   DEV_STAGE
+          		  , (SELECT CODE FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    RPLC_CODE = '04')   TEST_STAGE
+			FROM    MEM_INFO A
+					LEFT OUTER JOIN PRJT_INFO B 
+			        ON   B.PRJT_ID = A.CURR_PRJT_ID
+			WHERE   A.USER_NO    = #{sUSER_NO}
+         ]]>
+	</select>
+    
+</mapper>
+

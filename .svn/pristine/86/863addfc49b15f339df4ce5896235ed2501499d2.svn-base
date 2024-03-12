@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MN0101Mapper">
+
+    <resultMap id="MN010101OVO" type="com.uni.unipms.model.Out.MN010101OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_NM"				property="sPRJT_NM" />
+		<result column="CURR_STAGE"				property="sCURR_STAGE" />
+		<result column="CURR_STAGE_NM"			property="sCURR_STAGE_NM" />
+		<result column="BIZ_QUARTER"			property="sBIZ_QUARTER" />
+		<result column="BIZ_QUARTER_NM"			property="sBIZ_QUARTER_NM" />
+		<result column="CUS_CD"					property="sCUS_CD" />
+		<result column="CUS_NM"					property="sCUS_NM" />
+		<result column="MAIN_BIZ_PART_CD"		property="sMAIN_BIZ_PART_CD" />
+		<result column="MAIN_BIZ_PART_NM"		property="sMAIN_BIZ_PART_NM" />
+		<result column="PRJT_STRT_DT"			property="sPRJT_STRT_DT" />
+		<result column="PRJT_END_DT"			property="sPRJT_END_DT" />
+		<result column="PRJT_MANG_ID"			property="sPRJT_MANG_ID" />
+		<result column="PRJT_MANG_NM"			property="sPRJT_MANG_NM" />
+		<result column="MAN_MONTH"				property="sMAN_MONTH" />
+		<result column="PRJT_TYPE"				property="sPRJT_TYPE" />
+        <result column="DEV_STAGE"				property="sDEV_STAGE"/>
+        <result column="TEST_STAGE"				property="sTEST_STAGE"/>
+        <result column="PROGRESS_RT"			property="sPROGRESS_RT"/>
+        <result column="DELAY_YN"				property="sDELAY_YN"/>
+    </resultMap>
+    
+    <resultMap id="MN010102OVO" type="com.uni.unipms.model.Out.MN010102OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID" />            
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="STRT_DT"				property="sSTRT_DT" />
+		<result column="END_DT"					property="sEND_DT" />
+		<result column="PRJT_YEAR"				property="sPRJT_YEAR" />
+		<result column="PRJT_WEEK"				property="sPRJT_WEEK" />
+		<result column="WEEK_ORDER"				property="sWEEK_ORDER" />
+		<result column="PRJT_NM"				property="sPRJT_NM" />
+		<result column="PRJT_STAGE"				property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"			property="sPRJT_STAGE_NM" />
+		<result column="PRJT_MANG_ID"			property="sPRJT_MANG_ID" />
+		<result column="PRJT_MANG_NM"			property="sPRJT_MANG_NM" />
+		<result column="FILE_NM"				property="sFILE_NM" />
+		<result column="DEV_STAGE"				property="sDEV_STAGE"/>
+        <result column="TEST_STAGE"				property="sTEST_STAGE"/>
+    </resultMap>
+    
+    <resultMap id="MN010103OVO" type="com.uni.unipms.model.Out.MN010103OVO">
+    	<result column="WEEK_ORDER"				property="sWEEK_ORDER" />
+		<result column="YEAR_WEEK"				property="sYEAR_WEEK" />
+		<result column="WEEK_STRT_DT"			property="sWEEK_STRT_DT" />
+		<result column="WEEK_END_DT"			property="sWEEK_END_DT" />
+		<result column="CURR_YEAR"				property="sCURR_YEAR" />
+    </resultMap>
+    
+    <resultMap id="MN010104OVO" type="com.uni.unipms.model.Out.MN010104OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_NM"				property="sPRJT_NM" />
+		<result column="PRJT_STAGE"				property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"			property="sPRJT_STAGE_NM" />
+		<result column="TASK_ID"				property="sTASK_ID" />
+		<result column="TASK_NM"				property="sTASK_NM" />
+		<result column="ISSUE_ID"				property="sISSUE_ID" />
+		<result column="TITLE"					property="sTITLE" />
+		<result column="ISSUE_TYPE"				property="sISSUE_TYPE" />
+		<result column="ISSUE_TYPE_NM"			property="sISSUE_TYPE_NM" />
+		<result column="ISSUE_IMPT"				property="sISSUE_IMPT" />
+		<result column="ISSUE_IMPT_NM"			property="sISSUE_IMPT_NM" />
+		<result column="REG_USER_ID"			property="sREG_USER_ID" />
+		<result column="REG_USER_NM"			property="sREG_USER_NM" />
+		<result column="REG_DT"					property="sREG_DT" />
+		<result column="CHRG_USER_ID"			property="sCHRG_USER_ID" />
+		<result column="CHRG_USER_NM"			property="sCHRG_USER_NM" />
+		<result column="APPR_DT"				property="sAPPR_DT" />
+		<result column="COMPL_DT"				property="sCOMPL_DT" />
+		<result column="PROC_STAGE"				property="sPROC_STAGE" />
+		<result column="PROC_STAGE_NM"			property="sPROC_STAGE_NM" />
+		<result column="CONTENTS"				property="sCONTENTS" />
+		<result column="ISSUE_SOLTN"			property="sISSUE_SOLTN" />
+		<result column="CORRT_DESC"				property="sCORRT_DESC" />
+		<result column="FILE_NM"				property="sFILE_NM" />
+		<result column="CURR_STAGE"				property="sCURR_STAGE"/>
+		<result column="DEV_STAGE"				property="sDEV_STAGE"/>
+        <result column="TEST_STAGE"				property="sTEST_STAGE"/>
+    </resultMap>
+
+	<select id="MN010111A" parameterType="com.uni.unipms.model.In.MN010101IVO" resultMap="MN010101OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_NM
+			      , B.CURR_STAGE
+			      , B.CURR_STAGE_NM
+			      , B.BIZ_QUARTER
+			      , BIZ_QUARTER_NM
+			      , B.CUS_CD
+			      , B.CUS_NM
+				  , B.MAIN_BIZ_PART_CD
+				  , B.MAIN_BIZ_PART_NM
+			      , B.PRJT_STRT_DT
+			      , B.PRJT_END_DT
+			      , B.PRJT_MANG_ID
+			      , B.PRJT_MANG_NM
+			      , B.MAN_MONTH
+			      , B.PRJT_TYPE
+			      , B.DEV_STAGE
+				  , B.TEST_STAGE
+				  , CONCAT(B.PROGRESS_RT, ' / ', B.PURPOSE_RT)                         PROGRESS_RT
+				  , (CASE WHEN B.PROGRESS_RT < B.PURPOSE_RT THEN 'Y' ELSE 'N' END)     DELAY_YN
+			FROM  ( SELECT  B.DOMAIN_ID
+			              , B.PRJT_ID
+			              , B.PRJT_NM
+			              , B.CURR_STAGE
+			              , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                 AND    CODE_TYPE = 'PJST' 
+			                 AND    CODE      = B.CURR_STAGE)            CURR_STAGE_NM
+			              , B.BIZ_QUARTER
+			              , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                 WHERE  DOMAIN_ID = B.DOMAIN_ID
+			                 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                 AND    CODE_TYPE = 'BZQT' 
+			                 AND    CODE      = B.BIZ_QUARTER)           BIZ_QUARTER_NM
+			              , B.CUS_CD
+			              , IFNULL((SELECT A.COOP_NM 
+			                        FROM   COOP_INFO A 
+			                        WHERE  A.DOMAIN_ID = B.DOMAIN_ID 
+			                        AND    A.COOP_ID   = B.CUS_CD), '')  CUS_NM
+			              , MAIN_BIZ_PART_CD
+			              , IFNULL((SELECT A.COOP_NM 
+			                        FROM   COOP_INFO A 
+			                        WHERE  A.DOMAIN_ID = B.DOMAIN_ID 
+			                        AND    A.COOP_ID   = B.MAIN_BIZ_PART_CD), '')  MAIN_BIZ_PART_NM
+			              , B.PRJT_STRT_DT
+			              , B.PRJT_END_DT
+			              , B.PRJT_MANG_ID
+			              , IFNULL((SELECT A.USER_NM
+			                        FROM   MEM_INFO A
+			                        WHERE  A.DOMAIN_ID  = B.DOMAIN_ID
+			                        AND    A.USER_ID    = B.PRJT_MANG_ID), '')     PRJT_MANG_NM
+			              , B.MAN_MONTH
+			              , B.PRJT_TYPE
+			              , (SELECT CODE FROM PMS_COMM_CD 
+			                 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                 AND    CODE_TYPE = 'PJST' 
+			                 AND    RPLC_CODE = '03')                              DEV_STAGE
+			              , (SELECT CODE FROM PMS_COMM_CD 
+			                 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                 AND    CODE_TYPE = 'PJST' 
+			                 AND    RPLC_CODE = '04')                              TEST_STAGE
+			              , (SELECT ROUND(AVG(PROGRESS_RT), 2) FROM PRJT_MNG_INFO 
+			                        WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			                        AND    PRJT_ID    = B.PRJT_ID 
+			                        AND    TASK_LEVEL = 2)                                          PROGRESS_RT 
+			              , (SELECT ROUND(AVG(PURPOSE_RT), 2) FROM PRJT_MNG_INFO 
+			                 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			                 AND    PRJT_ID    = B.PRJT_ID 
+			                 AND    TASK_LEVEL = 2)                                                 PURPOSE_RT
+			              , 'N'                                                                     DELAY_YN
+			        FROM    PRJT_INFO B
+			        WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			        AND     B.PRJT_NM       LIKE CONCAT('%', #{sPRJT_NM}, '%')
+			        AND     B.PRJT_END_DT   >= #{sCURR_DT}
+			        AND     B.PRJT_ID       IN (SELECT  A.PRJT_ID
+			                                    FROM    PRJT_MEM B
+			                                          , PRJT_INFO A
+			                                    WHERE   B.PRJT_ID     = A.PRJT_ID
+			                                    AND     B.USER_ID     = #{sUSER_ID}
+			                                    AND     A.PRJT_END_DT >= #{sCURR_DT})) B
+			UNION ALL
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_NM
+			      , B.CURR_STAGE
+			      , B.CURR_STAGE_NM
+			      , B.BIZ_QUARTER
+			      , BIZ_QUARTER_NM
+			      , B.CUS_CD
+			      , B.CUS_NM
+				  , B.MAIN_BIZ_PART_CD
+				  , B.MAIN_BIZ_PART_NM
+			      , B.PRJT_STRT_DT
+			      , B.PRJT_END_DT
+			      , B.PRJT_MANG_ID
+			      , B.PRJT_MANG_NM
+			      , B.MAN_MONTH
+			      , B.PRJT_TYPE
+			      , B.DEV_STAGE
+				  , B.TEST_STAGE
+				  , CONCAT(B.PROGRESS_RT, ' / ', B.PURPOSE_RT)                         PROGRESS_RT
+				  , (CASE WHEN B.PROGRESS_RT < B.PURPOSE_RT THEN 'Y' ELSE 'N' END)     DELAY_YN
+			FROM    (SELECT  B.DOMAIN_ID
+			               , B.PRJT_ID
+			               , B.PRJT_NM
+			               , B.CURR_STAGE
+			               , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                  AND    CODE_TYPE = 'PJST' 
+			                  AND    CODE      = B.CURR_STAGE)            CURR_STAGE_NM
+			               , B.BIZ_QUARTER
+			               , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                  AND    CODE_TYPE = 'BZQT' 
+			                  AND    CODE      = B.BIZ_QUARTER)           BIZ_QUARTER_NM
+			               , B.CUS_CD
+			               , IFNULL((SELECT A.COOP_NM 
+			                         FROM   COOP_INFO A 
+			                         WHERE  A.DOMAIN_ID = B.DOMAIN_ID 
+			                         AND    A.COOP_ID   = B.CUS_CD), '')  CUS_NM
+			               , MAIN_BIZ_PART_CD
+			               , IFNULL((SELECT A.COOP_NM 
+			               	      FROM   COOP_INFO A 
+			               	      WHERE  A.DOMAIN_ID = B.DOMAIN_ID 
+			               	      AND    A.COOP_ID   = B.MAIN_BIZ_PART_CD), '')  MAIN_BIZ_PART_NM
+			               , B.PRJT_STRT_DT
+			               , B.PRJT_END_DT
+			               , B.PRJT_MANG_ID
+			               , IFNULL((SELECT A.USER_NM
+			                         FROM   MEM_INFO A
+			                         WHERE  A.DOMAIN_ID  = B.DOMAIN_ID
+			                         AND    A.USER_ID    = B.PRJT_MANG_ID), '')     PRJT_MANG_NM
+			               , B.MAN_MONTH
+			               , B.PRJT_TYPE
+			               , (SELECT CODE FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                  AND    CODE_TYPE = 'PJST' 
+			                  AND    RPLC_CODE = '03')                              DEV_STAGE
+			               , (SELECT CODE FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                  AND    CODE_TYPE = 'PJST' 
+			                  AND    RPLC_CODE = '04')                              TEST_STAGE
+			               , (SELECT ROUND(AVG(PROGRESS_RT), 2) FROM PRJT_MNG_INFO 
+			                  WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			                  AND    PRJT_ID    = B.PRJT_ID 
+			                  AND    TASK_LEVEL = 2)                                               PROGRESS_RT 
+			               , (SELECT ROUND(AVG(PURPOSE_RT), 2) FROM PRJT_MNG_INFO 
+			                  WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			                  AND    PRJT_ID    = B.PRJT_ID 
+			                  AND    TASK_LEVEL = 2)                                               PURPOSE_RT
+			               , ''                                                                    DELAY_YN
+			               FROM    PRJT_INFO B
+			               WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			               AND     B.PRJT_END_DT   >= #{sCURR_DT}
+			               AND     B.PRJT_NM       LIKE CONCAT('%', #{sPRJT_NM}, '%')
+			               AND     B.PRJT_ID       NOT IN (SELECT  A.PRJT_ID
+			                                               FROM    PRJT_MEM B
+			                                                     , PRJT_INFO A
+			                                               WHERE   B.PRJT_ID     = A.PRJT_ID
+			                                               AND     B.USER_ID     = #{sUSER_ID}
+			                                               AND     A.PRJT_END_DT >= #{sCURR_DT})
+			               ORDER BY B.PRJT_END_DT DESC, B.PRJT_NM ASC ) B;
+         ]]>
+	</select>
+
+	<select id="MN010111B" parameterType="com.uni.unipms.model.In.MN010101IVO" resultMap="MN010102OVO">
+        <![CDATA[
+			SELECT B.DOMAIN_ID
+			     , B.PRJT_ID
+			     , IFNULL(A.STRT_DT, '')          STRT_DT
+			     , IFNULL(A.END_DT, '')           END_DT
+			     , ''                             PRJT_YEAR
+			     , ''                             PRJT_WEEK
+			     , ''                             WEEK_ORDER
+			     , IFNULL(A.FILE_NM, '')          FILE_NM
+			     , B.PRJT_NM
+			     , B.CURR_STAGE                   PRJT_STAGE
+			     , IFNULL((SELECT CODE_NAME
+			               FROM   PMS_COMM_CD
+			               WHERE  DOMAIN_ID = B.DOMAIN_ID
+			               AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			               AND    CODE_TYPE = 'PJST'
+			               AND    CODE      = B.CURR_STAGE), '')                  PRJT_STAGE_NM
+			     , B.PRJT_MANG_ID
+			     , IFNULL((SELECT  USER_NM
+			               FROM    MEM_INFO
+			               WHERE   USER_ID = B.PRJT_MANG_ID), '')                 PRJT_MANG_NM
+			     , IFNULL((SELECT CODE FROM PMS_COMM_CD
+			               WHERE  DOMAIN_ID = B.DOMAIN_ID
+			               AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			               AND    CODE_TYPE = 'PJST'
+			               AND    RPLC_CODE = '03'), '')                          DEV_STAGE
+			     , IFNULL((SELECT CODE FROM PMS_COMM_CD
+			               WHERE  DOMAIN_ID = B.DOMAIN_ID
+			               AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			               AND    CODE_TYPE = 'PJST'
+			               AND    RPLC_CODE = '04'), '')                          TEST_STAGE
+			FROM    PRJT_INFO B
+			        LEFT OUTER JOIN PRJT_RPRT A
+			        ON     B.DOMAIN_ID    = A.DOMAIN_ID
+			        AND    B.PRJT_ID      = A.PRJT_ID
+			        AND    #{sCURR_DT}    BETWEEN A.STRT_DT AND A.END_DT
+			WHERE   B.PRJT_ID    IN (SELECT  A.PRJT_ID
+			                         FROM    PRJT_MEM B
+			                               , PRJT_INFO A
+			                         WHERE   B.PRJT_ID      = A.PRJT_ID
+			                         AND     B.USER_ID      = #{sUSER_ID}
+			                         AND     A.PRJT_END_DT >= #{sCURR_DT})
+			AND     B.PRJT_END_DT   >= #{sCURR_DT}
+			UNION ALL
+			SELECT B.DOMAIN_ID
+			     , B.PRJT_ID
+			     , B.STRT_DT
+			     , B.END_DT
+			     , B.PRJT_YEAR
+			     , B.PRJT_WEEK
+			     , B.WEEK_ORDER
+			     , B.FILE_NM
+			     , B.PRJT_NM
+			     , B.PRJT_STAGE
+			     , B.PRJT_STAGE_NM
+			     , B.PRJT_MANG_ID
+			     , B.PRJT_MANG_NM
+			     , B.DEV_STAGE
+			     , B.TEST_STAGE
+			FROM   (SELECT B.DOMAIN_ID
+			             , B.PRJT_ID
+			             , IFNULL(A.STRT_DT, '')          STRT_DT
+			             , IFNULL(A.END_DT, '')           END_DT
+			             , ''                             PRJT_YEAR
+			             , ''                             PRJT_WEEK
+			             , ''                             WEEK_ORDER
+			             , IFNULL(A.FILE_NM, '')          FILE_NM
+			             , B.PRJT_NM
+			             , B.CURR_STAGE                   PRJT_STAGE
+			             , IFNULL((SELECT CODE_NAME
+			                       FROM   PMS_COMM_CD
+			                       WHERE  DOMAIN_ID = B.DOMAIN_ID
+			                       AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			                       AND    CODE_TYPE = 'PJST'
+			                       AND    CODE      = B.CURR_STAGE), '')                  PRJT_STAGE_NM
+			             , B.PRJT_MANG_ID
+			             , IFNULL((SELECT  USER_NM
+			                       FROM    MEM_INFO
+			                       WHERE   USER_ID = B.PRJT_MANG_ID), '')                 PRJT_MANG_NM
+			             , IFNULL((SELECT CODE FROM PMS_COMM_CD
+			                       WHERE  DOMAIN_ID = B.DOMAIN_ID
+			                       AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			                       AND    CODE_TYPE = 'PJST'
+			                       AND    RPLC_CODE = '03'), '')                          DEV_STAGE
+			             , IFNULL((SELECT CODE FROM PMS_COMM_CD
+			                       WHERE  DOMAIN_ID = B.DOMAIN_ID
+			                       AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			                       AND    CODE_TYPE = 'PJST'
+			                       AND    RPLC_CODE = '04'), '')                          TEST_STAGE
+			        FROM    PRJT_INFO B
+			                LEFT OUTER JOIN PRJT_RPRT A
+			                ON     B.DOMAIN_ID    = A.DOMAIN_ID
+			                AND    B.PRJT_ID      = A.PRJT_ID
+			                AND    #{sCURR_DT}    BETWEEN A.STRT_DT AND A.END_DT
+			        WHERE   B.PRJT_ID    NOT IN (SELECT  A.PRJT_ID
+			                                     FROM    PRJT_MEM B
+			                                           , PRJT_INFO A
+			                                     WHERE   B.PRJT_ID      = A.PRJT_ID
+			                                     AND     B.USER_ID      = #{sUSER_ID}
+			                                     AND     A.PRJT_END_DT >= #{sCURR_DT})
+			        AND     B.PRJT_END_DT   >= #{sCURR_DT}
+			        ORDER BY B.PRJT_END_DT DESC, B.PRJT_NM ASC ) B;
+		]]>
+	</select>
+	
+	<select id="MN010111C" parameterType="com.uni.unipms.model.In.MN010101IVO" resultMap="MN010103OVO">
+        <![CDATA[
+			SELECT  CONCAT(CURR_YEAR, '년 ', MNTH, '월 ', MNTH_WEEK, '주차')   WEEK_ORDER
+			      , LPAD(CURR_WEEK - 1, 2, '0')   YEAR_WEEK
+			      , WEEK_STRT_DT
+			      , WEEK_END_DT
+			      , CURR_YEAR
+			      , MNTH
+			      , MNTH_WEEK
+			FROM    PMS_CALNDR_WEEK
+			WHERE   CURR_YEAR     = SUBSTRING(#{sCURR_DT}, 1,4)
+			AND     WEEK_STRT_DT <= DATE_ADD(#{sCURR_DT}, INTERVAL(9 - DAYOFWEEK(#{sCURR_DT})) DAY) + 0
+			ORDER BY WEEK_STRT_DT DESC;
+		]]>
+	</select>
+	
+	<select id="MN010111D" parameterType="com.uni.unipms.model.In.MN010101IVO" resultMap="MN010104OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , C.PRJT_NM
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = B.PRJT_STAGE)         PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , A.TASK_NM
+			      , B.ISSUE_ID
+			      , B.TITLE
+			      , B.ISSUE_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'ISTP' 
+			         AND    CODE      = B.ISSUE_TYPE)         ISSUE_TYPE_NM
+			      , B.ISSUE_IMPT
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'ISIM' 
+			         AND    CODE      = B.ISSUE_IMPT)         ISSUE_IMPT_NM
+			      , B.REG_USER_ID
+			      , (SELECT USER_NM
+			         FROM   MEM_INFO
+			         WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			         AND    USER_ID    = B.REG_USER_ID)       REG_USER_NM
+			      , B.REG_DT
+			      , B.CHRG_USER_ID
+			      , (SELECT USER_NM
+			         FROM   MEM_INFO
+			         WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			         AND    USER_ID    = B.CHRG_USER_ID)      CHRG_USER_NM
+			      , B.APPR_DT
+			      , B.COMPL_DT
+			      , B.PROC_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'ISST' 
+			         AND    CODE      = B.PROC_STAGE)         PROC_STAGE_NM
+			      , B.CONTENTS
+			      , B.ISSUE_SOLTN
+			      , B.CORRT_DESC
+			      , B.FILE_NM
+			      , C.CURR_STAGE 
+			      , (SELECT CODE FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE C.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    RPLC_CODE = '03')                              DEV_STAGE
+				  , (SELECT CODE FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE C.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    RPLC_CODE = '04')                              TEST_STAGE
+			FROM    PRJT_INFO C
+			      , PRJT_ISSUE B
+			        LEFT OUTER JOIN PRJT_TASK_INFO A
+			        ON   B.DOMAIN_ID  = A.DOMAIN_ID
+			        AND  B.PRJT_ID    = A.PRJT_ID
+			        AND  B.PRJT_STAGE = A.PRJT_STAGE
+			        AND  B.TASK_ID    = A.TASK_ID
+			WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     B.COMPL_DT    = ''
+			AND     B.DOMAIN_ID   = C.DOMAIN_ID
+			AND     B.PRJT_ID     = C.PRJT_ID
+			AND     B.PRJT_ID     IN (SELECT  A.PRJT_ID
+						              FROM    PRJT_MEM B
+						                    , PRJT_INFO A
+						              WHERE   B.PRJT_ID      = A.PRJT_ID
+						              AND     B.USER_ID      = #{sUSER_ID}
+						              AND     A.PRJT_END_DT >= #{sCURR_DT})
+			UNION ALL
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_NM
+			      , B.PRJT_STAGE
+			      , B.PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , B.TASK_NM
+			      , B.ISSUE_ID
+			      , B.TITLE
+			      , B.ISSUE_TYPE
+			      , B.ISSUE_TYPE_NM
+			      , B.ISSUE_IMPT
+			      , B.ISSUE_IMPT_NM
+			      , B.REG_USER_ID
+			      , B.REG_USER_NM
+			      , B.REG_DT
+			      , B.CHRG_USER_ID
+			      , B.CHRG_USER_NM
+			      , B.APPR_DT
+			      , B.COMPL_DT
+			      , B.PROC_STAGE
+			      , B.PROC_STAGE_NM
+			      , B.CONTENTS
+			      , B.ISSUE_SOLTN
+			      , B.CORRT_DESC
+			      , B.FILE_NM
+			      , B.CURR_STAGE 
+			      , B.DEV_STAGE
+				  , B.TEST_STAGE
+			FROM    (SELECT  B.DOMAIN_ID
+			               , B.PRJT_ID
+			               , C.PRJT_NM
+			               , B.PRJT_STAGE
+			               , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                  AND    CODE_TYPE = 'PJST' 
+			                  AND    CODE      = B.PRJT_STAGE)         PRJT_STAGE_NM
+			               , B.TASK_ID
+			               , A.TASK_NM
+			               , B.ISSUE_ID
+			               , B.TITLE
+			               , B.ISSUE_TYPE
+			               , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                  AND    CODE_TYPE = 'ISTP' 
+			                  AND    CODE      = B.ISSUE_TYPE)         ISSUE_TYPE_NM
+			               , B.ISSUE_IMPT
+			               , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                  AND    CODE_TYPE = 'ISIM' 
+			                  AND    CODE      = B.ISSUE_IMPT)         ISSUE_IMPT_NM
+			               , B.REG_USER_ID
+			               , (SELECT USER_NM
+			                  FROM   MEM_INFO
+			                  WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			                  AND    USER_ID    = B.REG_USER_ID)       REG_USER_NM
+			               , B.REG_DT
+			               , B.CHRG_USER_ID
+			               , (SELECT USER_NM
+			                  FROM   MEM_INFO
+			                  WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			                  AND    USER_ID    = B.CHRG_USER_ID)      CHRG_USER_NM
+			               , B.APPR_DT
+			               , B.COMPL_DT
+			               , B.PROC_STAGE
+			               , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                  AND    CODE_TYPE = 'ISST' 
+			                  AND    CODE      = B.PROC_STAGE)         PROC_STAGE_NM
+			               , B.CONTENTS
+			               , B.ISSUE_SOLTN
+			               , B.CORRT_DESC
+			               , B.FILE_NM
+			               , C.CURR_STAGE 
+			               , (SELECT CODE FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE C.PRJT_ID END)
+			                  AND    CODE_TYPE = 'PJST' 
+			                  AND    RPLC_CODE = '03')                              DEV_STAGE
+			         	  , (SELECT CODE FROM PMS_COMM_CD 
+			                  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE C.PRJT_ID END)
+			                  AND    CODE_TYPE = 'PJST' 
+			                  AND    RPLC_CODE = '04')                              TEST_STAGE
+			         FROM    PRJT_INFO C
+			               , PRJT_ISSUE B
+			                 LEFT OUTER JOIN PRJT_TASK_INFO A
+			                 ON   B.DOMAIN_ID  = A.DOMAIN_ID
+			                 AND  B.PRJT_ID    = A.PRJT_ID
+			                 AND  B.PRJT_STAGE = A.PRJT_STAGE
+			                 AND  B.TASK_ID    = A.TASK_ID
+			         WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+			         AND     B.COMPL_DT    = ''
+			         AND     B.DOMAIN_ID   = C.DOMAIN_ID
+			         AND     B.PRJT_ID     = C.PRJT_ID
+			         AND     B.PRJT_ID     NOT IN (SELECT  A.PRJT_ID
+						                           FROM    PRJT_MEM B
+						                                 , PRJT_INFO A
+						                           WHERE   B.PRJT_ID      = A.PRJT_ID
+						                           AND     B.USER_ID      = #{sUSER_ID}
+						                           AND     A.PRJT_END_DT >= #{sCURR_DT})
+			         ORDER BY B.ISSUE_ID DESC, B.DOMAIN_ID, B.PRJT_ID, B.REG_DT DESC ) B;
+		]]>
+	</select>
+	
+	<select id="MN010111AA" parameterType="com.uni.unipms.model.In.MN010101IVO" resultMap="MN010101OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_NM
+			      , B.CURR_STAGE
+			      , B.CURR_STAGE_NM
+			      , B.BIZ_QUARTER
+			      , BIZ_QUARTER_NM
+			      , B.CUS_CD
+			      , B.CUS_NM
+				  , B.MAIN_BIZ_PART_CD
+				  , B.MAIN_BIZ_PART_NM
+			      , B.PRJT_STRT_DT
+			      , B.PRJT_END_DT
+			      , B.PRJT_MANG_ID
+			      , B.PRJT_MANG_NM
+			      , B.MAN_MONTH
+			      , B.PRJT_TYPE
+			      , B.DEV_STAGE
+				  , B.TEST_STAGE
+				  , CONCAT(B.PROGRESS_RT, ' / ', B.PURPOSE_RT)                         PROGRESS_RT
+				  , (CASE WHEN B.PROGRESS_RT < B.PURPOSE_RT THEN 'Y' ELSE 'N' END)     DELAY_YN
+			FROM  ( SELECT  B.DOMAIN_ID
+			              , B.PRJT_ID
+			              , B.PRJT_NM
+			              , B.CURR_STAGE
+			              , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                 AND    CODE_TYPE = 'PJST' 
+			                 AND    CODE      = B.CURR_STAGE)            CURR_STAGE_NM
+			              , B.BIZ_QUARTER
+			              , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			                 WHERE  DOMAIN_ID = B.DOMAIN_ID
+			                 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                 AND    CODE_TYPE = 'BZQT' 
+			                 AND    CODE      = B.BIZ_QUARTER)           BIZ_QUARTER_NM
+			              , B.CUS_CD
+			              , IFNULL((SELECT A.COOP_NM 
+			                        FROM   COOP_INFO A 
+			                        WHERE  A.DOMAIN_ID = B.DOMAIN_ID 
+			                        AND    A.COOP_ID   = B.CUS_CD), '')  CUS_NM
+			              , MAIN_BIZ_PART_CD
+			              , IFNULL((SELECT A.COOP_NM 
+			                        FROM   COOP_INFO A 
+			                        WHERE  A.DOMAIN_ID = B.DOMAIN_ID 
+			                        AND    A.COOP_ID   = B.MAIN_BIZ_PART_CD), '')  MAIN_BIZ_PART_NM
+			              , B.PRJT_STRT_DT
+			              , B.PRJT_END_DT
+			              , B.PRJT_MANG_ID
+			              , IFNULL((SELECT A.USER_NM
+			                        FROM   MEM_INFO A
+			                        WHERE  A.DOMAIN_ID  = B.DOMAIN_ID
+			                        AND    A.USER_ID    = B.PRJT_MANG_ID), '')     PRJT_MANG_NM
+			              , B.MAN_MONTH
+			              , B.PRJT_TYPE
+			              , (SELECT CODE FROM PMS_COMM_CD 
+			                 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                 AND    CODE_TYPE = 'PJST' 
+			                 AND    RPLC_CODE = '03')                              DEV_STAGE
+			              , (SELECT CODE FROM PMS_COMM_CD 
+			                 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                 AND    CODE_TYPE = 'PJST' 
+			                 AND    RPLC_CODE = '04')                              TEST_STAGE
+			              , (SELECT ROUND(AVG(PROGRESS_RT), 2) FROM PRJT_MNG_INFO 
+			                        WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			                        AND    PRJT_ID    = B.PRJT_ID 
+			                        AND    TASK_LEVEL = 2)                                          PROGRESS_RT 
+			              , (SELECT ROUND(AVG(PURPOSE_RT), 2) FROM PRJT_MNG_INFO 
+			                 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			                 AND    PRJT_ID    = B.PRJT_ID 
+			                 AND    TASK_LEVEL = 2)                                                 PURPOSE_RT
+			              , 'N'                                                                     DELAY_YN
+			        FROM    PRJT_INFO B
+			        WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			        AND     B.PRJT_NM       LIKE CONCAT('%', #{sPRJT_NM}, '%')
+			        AND     B.PRJT_END_DT   >= #{sCURR_DT}
+			        AND     B.PRJT_ID       IN (SELECT  A.PRJT_ID
+			                                    FROM    PRJT_MEM B
+			                                          , PRJT_INFO A
+			                                    WHERE   B.PRJT_ID     = A.PRJT_ID
+			                                    AND     B.USER_ID     = #{sUSER_ID}
+			                                    AND     A.PRJT_END_DT >= #{sCURR_DT})) B;
+         ]]>
+	</select>
+
+	<select id="MN010111BA" parameterType="com.uni.unipms.model.In.MN010101IVO" resultMap="MN010102OVO">
+        <![CDATA[
+			SELECT B.DOMAIN_ID
+			     , B.PRJT_ID
+			     , IFNULL(A.STRT_DT, '')          STRT_DT
+			     , IFNULL(A.END_DT, '')           END_DT
+			     , ''                             PRJT_YEAR
+			     , ''                             PRJT_WEEK
+			     , ''                             WEEK_ORDER
+			     , IFNULL(A.FILE_NM, '')          FILE_NM
+			     , B.PRJT_NM
+			     , B.CURR_STAGE                   PRJT_STAGE
+			     , IFNULL((SELECT CODE_NAME
+			               FROM   PMS_COMM_CD
+			               WHERE  DOMAIN_ID = B.DOMAIN_ID
+			               AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			               AND    CODE_TYPE = 'PJST'
+			               AND    CODE      = B.CURR_STAGE), '')                  PRJT_STAGE_NM
+			     , B.PRJT_MANG_ID
+			     , IFNULL((SELECT  USER_NM
+			               FROM    MEM_INFO
+			               WHERE   USER_ID = B.PRJT_MANG_ID), '')                 PRJT_MANG_NM
+			     , IFNULL((SELECT CODE FROM PMS_COMM_CD
+			               WHERE  DOMAIN_ID = B.DOMAIN_ID
+			               AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			               AND    CODE_TYPE = 'PJST'
+			               AND    RPLC_CODE = '03'), '')                          DEV_STAGE
+			     , IFNULL((SELECT CODE FROM PMS_COMM_CD
+			               WHERE  DOMAIN_ID = B.DOMAIN_ID
+			               AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			               AND    CODE_TYPE = 'PJST'
+			               AND    RPLC_CODE = '04'), '')                          TEST_STAGE
+			FROM    PRJT_INFO B
+			        LEFT OUTER JOIN PRJT_RPRT A
+			        ON     B.DOMAIN_ID    = A.DOMAIN_ID
+			        AND    B.PRJT_ID      = A.PRJT_ID
+			        AND    #{sCURR_DT}    BETWEEN A.STRT_DT AND A.END_DT
+			WHERE   B.PRJT_ID    IN (SELECT  A.PRJT_ID
+			                         FROM    PRJT_MEM B
+			                               , PRJT_INFO A
+			                         WHERE   B.PRJT_ID      = A.PRJT_ID
+			                         AND     B.USER_ID      = #{sUSER_ID}
+			                         AND     A.PRJT_END_DT >= #{sCURR_DT})
+			AND     B.PRJT_END_DT   >= #{sCURR_DT};
+		]]>
+	</select>
+	
+	<select id="MN010111DA" parameterType="com.uni.unipms.model.In.MN010101IVO" resultMap="MN010104OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , C.PRJT_NM
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = B.PRJT_STAGE)         PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , A.TASK_NM
+			      , B.ISSUE_ID
+			      , B.TITLE
+			      , B.ISSUE_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'ISTP' 
+			         AND    CODE      = B.ISSUE_TYPE)         ISSUE_TYPE_NM
+			      , B.ISSUE_IMPT
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'ISIM' 
+			         AND    CODE      = B.ISSUE_IMPT)         ISSUE_IMPT_NM
+			      , B.REG_USER_ID
+			      , (SELECT USER_NM
+			         FROM   MEM_INFO
+			         WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			         AND    USER_ID    = B.REG_USER_ID)       REG_USER_NM
+			      , B.REG_DT
+			      , B.CHRG_USER_ID
+			      , (SELECT USER_NM
+			         FROM   MEM_INFO
+			         WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			         AND    USER_ID    = B.CHRG_USER_ID)      CHRG_USER_NM
+			      , B.APPR_DT
+			      , B.COMPL_DT
+			      , B.PROC_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'ISST' 
+			         AND    CODE      = B.PROC_STAGE)         PROC_STAGE_NM
+			      , B.CONTENTS
+			      , B.ISSUE_SOLTN
+			      , B.CORRT_DESC
+			      , B.FILE_NM
+			      , C.CURR_STAGE 
+			      , (SELECT CODE FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE C.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    RPLC_CODE = '03')                              DEV_STAGE
+				  , (SELECT CODE FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE C.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    RPLC_CODE = '04')                              TEST_STAGE
+			FROM    PRJT_INFO C
+			      , PRJT_ISSUE B
+			        LEFT OUTER JOIN PRJT_TASK_INFO A
+			        ON   B.DOMAIN_ID  = A.DOMAIN_ID
+			        AND  B.PRJT_ID    = A.PRJT_ID
+			        AND  B.PRJT_STAGE = A.PRJT_STAGE
+			        AND  B.TASK_ID    = A.TASK_ID
+			WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     B.COMPL_DT    = ''
+			AND     B.DOMAIN_ID   = C.DOMAIN_ID
+			AND     B.PRJT_ID     = C.PRJT_ID
+			AND     B.PRJT_ID     IN (SELECT  A.PRJT_ID
+						              FROM    PRJT_MEM B
+						                    , PRJT_INFO A
+						              WHERE   B.PRJT_ID      = A.PRJT_ID
+						              AND     B.USER_ID      = #{sUSER_ID}
+						              AND     A.PRJT_END_DT >= #{sCURR_DT});
+		]]>
+	</select>
+
+</mapper>

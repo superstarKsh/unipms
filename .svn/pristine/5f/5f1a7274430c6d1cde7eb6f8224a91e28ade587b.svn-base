@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AD0501Mapper">
+
+    <resultMap id="AD050101OVO" type="com.uni.unipms.model.Out.AD050101OVO">
+		<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="CODE_TYPE"					property="sCODE_TYPE" />
+		<result column="CODE"						property="sCODE" />
+		<result column="CODE_NAME"					property="sCODE_NAME" />
+		<result column="CODE_DESC"					property="sCODE_DESC" />
+		<result column="USE_YN"						property="sUSE_YN" />
+		<result column="USE_ORDER"					property="sUSE_ORDER" />
+		<result column="RPLC_CODE"					property="sRPLC_CODE" />
+    </resultMap>
+
+    <select id="AD050111" parameterType="com.uni.unipms.model.In.AD050101IVO"  resultMap="AD050101OVO">
+        <![CDATA[
+        	SELECT  DOMAIN_ID
+				  , PRJT_ID
+				  , CODE_TYPE
+				  , CODE
+				  , CODE_NAME
+				  , CODE_DESC
+				  , USE_YN
+				  , USE_ORDER
+				  , RPLC_CODE
+			FROM    PMS_COMM_CD
+			WHERE	DOMAIN_ID = #{sDOMAIN_ID}
+			AND     PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+			AND     CODE      = '0000'
+			ORDER BY DOMAIN_ID, PRJT_ID, CODE_TYPE, CODE;
+         ]]>
+	</select>
+
+    <select id="AD050112" parameterType="com.uni.unipms.model.In.AD050101IVO"  resultMap="AD050101OVO">
+        <![CDATA[
+        	SELECT  DOMAIN_ID
+				  , PRJT_ID
+				  , CODE_TYPE
+				  , CODE
+				  , CODE_NAME
+				  , CODE_DESC
+				  , USE_YN
+				  , USE_ORDER
+				  , RPLC_CODE
+			FROM    PMS_COMM_CD
+			WHERE	DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+			AND     CODE_TYPE  = #{sCODE_TYPE}
+			AND     CODE      != '0000'
+			ORDER BY USE_ORDER, DOMAIN_ID, PRJT_ID, CODE_TYPE, CODE;
+         ]]>
+	</select>
+
+    <insert id="AD050121" parameterType="com.uni.unipms.model.In.AD050101IVO">
+        <![CDATA[
+        	INSERT INTO PMS_COMM_CD (
+					  DOMAIN_ID
+					, PRJT_ID
+					, CODE_TYPE
+					, CODE
+					, CODE_NAME
+					, CODE_DESC
+					, USE_YN
+					, USE_ORDER
+					, RPLC_CODE )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+					, #{sCODE_TYPE}
+					, #{sCODE}
+					, #{sCODE_NAME}
+					, #{sCODE_DESC}
+					, #{sUSE_YN}
+					, #{sUSE_ORDER}
+					, #{sRPLC_CODE} );
+         ]]>
+	</insert>
+
+    <delete id="AD050141" parameterType="com.uni.unipms.model.In.AD050101IVO" >
+        <![CDATA[
+        	DELETE FROM PMS_COMM_CD
+			WHERE DOMAIN_ID = #{sDOMAIN_ID}
+			AND   PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+			AND   CODE_TYPE = #{sCODE_TYPE}
+			AND   CODE      = #{sCODE};
+		 ]]>
+	</delete>
+
+    <delete id="AD050142" parameterType="com.uni.unipms.model.In.AD050102IVO" >
+        <![CDATA[
+        	DELETE FROM PMS_COMM_CD
+			WHERE DOMAIN_ID = #{sDOMAIN_ID}
+			AND   PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+			AND   CODE_TYPE = #{sCODE_TYPE}
+			AND   CODE     != '0000';
+		 ]]>
+	</delete>
+
+</mapper>

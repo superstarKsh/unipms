@@ -1,0 +1,72 @@
+package com.uni.unipms.model.In;
+
+import java.util.List;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.uni.unipms.model.CommonInVO;
+
+public class PJ010122IVO extends CommonInVO{
+	
+	private List<PJ010112IVO_SUB> sPRJT_STAGE_INFO = null;
+
+	public List<PJ010112IVO_SUB> getsPRJT_STAGE_INFO() {
+		return sPRJT_STAGE_INFO;
+	}
+	
+	public void setsPRJT_STAGE_INFO(List<PJ010112IVO_SUB> sPRJT_STAGE_INFO) {
+		this.sPRJT_STAGE_INFO = sPRJT_STAGE_INFO;
+	}
+	
+    public static class PJ010112IVO_SUB {
+
+    	private String sPRJT_STAGE = "";
+	    private String sSTRT_DT = "";
+	    private String sEND_DT = "";
+	    private String sETC_DISC = "";
+	    
+		public String getsPRJT_STAGE() {
+			return sPRJT_STAGE;
+		}
+		
+		public void setsPRJT_STAGE(String sPRJT_STAGE) {
+			this.sPRJT_STAGE = sPRJT_STAGE;
+		}
+		
+		public String getsSTRT_DT() {
+			return sSTRT_DT;
+		}
+		
+		public void setsSTRT_DT(String sSTRT_DT) {
+			this.sSTRT_DT = sSTRT_DT;
+		}
+		
+		public String getsEND_DT() {
+			return sEND_DT;
+		}
+		
+		public void setsEND_DT(String sEND_DT) {
+			this.sEND_DT = sEND_DT;
+		}
+	
+		public String getsETC_DISC() {
+			return sETC_DISC;
+		}
+		
+		public void setsETC_DISC(String sETC_DISC) {
+			this.sETC_DISC = sETC_DISC;
+		}
+		
+		@Override
+		public String toString() {
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+		}
+    }
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+}

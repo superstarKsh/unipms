@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="QT0201Mapper">
+    <resultMap id="QT020101OVO" type="com.uni.unipms.model.Out.QT020101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="QULTY_ID"					property="sQULTY_ID" />
+		<result column="QULTY_TITLE"				property="sQULTY_TITLE" />
+		<result column="QULTY_CNTL_ID"				property="sQULTY_CNTL_ID" />
+		<result column="TITLE"						property="sTITLE" />
+		<result column="CNTL_DESC"					property="sCNTL_DESC" />
+		<result column="ISSUE_DESC"					property="sISSUE_DESC" />
+		<result column="CNTL_DT"					property="sCNTL_DT" />
+		<result column="CNTL_USER_ID"				property="sCNTL_USER_ID" />
+		<result column="CNTL_USER_NM"				property="sCNTL_USER_NM" />
+		<result column="DEV_USER_ID"				property="sDEV_USER_ID" />
+		<result column="DEV_USER_NM"				property="sDEV_USER_NM" />
+		<result column="CORRT_DESC"					property="sCORRT_DESC" />
+		<result column="CORRT_SCHD_DT"				property="sCORRT_SCHD_DT" />
+		<result column="CORRT_DT"					property="sCORRT_DT" />
+		<result column="CONFRM_YN"					property="sCONFRM_YN" />
+		<result column="CONFRM_DT"					property="sCONFRM_DT" />
+		<result column="FILE_NM"					property="sFILE_NM" />
+    </resultMap>
+    
+	<select id="QT020111" parameterType="com.uni.unipms.model.In.QT020101IVO" resultMap="QT020101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.QULTY_ID
+			      , B.QULTY_CNTL_ID
+			      , B.TITLE
+			      , B.CNTL_DESC
+			      , B.ISSUE_DESC
+			      , B.CNTL_DT
+			      , B.CNTL_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.CNTL_USER_ID)     CNTL_USER_NM
+			      , B.DEV_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.DEV_USER_ID)      DEV_USER_NM
+			      , B.CORRT_DESC
+			      , B.CORRT_SCHD_DT
+			      , B.CORRT_DT
+			      , B.CONFRM_YN
+			      , B.CONFRM_DT
+			      , B.FILE_NM
+            	  , A.TITLE                                  QULTY_TITLE
+			FROM    PRJT_QULTY_SCHL A
+            	  , PRJT_QULTY_MNG B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    AND     B.QULTY_ID      = #{sQULTY_ID}
+		    AND     B.DOMAIN_ID     = A.DOMAIN_ID
+        	AND     B.PRJT_ID       = A.PRJT_ID
+        	AND     B.QULTY_ID      = A.QULTY_ID;
+		]]>
+	</select>
+	
+	<select id="QT020102" parameterType="com.uni.unipms.model.In.QT020101IVO" resultMap="QT020101OVO">
+		<![CDATA[
+			SELECT  IFNULL(CONCAT(SUBSTRING(MAX(B.QULTY_CNTL_ID), 1, 8), LPAD(SUBSTRING(MAX(B.QULTY_CNTL_ID), 9, 4) + 1, 4, '0')),
+			               CONCAT(#{sQULTY_ID}, '0001'))          QULTY_CNTL_ID
+			FROM    PRJT_INFO A
+			        LEFT OUTER JOIN PRJT_QULTY_MNG B
+			        ON   B.DOMAIN_ID = A.DOMAIN_ID
+			        AND  B.PRJT_ID   = A.PRJT_ID
+			        AND  B.QULTY_ID  = #{sQULTY_ID}
+			WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.PRJT_ID   = #{sPRJT_ID};
+		]]>
+	</select>
+	
+	<insert id="QT020121" parameterType="com.uni.unipms.model.In.QT020101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_QULTY_MNG (
+					  DOMAIN_ID
+				    , PRJT_ID
+				    , QULTY_ID
+				    , QULTY_CNTL_ID
+				    , TITLE
+				    , CNTL_DESC
+				    , ISSUE_DESC
+				    , CNTL_DT
+				    , CNTL_USER_ID
+				    , DEV_USER_ID
+				    , CORRT_DESC
+				    , CORRT_SCHD_DT
+				    , CORRT_DT
+				    , CONFRM_YN
+				    , CONFRM_DT
+				    , FILE_NM )
+			VALUES (
+					  #{sDOMAIN_ID}
+				    , #{sPRJT_ID}
+				    , #{sQULTY_ID}
+				    , #{sQULTY_CNTL_ID}
+				    , #{sTITLE}
+				    , #{sCNTL_DESC}
+				    , #{sISSUE_DESC}
+				    , REPLACE(#{sCNTL_DT}, '.' ,'')
+				    , #{sCNTL_USER_ID}
+				    , #{sDEV_USER_ID}
+				    , #{sCORRT_DESC}
+				    , REPLACE(#{sCORRT_SCHD_DT}, '.' ,'')
+				    , REPLACE(#{sCORRT_DT}, '.' ,'')
+				    , #{sCONFRM_YN}
+				    , REPLACE(#{sCONFRM_DT}, '.' ,'')
+				    , #{sFILE_NM} );
+		]]>
+	</insert>
+	
+	<delete id="QT020141" parameterType="com.uni.unipms.model.In.QT020101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_QULTY_MNG
+			WHERE  DOMAIN_ID      = #{sDOMAIN_ID}
+			AND    PRJT_ID        = #{sPRJT_ID}
+			AND    QULTY_ID       = #{sQULTY_ID}
+			AND    QULTY_CNTL_ID  = #{sQULTY_CNTL_ID};
+		]]>
+	</delete>
+	
+	<select id="QT020113" parameterType="com.uni.unipms.model.In.QT020101IVO" resultMap="QT020101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.QULTY_ID
+			      , B.QULTY_CNTL_ID
+			      , B.TITLE
+			      , B.CNTL_DESC
+			      , B.ISSUE_DESC
+			      , B.CNTL_DT
+			      , B.CNTL_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.CNTL_USER_ID)     CNTL_USER_NM
+			      , B.DEV_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.DEV_USER_ID)      DEV_USER_NM
+			      , B.CORRT_DESC
+			      , B.CORRT_SCHD_DT
+			      , B.CORRT_DT
+			      , B.CONFRM_YN
+			      , B.CONFRM_DT
+			      , B.FILE_NM
+			FROM    PRJT_QULTY_MNG B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    AND     B.QULTY_ID      = #{sQULTY_ID}
+		    AND     B.QULTY_CNTL_ID = #{sQULTY_CNTL_ID};
+		]]>
+	</select>
+
+</mapper>

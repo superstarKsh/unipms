@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="true" />
+        <setting name="useGeneratedKeys" value="false" />
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <setting name="defaultStatementTimeout" value="3600"/>
+        <setting name="callSettersOnNulls" value="true"/>
+        <setting name="mapUnderscoreToCamelCase" value="false"/>
+    </settings>
+<typeAliases></typeAliases>
+<mappers>
+
+	<mapper resource="com/uni/unipms/dao/datasource/MN0101Mapper.xml"/>
+	<mapper resource="com/uni/unipms/dao/datasource/MN0201Mapper.xml"/>
+	
+	<mapper resource="com/uni/unipms/dao/datasource/MG0101Mapper.xml"/>
+	<mapper resource="com/uni/unipms/dao/datasource/MG0201Mapper.xml"/>
+	<mapper resource="com/uni/unipms/dao/datasource/MG1101Mapper.xml"/>
+	<mapper resource="com/uni/unipms/dao/datasource/MG1201Mapper.xml"/>
+	<mapper resource="com/uni/unipms/dao/datasource/MG1301Mapper.xml"/>
+	<mapper resource="com/uni/unipms/dao/datasource/MG1401Mapper.xml"/>
+
+    <mapper resource="com/uni/unipms/dao/datasource/CM0001Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/CM0011Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/CM0021Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/CM0031Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/CM0101Mapper.xml"/>
+    
+    <mapper resource="com/uni/unipms/dao/datasource/PJ0101Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/PJ0201Mapper.xml"/>
+
+    <mapper resource="com/uni/unipms/dao/datasource/DV0101Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/DV0201Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/DV0211Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/DV0301Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/DV0311Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/DV0401Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/DV0501Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/DV0601Mapper.xml"/>
+    
+    <mapper resource="com/uni/unipms/dao/datasource/CF0101Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/CF0201Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/CF0301Mapper.xml"/>
+    
+	<mapper resource="com/uni/unipms/dao/datasource/CS0101Mapper.xml"/>
+
+    <mapper resource="com/uni/unipms/dao/datasource/TS0101Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/TS0102Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/TS0103Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/TS0104Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/TS0201Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/TS0301Mapper.xml"/>
+    
+    <mapper resource="com/uni/unipms/dao/datasource/QT0101Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/QT0201Mapper.xml"/>
+
+    <mapper resource="com/uni/unipms/dao/datasource/NT0101Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/NT0201Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/NT0301Mapper.xml"/>
+
+    <mapper resource="com/uni/unipms/dao/datasource/AD0101Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/AD0201Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/AD0301Mapper.xml"/>
+    <mapper resource="SqlSessionTemplate"/>
+    <mapper resource="com/uni/unipms/dao/datasource/AD0501Mapper.xml"/>
+    
+    <mapper resource="com/uni/unipms/dao/datasource/PU0101Mapper.xml"/>
+    
+    <mapper resource="com/uni/unipms/dao/datasource/WSCM0001Mapper.xml"/>
+    <mapper resource="com/uni/unipms/dao/datasource/WSAD0101Mapper.xml"/>
+	<mapper resource="com/uni/unipms/dao/datasource/WSPJ0201Mapper.xml"/>
+	<mapper resource="com/uni/unipms/dao/datasource/WSPU0101Mapper.xml"/>
+
+</mappers>
+</configuration>

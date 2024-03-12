@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TS0103Mapper">
+
+    <resultMap id="TS010301OVO" type="com.uni.unipms.model.Out.TS010301OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />            
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="TEST_SCN_ID"				property="sTEST_SCN_ID" />
+		<result column="TEST_CASE_ID"				property="sTEST_CASE_ID" />
+		<result column="TEST_CASE_NM"				property="sTEST_CASE_NM" />
+		<result column="TEST_CASE_DESC"				property="sTEST_CASE_DESC" />
+		<result column="TEST_INPUT_DATA"			property="sTEST_INPUT_DATA" />
+		<result column="TEST_RSLT"					property="sTEST_RSLT" />
+		<result column="TEST_DT"					property="sTEST_DT" />
+		<result column="TEST_SVRT"					property="sTEST_SVRT" />
+		<result column="TEST_SVRT_NM"				property="sTEST_SVRT_NM" />
+		<result column="TEST_IMG_URL"				property="sTEST_IMG_URL" />
+		<result column="TEST_USER_ID"				property="sTEST_USER_ID" />
+		<result column="TEST_USER_NM"				property="sTEST_USER_NM" />
+		<result column="TEST_CONFRM"				property="sTEST_CONFRM" />
+		<result column="TEST_DESC"					property="sTEST_DESC" />
+		<result column="CORRT_SCHD_DT"				property="sCORRT_SCHD_DT" />
+		<result column="CORRT_DT"					property="sCORRT_DT" />
+		<result column="DEV_USER_ID"				property="sDEV_USER_ID" />
+		<result column="DEV_USER_NM"				property="sDEV_USER_NM" />
+		<result column="CORRT_DESC"					property="sCORRT_DESC" />
+    </resultMap>
+
+    <select id="TS010313" parameterType="com.uni.unipms.model.In.TS010301IVO" resultMap="TS010301OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+				  , B.PRJT_ID
+				  , B.TEST_SCN_ID
+				  , B.TEST_CASE_ID
+				  , B.TEST_CASE_NM
+				  , B.TEST_CASE_DESC
+				  , B.TEST_INPUT_DATA
+				  , B.TEST_RSLT
+				  , B.TEST_DT
+				  , B.TEST_SVRT
+				  , ( SELECT CODE_NAME FROM PMS_COMM_CD 
+			          WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			          AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			          AND    CODE_TYPE = 'TSVR' 
+			          AND    CODE      = B.TEST_SVRT)         TEST_SVRT_NM
+                  , B.TEST_IMG_URL
+				  , B.TEST_USER_ID
+				  , ( SELECT  USER_NM
+					  FROM    MEM_INFO
+					  WHERE   DOMAIN_ID = B.DOMAIN_ID
+					  AND     USER_ID   = B.TEST_USER_ID )    TEST_USER_NM
+				  , B.TEST_CONFRM
+				  , B.TEST_DESC
+				  , B.CORRT_SCHD_DT
+				  , B.CORRT_DT
+				  , B.DEV_USER_ID
+				  , ( SELECT  USER_NM
+					  FROM    MEM_INFO
+					  WHERE   DOMAIN_ID = B.DOMAIN_ID
+					  AND     USER_ID   = B.DEV_USER_ID )     DEV_USER_NM
+				  , B.CORRT_DESC
+			FROM    PRJT_TEST_DETAIL B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    AND     B.TEST_SCN_ID   = #{sTEST_SCN_ID}
+		    AND     B.TEST_CASE_ID  = #{sTEST_CASE_ID};
+		]]>
+	</select>
+	
+	<update id="TS010331" parameterType="com.uni.unipms.model.In.TS010301IVO">
+		<![CDATA[
+			UPDATE  PRJT_TEST_DETAIL
+            SET     TEST_DT        = REPLACE(#{sTEST_DT}, '.', '')
+				  , TEST_SVRT      = #{sTEST_SVRT}
+                  , TEST_IMG_URL   = #{sTEST_IMG_URL}
+				  , TEST_USER_ID   = #{sTEST_USER_ID}
+				  , TEST_USER_NM   = #{sTEST_USER_NM}
+				  , TEST_CONFRM    = #{sTEST_CONFRM}
+				  , TEST_DESC      = #{sTEST_DESC}
+				  , CORRT_SCHD_DT  = REPLACE(#{sCORRT_SCHD_DT}, '.', '')
+				  , CORRT_DT       = REPLACE(#{sCORRT_DT}, '.', '')
+				  , DEV_USER_ID    = #{sDEV_USER_ID}
+				  , DEV_USER_NM    = #{sDEV_USER_NM}
+				  , CORRT_DESC     = #{sCORRT_DESC}
+			WHERE   DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     PRJT_ID       = #{sPRJT_ID}
+			AND     TEST_SCN_ID   = #{sTEST_SCN_ID}
+			AND     TEST_CASE_ID  = #{sTEST_CASE_ID};
+		]]>
+	</update>
+	
+</mapper>

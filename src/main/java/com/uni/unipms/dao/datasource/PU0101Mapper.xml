@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PU0101Mapper">
+	
+    <resultMap id="PU010101OVO" type="com.uni.unipms.model.Out.PU010101OVO">
+        <result column="DOMAIN_ID"				property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"				property="sPRJT_ID"/>
+        <result column="PRJT_NM"				property="sPRJT_NM"/>
+        <result column="CURR_STAGE"				property="sCURR_STAGE"/>
+        <result column="CURR_STAGE_NM"			property="sCURR_STAGE_NM"/>
+        <result column="PRJT_MANG_NM"			property="sPRJT_MANG_NM"/>
+        <result column="USER_PSTN"				property="sUSER_PSTN"/>
+        <result column="PRJT_STRT_DT"			property="sPRJT_STRT_DT"/>
+        <result column="PRJT_END_DT"			property="sPRJT_END_DT"/>
+		<result column="DEV_STAGE"				property="sDEV_STAGE"/>
+        <result column="TEST_STAGE"				property="sTEST_STAGE"/>
+    </resultMap>
+    
+    <resultMap id="PU010111OVO" type="com.uni.unipms.model.Out.PU010111OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"				property="sPRJT_ID"/>
+        <result column="USER_ID"				property="sUSER_ID"/>
+        <result column="USER_NM"				property="sUSER_NM"/>
+        <result column="COOP_ID"				property="sCOOP_ID"/>
+        <result column="COOP_NM"				property="sCOOP_NM"/>
+        <result column="BIZ_QUARTER"			property="sBIZ_QUARTER"/>
+        <result column="USER_PSTN"				property="sUSER_PSTN"/>
+        <result column="USER_PSTN_NM"			property="sUSER_PSTN_NM"/>
+    </resultMap>
+    
+    <resultMap id="PU010121OVO" type="com.uni.unipms.model.Out.PU010121OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID"/>
+        <result column="COOP_ID"				property="sCOOP_ID"/>
+        <result column="COOP_NM"				property="sCOOP_NM"/>
+        <result column="PHONE_NUM"				property="sPHONE_NUM"/>
+    </resultMap>
+    
+    <resultMap id="PU010131OVO" type="com.uni.unipms.model.Out.PU010131OVO">
+        <result column="DOMAIN_ID"				property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"				property="sPRJT_ID"/>
+        <result column="PRJT_NM"				property="sPRJT_NM"/>
+        <result column="PRJT_STAGE"				property="sPRJT_STAGE"/>
+        <result column="PRJT_STAGE_NM"			property="sPRJT_STAGE_NM"/>
+        <result column="TASK_ID"				property="sTASK_ID"/>
+        <result column="TASK_NM"				property="sTASK_NM"/>
+        <result column="TASK_DESC"				property="sTASK_DESC"/>
+    </resultMap>
+    
+    <resultMap id="PU010141OVO" type="com.uni.unipms.model.Out.PU010141OVO">
+        <result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="QULTY_ID"					property="sQULTY_ID" />
+		<result column="TITLE"						property="sTITLE" />
+		<result column="STRT_DT"					property="sSTRT_DT" />
+		<result column="END_DT"						property="sEND_DT" />
+		<result column="CNTL_TYPE"					property="sCNTL_TYPE" />
+		<result column="CNTL_TYPE_NM"				property="sCNTL_TYPE_NM" />
+		<result column="CNTL_USER_ID"				property="sCNTL_USER_ID" />
+		<result column="CNTL_USER_NM"				property="sCNTL_USER_NM" />
+		<result column="TARGET_TYPE"				property="sTARGET_TYPE" />
+		<result column="TARGET_TYPE_NM"				property="sTARGET_TYPE_NM" />
+		<result column="CONTENTS"					property="sCONTENTS" />
+    </resultMap>
+    
+    <select id="PU010101" parameterType="com.uni.unipms.model.In.PU010101IVO"  resultMap="PU010101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , A.PRJT_ID
+			      , A.PRJT_NM
+			      , A.CURR_STAGE 
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = A.CURR_STAGE)   CURR_STAGE_NM
+			      , B.USER_NM							PRJT_MANG_NM
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PSTN' 
+			         AND    CODE      = B.USER_PSTN)    USER_PSTN
+			      , A.PRJT_STRT_DT
+			      , A.PRJT_END_DT
+		          , (SELECT CODE FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    RPLC_CODE = '03')                              DEV_STAGE
+          		  , (SELECT CODE FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    RPLC_CODE = '04')                              TEST_STAGE
+			FROM    PRJT_INFO A
+			        LEFT OUTER JOIN MEM_INFO B
+			        ON   B.DOMAIN_ID = A.DOMAIN_ID 
+			        AND  B.USER_ID   = A.PRJT_MANG_ID
+			WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.PRJT_NM   LIKE CONCAT('%', TRIM(#{sPRJT_NM}),'%')
+			ORDER  BY A.PRJT_ID DESC;
+         ]]>
+	</select>
+    
+	<select id="PU010111" parameterType="com.uni.unipms.model.In.PU010111IVO"  resultMap="PU010111OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.CURR_PRJT_ID    PRJT_ID
+			      , B.USER_ID
+			      , B.USER_NM
+			      , B.COOP_ID
+			      , A.COOP_NM
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = DOMAIN_ID
+					 AND    PRJT_ID   =  (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+					 AND    CODE_TYPE = 'BZQT' 
+					 AND    CODE      = B.BIZ_QUARTER)    BIZ_QUARTER
+				  , USER_PSTN
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = DOMAIN_ID 
+					 AND    PRJT_ID   =  (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+					 AND    CODE_TYPE = 'PSTN'
+					 AND    CODE      = B.USER_PSTN)      USER_PSTN_NM
+			FROM    MEM_INFO B
+			        LEFT OUTER JOIN COOP_INFO A
+			        ON   B.COOP_ID = A.COOP_ID
+			WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     B.USER_NM   LIKE CONCAT('%', #{sUSER_NM}, '%')
+			ORDER BY USER_NM ASC
+         ]]>
+	</select>
+
+	<select id="PU010112" parameterType="com.uni.unipms.model.In.PU010111IVO"  resultMap="PU010111OVO">
+        <![CDATA[
+			 SELECT  B.DOMAIN_ID
+			       , B.PRJT_ID
+			       , B.USER_ID
+			       , A.USER_NM
+			       , A.COOP_ID
+			       , B.PRJT_ROLE
+			       , B.STRT_DT
+			       , B.END_DT
+			       , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					  WHERE  DOMAIN_ID = DOMAIN_ID 
+					  AND    PRJT_ID   =  (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+					  AND    CODE_TYPE = 'PSTN'
+					  AND    CODE      = A.USER_PSTN )                    USER_PSTN_NM
+			       , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					  WHERE  DOMAIN_ID = DOMAIN_ID
+					  AND    PRJT_ID   =  (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+					  AND    CODE_TYPE = 'BZQT' 
+					  AND    CODE      = A.BIZ_QUARTER )                  BIZ_QUARTER    
+			       , PRJT_TASK
+			       , PROC_RATIO
+			       , PROC_MM
+			 FROM    PRJT_MEM B
+			       , MEM_INFO A
+			 WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+			 AND 	 B.PRJT_ID   = #{sPRJT_ID}
+			 AND  	 B.DOMAIN_ID = A.DOMAIN_ID
+			 AND  	 B.USER_ID   = A.USER_ID 
+			 AND  	 A.USER_NM   LIKE CONCAT('%', #{sUSER_NM}, '%')
+			 ORDER BY USER_NM ASC;    
+         ]]>
+	</select>
+	
+	<select id="PU010121" parameterType="com.uni.unipms.model.In.PU010121IVO"  resultMap="PU010121OVO">
+        <![CDATA[
+        	SELECT  DOMAIN_ID
+			      , COOP_ID
+			      , COOP_NM
+			      , PHONE_NUM
+			FROM    COOP_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     COOP_NM   LIKE CONCAT('%', #{sCOOP_NM}, '%');
+         ]]>
+	</select>
+	
+	<select id="PU010131" parameterType="com.uni.unipms.model.In.PU010131IVO"  resultMap="PU010131OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+                  , A.PRJT_NM
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PJST' 
+					 AND    CODE      = B.PRJT_STAGE)   PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , B.TASK_NM
+			      , B.TASK_DESC
+			FROM    PRJT_INFO A
+			      , PRJT_TASK_INFO B
+			WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     B.PRJT_ID     = #{sPRJT_ID}
+			AND     B.PRJT_STAGE  LIKE CONCAT('%', TRIM(#{sPRJT_STAGE}),'%')
+			AND     B.TASK_NM     LIKE CONCAT('%', TRIM(#{sTASK_NM}),'%')
+      		AND     B.DOMAIN_ID   = A.DOMAIN_ID 
+            AND     B.PRJT_ID     = A.PRJT_ID;
+         ]]>
+	</select>
+
+	<select id="PU010141" parameterType="com.uni.unipms.model.In.PU010141IVO"  resultMap="PU010141OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.QULTY_ID
+			      , B.TITLE
+			      , B.STRT_DT
+			      , B.END_DT
+			      , B.CNTL_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'QTTP' 
+					 AND    CODE      = B.CNTL_TYPE)         CNTL_TYPE_NM
+			      , B.CNTL_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.CNTL_USER_ID)     CNTL_USER_NM
+			      , B.TARGET_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'QMTP' 
+					 AND    CODE      = B.TARGET_TYPE)       TARGET_TYPE_NM
+			      , B.CONTENTS
+			FROM    PRJT_QULTY_SCHL B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+			AND     B.TITLE         LIKE CONCAT('%', TRIM(#{sTITLE}),'%');
+         ]]>
+	</select>
+
+</mapper>

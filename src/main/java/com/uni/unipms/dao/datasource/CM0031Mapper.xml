@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CM0031Mapper">
+
+    <resultMap id="CM003101OVO" type="com.uni.unipms.model.Out.CM003101OVO">
+        <result column="DOMAIN_ID"				property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"				property="sPRJT_ID"/>
+        <result column="PRJT_STAGE"				property="sPRJT_STAGE"/>
+        <result column="sACTIVITY_ID"			property="sACTIVITY_ID"/>
+        <result column="sACTIVITY_NM"			property="sACTIVITY_NM"/>
+        <result column="TASK_ID"				property="sTASK_ID"/>
+        <result column="TASK_NM"				property="sTASK_NM"/>
+        <result column="SEG_ID"					property="sSEG_ID"/>
+        <result column="SEG_NM"					property="sSEG_NM"/>
+        <result column="SEG_SUB_ID"				property="sSEG_SUB_ID"/>
+        <result column="SEG_SUB_NM"				property="sSEG_SUB_NM"/>
+        <result column="SEG_SUB_CNT"			property="sSEG_SUB_CNT"/>
+    </resultMap>
+
+	<select id="CM003101" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , TASK_ID
+			      , CONCAT('[', TASK_ID , '] ', TASK_NM)  TASK_NM
+			FROM   PRJT_TASK_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE};
+		]]>
+	</select>
+	
+	<select id="CM003102" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , SEG_ID
+			      , CONCAT('[', SEG_ID , '] ', SEG_NM)  SEG_NM
+			FROM   PRJT_SEG_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE}
+			AND    TASK_ID     = #{sTASK_ID};
+		]]>
+	</select>
+	
+	<select id="CM003103" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , SEG_SUB_ID
+			      , CONCAT('[', SEG_SUB_ID , '] ', SEG_SUB_NM)  SEG_SUB_NM
+			FROM   PRJT_SEG_SUB_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE}
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    SEG_ID      = #{sSEG_ID};
+		]]>
+	</select>
+	
+	<select id="CM003104" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  COUNT(DOMAIN_ID)     SEG_SUB_CNT
+			FROM   PRJT_SEG_SUB_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    SEG_ID      = #{sSEG_ID};
+		]]>
+	</select>
+	
+	<select id="CM003111" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , TASK_ID
+			      , CONCAT('[', TASK_ID , '] ', TASK_NM)  TASK_NM
+			FROM   PRJT_TASK_INFO A
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = (SELECT CODE
+                            	  FROM   PMS_COMM_CD 
+            			          WHERE  DOMAIN_ID = A.DOMAIN_ID 
+            			          AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+            			          AND    CODE_TYPE = 'PJST' 
+            			          AND    RPLC_CODE = '03' );
+		]]>
+	</select>
+	
+	<select id="CM003112" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , SEG_ID
+			      , CONCAT('[', SEG_ID , '] ', SEG_NM)  SEG_NM
+			FROM   PRJT_SEG_INFO A
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = (SELECT CODE
+                            	  FROM   PMS_COMM_CD 
+            			          WHERE  DOMAIN_ID = A.DOMAIN_ID 
+            			          AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+            			          AND    CODE_TYPE = 'PJST' 
+            			          AND    RPLC_CODE = '03' )
+			AND    TASK_ID     = #{sTASK_ID};
+		]]>
+	</select>
+	
+	<select id="CM003113" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , SEG_SUB_ID
+			      , CONCAT('[', SEG_SUB_ID , '] ', SEG_SUB_NM)  SEG_SUB_NM
+			FROM   PRJT_SEG_SUB_INFO A
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = (SELECT CODE
+                            	  FROM   PMS_COMM_CD 
+            			          WHERE  DOMAIN_ID = A.DOMAIN_ID 
+            			          AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+            			          AND    CODE_TYPE = 'PJST' 
+            			          AND    RPLC_CODE = '03' )
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    SEG_ID      = #{sSEG_ID};
+		]]>
+	</select>
+	
+	<select id="CM003121" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , TASK_ID
+			      , CONCAT('[', TASK_ID , '] ', TASK_NM)  TASK_NM
+			FROM   PRJT_TASK_INFO A
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = (SELECT CODE
+                            	  FROM   PMS_COMM_CD 
+            			          WHERE  DOMAIN_ID = A.DOMAIN_ID 
+            			          AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+            			          AND    CODE_TYPE = 'PJST' 
+            			          AND    RPLC_CODE = '04' );
+		]]>
+	</select>
+
+	<select id="CM003122" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , SEG_ID
+			      , CONCAT('[', SEG_ID , '] ', SEG_NM)  SEG_NM
+			FROM   PRJT_SEG_INFO A
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = (SELECT CODE
+                            	  FROM   PMS_COMM_CD 
+            			          WHERE  DOMAIN_ID = A.DOMAIN_ID 
+            			          AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+            			          AND    CODE_TYPE = 'PJST' 
+            			          AND    RPLC_CODE = '04' )
+			AND    TASK_ID     = #{sTASK_ID};
+		]]>
+	</select>
+	
+	<select id="CM003123" parameterType="com.uni.unipms.model.In.CM003101IVO"  resultMap="CM003101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , SEG_SUB_ID
+			      , CONCAT('[', SEG_SUB_ID , '] ', SEG_SUB_NM)  SEG_SUB_NM
+			FROM   PRJT_SEG_SUB_INFO A
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = (SELECT CODE
+                            	  FROM   PMS_COMM_CD 
+            			          WHERE  DOMAIN_ID = A.DOMAIN_ID 
+            			          AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+            			          AND    CODE_TYPE = 'PJST' 
+            			          AND    RPLC_CODE = '04' )
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    SEG_ID      = #{sSEG_ID};
+		]]>
+	</select>
+
+</mapper>

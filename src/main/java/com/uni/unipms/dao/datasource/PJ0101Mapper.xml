@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PJ0101Mapper">
+	
+    <resultMap id="PJ010111OVO" type="com.uni.unipms.model.Out.PJ010111OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="YYYYMM"					property="sYYYYMM" />
+		<result column="MAN_MONTH"				property="sMAN_MONTH" />
+    </resultMap>
+
+    <resultMap id="PJ010121OVO" type="com.uni.unipms.model.Out.PJ010121OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_STAGE"				property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"			property="sPRJT_STAGE_NM" />
+		<result column="STRT_DT"				property="sSTRT_DT" />
+		<result column="END_DT"					property="sEND_DT" />
+		<result column="ETC_DISC"				property="sETC_DISC" />
+    </resultMap>
+    
+	<select id="PJ010111A" parameterType="com.uni.unipms.model.In.PJ010111IVO" resultMap="PJ010111OVO">
+        <![CDATA[
+			SELECT  IFNULL(B.DOMAIN_ID, A.DOMAIN_ID)    DOMAIN_ID
+			      , IFNULL(B.PRJT_ID, A.PRJT_ID)        PRJT_ID
+			      , IFNULL(B.YYYYMM,  A.PRJT_YYYYMM)    YYYYMM
+			      , B.MAN_MONTH
+			FROM  ( SELECT  B.DOMAIN_ID
+			              , B.PRJT_ID
+			              , SUBSTRING(A.CURR_DT, 1, 6)  PRJT_YYYYMM
+			        FROM    PRJT_INFO B
+			              , PMS_CALNDR A
+			        WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+			        AND     B.PRJT_ID   = #{sPRJT_ID}
+			        AND     A.CURR_DT BETWEEN B.PRJT_STRT_DT AND B.PRJT_END_DT
+			        GROUP BY SUBSTRING(A.CURR_DT, 1, 6) ) A
+			      LEFT OUTER JOIN PRJT_MM B
+			      ON  B.DOMAIN_ID = A.DOMAIN_ID
+			      AND B.PRJT_ID   = A.PRJT_ID
+			      AND B.YYYYMM    = A.PRJT_YYYYMM
+			ORDER BY 1,2,3;
+         ]]>
+	</select>
+	
+	<insert id="PJ010121A" parameterType="com.uni.unipms.model.In.PJ010111IVO">
+        <![CDATA[
+			INSERT INTO PRJT_MM (
+						DOMAIN_ID
+					  , PRJT_ID
+					  , YYYYMM
+					  , MAN_MONTH )
+			VALUES (
+						#{sDOMAIN_ID}
+					  , #{sPRJT_ID}
+					  , #{sYYYYMM}
+					  , #{sMAN_MONTH} );
+         ]]>
+	</insert>
+	
+	<delete id="PJ010142A" parameterType="com.uni.unipms.model.In.PJ010112IVO">
+        <![CDATA[
+			DELETE FROM PRJT_MM
+			WHERE  DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    PRJT_ID    = #{sPRJT_ID};
+         ]]>
+	</delete>
+	
+	<select id="PJ010111B" parameterType="com.uni.unipms.model.In.PJ010121IVO" resultMap="PJ010121OVO">
+        <![CDATA[
+			SELECT  IFNULL(A.DOMAIN_ID, B.DOMAIN_ID)    DOMAIN_ID
+			      , IFNULL(A.PRJT_ID, B.PRJT_ID)        PRJT_ID
+			      , IFNULL(A.PRJT_STAGE, B.CODE)        PRJT_STAGE
+			      , B.CODE_NAME                         PRJT_STAGE_NM
+			      , A.STRT_DT
+			      , A.END_DT
+			      , A.ETC_DISC
+			FROM    PMS_COMM_CD B
+			        LEFT OUTER JOIN PRJT_STAGE A
+			        ON  A.DOMAIN_ID  = #{sDOMAIN_ID}
+					AND A.PRJT_ID    = #{sPRJT_ID}
+			        AND A.DOMAIN_ID  = B.DOMAIN_ID
+			        AND B.PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			        AND B.CODE       = A.PRJT_STAGE
+			WHERE   B.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     B.PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			AND     B.CODE_TYPE  = 'PJST'
+			AND     B.CODE      != '0000'
+			AND     B.USE_YN     = 'Y'
+			ORDER BY B.USE_ORDER, B.CODE;
+         ]]>
+	</select>
+	
+	<insert id="PJ010121B" parameterType="com.uni.unipms.model.In.PJ010121IVO">
+        <![CDATA[
+			INSERT INTO PRJT_STAGE (
+						DOMAIN_ID
+					  , PRJT_ID
+					  , PRJT_STAGE
+					  , STRT_DT
+					  , END_DT
+					  , ETC_DISC )
+			VALUES (
+						#{sDOMAIN_ID}
+					  , #{sPRJT_ID}
+					  , #{sPRJT_STAGE}
+					  , REPLACE(#{sSTRT_DT}, '.', '')
+					  , REPLACE(#{sEND_DT}, '.', '')
+					  , #{sETC_DISC} );
+         ]]>
+	</insert>
+	
+	<delete id="PJ010142B" parameterType="com.uni.unipms.model.In.PJ010122IVO">
+        <![CDATA[
+			DELETE FROM PRJT_STAGE
+			WHERE  DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    PRJT_ID    = #{sPRJT_ID};
+         ]]>
+	</delete>
+    
+    <update id="PJ010132" parameterType="com.uni.unipms.model.In.PJ010101IVO">
+        <![CDATA[
+			UPDATE PRJT_INFO_PMS
+			SET    CURR_STAGE  = (SELECT MAX(PRJT_STAGE)
+								  FROM   PRJT_STAGE
+								  WHERE  DOMAIN_ID = #{sDOMAIN_ID}
+								  AND    PRJT_ID   = #{sPRJT_ID}
+								  AND    CURDATE() + 0 BETWEEN STRT_DT AND END_DT)
+			WHERE  DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    PRJT_ID    = #{sPRJT_ID};
+         ]]>
+	</update>
+</mapper>
+
+
+
+

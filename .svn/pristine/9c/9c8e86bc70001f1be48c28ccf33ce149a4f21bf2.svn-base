@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NT0301Mapper">
+
+	<resultMap id="NT030101OVO" type="com.uni.unipms.model.Out.NT030101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />            
+		<result column="USER_ID"					property="sUSER_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="CURR_DT"					property="sCURR_DT" />
+		<result column="WEEK_TYPE"					property="sWEEK_TYPE" />
+		<result column="WEEK_TYPE_NM"				property="sWEEK_TYPE_NM" />
+		<result column="HDAY_TYPE"					property="sHDAY_TYPE" />
+		<result column="DAY_DESC"					property="sDAY_DESC" />
+		<result column="SEQ_NO"						property="sSEQ_NO" />
+		<result column="DIARY_TIME"					property="sDIARY_TIME" />
+		<result column="TITLE"						property="sTITLE" />
+		<result column="CONTENTS"					property="sCONTENTS" />
+		<result column="DPL_TYPE"					property="sDPL_TYPE" />
+    </resultMap>
+    
+	<select id="NT030102" parameterType="com.uni.unipms.model.In.NT030101IVO" resultMap="NT030101OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    PRJT_DIARY 
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID} 
+			AND     USER_ID   = #{sUSER_ID}
+			AND     CURR_DT   = REPLACE(#{sCURR_DT}, '.', '');
+		]]>
+	</select>
+	
+    <select id="NT030111" parameterType="com.uni.unipms.model.In.NT030101IVO"  resultMap="NT030101OVO">
+		<![CDATA[
+			SELECT  IFNULL(A.DOMAIN_ID, #{sDOMAIN_ID})    DOMAIN_ID
+			      , IFNULL(A.USER_ID, #{sUSER_ID})        USER_ID
+			      , IFNULL(A.PRJT_ID, #{sPRJT_ID})        PRJT_ID
+			      , B.CURR_DT
+			      , B.WEEK_TYPE
+			      , B.WEEK_TYPE_NM
+			      , B.HDAY_TYPE
+			      , B.DAY_DESC
+			      , A.SEQ_NO
+			      , CASE WHEN LENGTH(A.DIARY_TIME) = '3' THEN CONCAT('0', A.DIARY_TIME) ELSE A.DIARY_TIME END AS DIARY_TIME
+			      , A.TITLE
+			FROM    PMS_CALNDR B
+			        LEFT OUTER JOIN PRJT_DIARY A
+			        ON   B.CURR_DT   = A.CURR_DT
+			        AND  A.DOMAIN_ID = #{sDOMAIN_ID}
+			        AND  A.USER_ID   = #{sUSER_ID}
+			WHERE   B.CURR_DT  LIKE CONCAT(REPLACE(#{sCURR_DT}, '.', ''), '%');
+		]]>
+	</select>
+	
+	<select id="NT030113" parameterType="com.uni.unipms.model.In.NT030101IVO"  resultMap="NT030101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , USER_ID
+			      , PRJT_ID
+			      , CURR_DT
+			      , SEQ_NO
+			      , DIARY_TIME
+			      , TITLE
+			      , CONTENTS
+			      , DPL_TYPE 
+			FROM    PRJT_DIARY
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     USER_ID   = #{sUSER_ID}
+			AND     CURR_DT   = REPLACE(#{sCURR_DT}, '.', '')
+			AND     SEQ_NO    = #{sSEQ_NO};
+		]]>
+	</select>
+
+	<insert id="NT030121" parameterType="com.uni.unipms.model.In.NT030101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_DIARY (
+						  DOMAIN_ID
+						, USER_ID
+						, PRJT_ID
+						, CURR_DT
+						, SEQ_NO
+						, DIARY_TIME
+						, TITLE
+						, CONTENTS
+						, DPL_TYPE )
+			VALUES (
+						  #{sDOMAIN_ID}
+						, #{sUSER_ID}
+						, #{sPRJT_ID}
+						, REPLACE(#{sCURR_DT}, '.', '')
+						, #{sSEQ_NO}
+						, REPLACE(#{sDIARY_TIME}, ':', '')
+						, #{sTITLE}
+						, #{sCONTENTS}
+						, #{sDPL_TYPE} );
+		]]>
+	</insert>
+	
+	<delete id="NT030141" parameterType="com.uni.unipms.model.In.NT030101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_DIARY
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    USER_ID     = #{sUSER_ID}
+			AND    CURR_DT     = REPLACE(#{sCURR_DT}, '.', '')
+			AND    SEQ_NO      = #{sSEQ_NO};
+		]]>
+	</delete>
+
+</mapper>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DV0601Mapper">
+
+    <resultMap id="DV060101OVO" type="com.uni.unipms.model.Out.DV060101OVO">
+		<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="PRJT_STAGE"					property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"				property="sPRJT_STAGE_NM" />
+		<result column="TASK_ID"					property="sTASK_ID" />
+		<result column="TASK_NM"					property="sTASK_NM" />
+		<result column="OUTPUT_ID"					property="sOUTPUT_ID" />
+		<result column="OUTPUT_NM"					property="sOUTPUT_NM" />
+		<result column="OUTPUT_DESC"				property="sOUTPUT_DESC" />
+		<result column="MAKE_USER_ID"				property="sMAKE_USER_ID" />
+		<result column="MAKE_USER_NM"				property="sMAKE_USER_NM" />
+		<result column="MAKE_DT"					property="sMAKE_DT" />
+		<result column="MAKE_YN"					property="sMAKE_YN" />
+		<result column="DEF_FILE_NM"				property="sDEF_FILE_NM" />
+		<result column="CMPL_FILE_VER"				property="sCMPL_FILE_VER" />
+		<result column="CMPL_FILE_NM"				property="sCMPL_FILE_NM" />
+		<result column="OUPUT_POOL_ID"				property="sOUPUT_POOL_ID" />
+		<result column="OUPUT_POOL_NM"				property="sOUPUT_POOL_NM" />
+    </resultMap>
+
+    <resultMap id="DV060102OVO" type="com.uni.unipms.model.Out.DV060102OVO">
+		<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="PRJT_STAGE"					property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"				property="sPRJT_STAGE_NM" />
+		<result column="TASK_ID"					property="sTASK_ID" />
+		<result column="TASK_NM"					property="sTASK_NM" />
+		<result column="OUTPUT_ID"					property="sOUTPUT_ID" />
+		<result column="OUTPUT_NM"					property="sOUTPUT_NM" />
+		<result column="OUTPUT_VER"					property="sOUTPUT_VER" />
+		<result column="MAKE_USER_ID"				property="sMAKE_USER_ID" />
+		<result column="MAKE_USER_NM"				property="sMAKE_USER_NM" />
+		<result column="MAKE_DT"					property="sMAKE_DT" />
+		<result column="MAKE_YN"					property="sMAKE_YN" />
+		<result column="FILE_NM"					property="sFILE_NM" />
+    </resultMap>
+
+    <select id="DV060102" parameterType="com.uni.unipms.model.In.DV060101IVO"  resultMap="DV060102OVO">
+        <![CDATA[
+			SELECT  IFNULL(B.DOMAIN_ID, #{sDOMAIN_ID})    DOMAIN_ID
+			      , IFNULL(B.PRJT_ID, #{sPRJT_ID})      PRJT_ID
+			      , IFNULL(CONCAT(MAX(SUBSTRING(B.OUTPUT_VER, 1, 4)), LPAD(MAX(SUBSTRING(B.OUTPUT_VER, 5, 2)) + 1, 2, '0')), '1.0.00')   OUTPUT_VER
+			FROM    PRJT_INFO A
+			        LEFT OUTER JOIN PRJT_OUTPUT_VER B
+			        ON    B.DOMAIN_ID  = #{sDOMAIN_ID}
+			        AND   B.PRJT_ID    = #{sPRJT_ID}
+			        AND   B.PRJT_STAGE = #{sPRJT_STAGE}
+			        AND   B.TASK_ID    = #{sTASK_ID}
+			        AND   B.OUTPUT_ID  = #{sOUTPUT_ID}
+			        AND   A.DOMAIN_ID  = B.DOMAIN_ID
+			        AND   A.PRJT_ID    = B.PRJT_ID
+			WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.PRJT_ID   = #{sPRJT_ID};
+         ]]>
+	</select>
+	
+    <select id="DV060111" parameterType="com.uni.unipms.model.In.DV060101IVO"  resultMap="DV060101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID                                         DOMAIN_ID
+                  , PRJT_ID                                           PRJT_ID
+                  , PRJT_STAGE                                        PRJT_STAGE
+                  , (SELECT CODE_NAME FROM PMS_COMM_CD
+                     WHERE  DOMAIN_ID = B.DOMAIN_ID
+                     AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+                     AND    CODE_TYPE = 'PJST'
+                     AND    CODE      = B.PRJT_STAGE)                 PRJT_STAGE_NM
+                  , ''                                                TASK_ID
+                  , ''                                                TASK_NM
+                  , PRJT_STAGE                                        OUTPUT_ID
+                  , (SELECT CODE_NAME FROM PMS_COMM_CD
+                     WHERE  DOMAIN_ID = B.DOMAIN_ID
+                     AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+                     AND    CODE_TYPE = 'PJST'
+                     AND    CODE      = B.PRJT_STAGE)                 OUTPUT_NM
+                  , ''                                                OUTPUT_DESC
+                  , ''                                                MAKE_USER_ID
+                  , ''                                                MAKE_USER_NM
+                  , ''                                                MAKE_DT
+                  , ''                                                MAKE_YN
+                  , ''                                                DEF_FILE_NM
+                  , ''                                                CMPL_FILE_VER
+                  , ''                                                CMPL_FILE_NM
+            FROM    PRJT_STAGE B
+            WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+            AND     B.PRJT_ID       = #{sPRJT_ID}
+            AND     B.PRJT_STAGE    LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+            UNION ALL
+            SELECT  B.DOMAIN_ID                                       DOMAIN_ID
+                  , B.PRJT_ID                                         PRJT_ID
+                  , B.PRJT_STAGE                                      PRJT_STAGE
+                  , (SELECT CODE_NAME FROM PMS_COMM_CD
+                     WHERE  DOMAIN_ID = B.DOMAIN_ID
+                     AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+                     AND    CODE_TYPE = 'PJST'
+                     AND    CODE      = B.PRJT_STAGE)                 PRJT_STAGE_NM
+                  , B.TASK_ID                                         TASK_ID
+                  , B.TASK_NM                                         TASK_NM
+                  , B.TASK_ID                                         OUTPUT_ID
+                  , B.TASK_NM                                         OUTPUT_NM
+                  , ''                                                OUTPUT_DESC
+                  , ''                                                MAKE_USER_ID
+                  , ''                                                MAKE_USER_NM
+                  , ''                                                MAKE_DT
+                  , ''                                                MAKE_YN
+                  , ''                                                DEF_FILE_NM
+                  , ''                                                CMPL_FILE_VER
+                  , ''                                                CMPL_FILE_NM
+            FROM    PRJT_TASK_INFO B
+                  , PRJT_STAGE A
+            WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+            AND     B.PRJT_ID       = #{sPRJT_ID}
+            AND     B.PRJT_STAGE    LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+            AND     B.DOMAIN_ID     = A.DOMAIN_ID
+            AND     B.PRJT_ID       = A.PRJT_ID
+            AND     B.PRJT_STAGE    = A.PRJT_STAGE
+            UNION ALL
+            SELECT  B.DOMAIN_ID                                       DOMAIN_ID
+                  , B.PRJT_ID                                         PRJT_ID
+                  , B.PRJT_STAGE                                      PRJT_STAGE
+                  , (SELECT CODE_NAME FROM PMS_COMM_CD
+                     WHERE  DOMAIN_ID = B.DOMAIN_ID
+                     AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+                     AND    CODE_TYPE = 'PJST'
+                     AND    CODE      = B.PRJT_STAGE)                 PRJT_STAGE_NM
+                  , B.TASK_ID                                         TASK_ID
+                  , A.TASK_NM                                         TASK_NM
+                  , B.OUTPUT_ID                                       OUTPUT_ID
+                  , B.OUTPUT_NM                                       OUTPUT_NM
+                  , B.OUTPUT_DESC                                     OUTPUT_DESC
+                  , B.MAKE_USER_ID                                    MAKE_USER_ID
+                  , (SELECT USER_NM FROM   MEM_INFO
+                     WHERE  DOMAIN_ID = B.DOMAIN_ID
+                     AND    USER_ID   = B.MAKE_USER_ID )              MAKE_USER_NM
+                  , B.MAKE_DT                                         MAKE_DT
+                  , B.MAKE_YN                                         MAKE_YN
+                  , B.DEF_FILE_NM                                     DEF_FILE_NM
+                  , B.CMPL_FILE_VER                                   CMPL_FILE_VER
+                  , B.CMPL_FILE_NM                                    CMPL_FILE_NM
+            FROM    PRJT_OUTPUT_MNG B
+                    LEFT OUTER JOIN PRJT_TASK_INFO A
+                    ON   B.DOMAIN_ID  = A.DOMAIN_ID
+                    AND  B.PRJT_STAGE = A.PRJT_STAGE
+                    AND  B.PRJT_ID    = A.PRJT_ID
+                    AND  B.TASK_ID    = A.TASK_ID
+            WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+            AND     B.PRJT_ID       = #{sPRJT_ID}
+            AND     B.PRJT_STAGE    LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+            ORDER BY DOMAIN_ID, PRJT_ID, PRJT_STAGE, TASK_ID, OUTPUT_ID;
+         ]]>
+	</select>
+
+	<select id="DV060112" parameterType="com.uni.unipms.model.In.DV060101IVO"  resultMap="DV060102OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = B.PRJT_STAGE)   PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , C.TASK_NM
+			      , B.OUTPUT_ID
+			      , A.OUTPUT_NM
+			      , B.OUTPUT_VER
+			      , B.MAKE_USER_ID
+			      , (SELECT USER_NM FROM   MEM_INFO
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID
+			         AND    USER_ID   = B.MAKE_USER_ID )              MAKE_USER_NM
+			      , B.MAKE_DT
+			      , B.MAKE_YN
+			      , B.FILE_NM
+			FROM    PRJT_OUTPUT_VER B
+			      , PRJT_OUTPUT_MNG A
+			        LEFT OUTER JOIN PRJT_TASK_INFO C
+                    ON   A.DOMAIN_ID  = C.DOMAIN_ID
+                    AND  A.PRJT_STAGE = C.PRJT_STAGE
+                    AND  A.PRJT_ID    = C.PRJT_ID
+                    AND  A.TASK_ID    = C.TASK_ID
+			WHERE   B.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     B.PRJT_ID    = #{sPRJT_ID}
+			AND     B.PRJT_STAGE = #{sPRJT_STAGE}
+			AND     B.OUTPUT_ID  = #{sOUTPUT_ID}
+			AND     B.DOMAIN_ID  = A.DOMAIN_ID
+			AND     B.PRJT_ID    = A.PRJT_ID
+			AND     B.PRJT_STAGE = A.PRJT_STAGE
+			AND     B.TASK_ID    = A.TASK_ID
+			AND     B.OUTPUT_ID  = A.OUTPUT_ID
+			ORDER BY B.DOMAIN_ID, B.PRJT_ID, B.OUTPUT_ID, B.OUTPUT_VER DESC;
+         ]]>
+	</select>
+
+	<select id="DV060113" parameterType="com.uni.unipms.model.In.DV060101IVO"  resultMap="DV060101OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = B.PRJT_STAGE)   PRJT_STAGE_NM
+			      , B.TASK_ID
+			      , B.TASK_NM
+			      , B.OUTPUT_ID
+			      , B.OUTPUT_NM
+			      , B.OUTPUT_DESC
+			      , B.MAKE_USER_ID
+			      , (SELECT USER_NM FROM   MEM_INFO
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID
+			         AND    USER_ID   = B.MAKE_USER_ID )              sMAKE_USER_NM
+			      , B.MAKE_DT
+			      , B.MAKE_YN
+			      , B.DEF_FILE_NM
+			      , B.CMPL_FILE_NM
+			FROM    PRJT_OUTPUT_MNG B
+			        LEFT OUTER JOIN PRJT_TASK_INFO A
+                    ON   B.DOMAIN_ID  = A.DOMAIN_ID
+                    AND  B.PRJT_STAGE = A.PRJT_STAGE
+                    AND  B.PRJT_ID    = A.PRJT_ID
+                    AND  B.TASK_ID    = A.TASK_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     B.PRJT_ID       = #{sPRJT_ID}
+			AND     B.PRJT_STAGE    = #{sPRJT_STAGE}
+			AND     B.TASK_ID       = #{sTASK_ID}
+			AND     B.OUTPUT_ID     = #{sOUTPUT_ID};
+         ]]>
+	</select>
+	
+	<insert id="DV060121" parameterType="com.uni.unipms.model.In.DV060101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_OUTPUT_VER (
+					  DOMAIN_ID
+					, PRJT_ID
+					, PRJT_STAGE
+					, TASK_ID
+					, OUTPUT_ID
+					, OUTPUT_VER
+					, MAKE_USER_ID
+					, MAKE_DT
+					, MAKE_YN
+					, FILE_NM )
+			VALUES (  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sPRJT_STAGE}
+					, #{sTASK_ID}
+					, #{sOUTPUT_ID}
+					, #{sOUTPUT_VER}
+					, #{sMAKE_USER_ID}
+					, REPLACE(#{sMAKE_DT}, '.' ,'')
+					, #{sMAKE_YN}
+					, #{sFILE_NM} );
+         ]]>
+	</insert>
+	
+	<delete id="DV060141" parameterType="com.uni.unipms.model.In.DV060101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_OUTPUT_VER
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE}
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    OUTPUT_ID   = #{sOUTPUT_ID}
+			AND    OUTPUT_VER  = #{sOUTPUT_VER};
+         ]]>
+	</delete>
+	
+	<update id="DV060131" parameterType="com.uni.unipms.model.In.DV060101IVO">
+		<![CDATA[
+			UPDATE PRJT_OUTPUT_MNG
+			SET    MAKE_USER_ID  = #{sMAKE_USER_ID}
+		         , MAKE_DT       = REPLACE(#{sMAKE_DT}, '.' ,'')
+			     , MAKE_YN       = #{sMAKE_YN}
+			     , CMPL_FILE_VER = #{sOUTPUT_VER}
+			     , CMPL_FILE_NM  = #{sFILE_NM}
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE}
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    OUTPUT_ID   = #{sOUTPUT_ID};
+         ]]>
+	</update>
+	
+</mapper>
+
+
+
+

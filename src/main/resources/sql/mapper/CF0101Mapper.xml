@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CF0101Mapper">
+	<resultMap id="CF010101OVO" type="com.uni.unipms.model.Out.CF010101OVO">
+		<result column="STRT_DT"					property="sSTRT_DT" />
+		<result column="END_DT"                     property="sEND_DT" />
+		<result column="CURR_CONTENTS"              property="sCURR_CONTENTS" />
+		<result column="NEXT_CONTENTS"              property="sNEXT_CONTENTS" />
+		<result column="ETC_CONTENTS"               property="sETC_CONTENTS" />
+		<result column="FILE_NM"                    property="sFILE_NM" />
+		<result column="PRJT_YEAR"                  property="sPRJT_YEAR" />
+		<result column="PRJT_WEEK"                  property="sPRJT_WEEK" />
+		<result column="WEEK_ORDER"                 property="sWEEK_ORDER" />
+		<result column="IMG_URL"                    property="sIMG_URL" />
+		<result column="PRJT_NM"                    property="sPRJT_NM" />
+		<result column="PRJT_STAGE"                 property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"              property="sPRJT_STAGE_NM" />
+		<result column="PRJT_MANG_ID"               property="sPRJT_MANG_ID" />
+		<result column="PRJT_MANG_NM"               property="sPRJT_MANG_NM" />
+		<result column="TASK_ID"                    property="sTASK_ID" />
+		<result column="TASK_NM"                    property="sTASK_NM" />
+		<result column="TASK_DESC"                  property="sTASK_DESC" />
+    </resultMap>
+    
+	<select id="CF010111" parameterType="com.uni.unipms.model.In.CF010101IVO"  resultMap="CF010101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.STRT_DT
+			      , B.END_DT
+			      , B.PRJT_YEAR
+			      , B.PRJT_WEEK
+			      , B.WEEK_ORDER
+			      , B.CURR_CONTENTS
+			      , B.NEXT_CONTENTS
+			      , B.ETC_CONTENTS
+			      , B.FILE_NM
+			      , B.PRJT_NM
+			      , B.PRJT_STAGE
+			      , B.PRJT_STAGE_NM
+			      , B.PRJT_MANG_ID
+			      , B.PRJT_MANG_NM
+			FROM    ( SELECT  B.DOMAIN_ID
+			                , B.PRJT_ID
+			                , B.PRJT_NM
+			                , B.PRJT_STRT_DT
+			                , B.PRJT_END_DT
+			                , CONCAT('M+', B.WEEK_ORDER - 1)      PRJT_WEEK
+			                , B.WEEK_STRT_DT
+			                , B.WEEK_END_DT
+			                , B.CURR_YEAR                         PRJT_YEAR
+			                , B.MNTH
+			                , B.MNTH_WEEK
+			                , B.CURR_WEEK
+			                , CONCAT(B.CURR_YEAR, '년 ', B.MNTH, '월 ', B.MNTH_WEEK, '주차')   WEEK_ORDER
+			                , A.STRT_DT
+			                , A.END_DT
+			                , A.CURR_CONTENTS
+			                , A.NEXT_CONTENTS
+			                , A.ETC_CONTENTS
+			                , A.FILE_NM
+			                , B.PRJT_STAGE
+			                , B.PRJT_STAGE_NM
+			                , B.PRJT_MANG_ID
+			                , B.PRJT_MANG_NM
+			          FROM    ( SELECT  @rownum := @rownum + 1    WEEK_ORDER
+			                          , A.DOMAIN_ID
+			                          , A.PRJT_ID
+			                          , A.PRJT_NM
+			                          , A.PRJT_STRT_DT
+			                          , A.PRJT_END_DT
+			                          , A.CURR_STAGE                                             PRJT_STAGE
+			                          , IFNULL((SELECT CODE_NAME
+			                                    FROM   PMS_COMM_CD
+			                                    WHERE  DOMAIN_ID = A.DOMAIN_ID
+			                                    AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			                                    AND    CODE_TYPE = 'PJST'
+			                                    AND    CODE      = A.CURR_STAGE), '')       PRJT_STAGE_NM
+			                          , A.PRJT_MANG_ID
+			                          , IFNULL((SELECT  USER_NM
+			                                    FROM    MEM_INFO
+			                                    WHERE   USER_ID = A.PRJT_MANG_ID), '')      PRJT_MANG_NM
+			                          , B.WEEK_STRT_DT
+			                          , B.WEEK_END_DT
+			                          , B.CURR_YEAR
+			                          , B.MNTH
+			                          , B.MNTH_WEEK
+			                          , B.CURR_WEEK
+			                    FROM    PMS_CALNDR_WEEK B
+			                          , PRJT_INFO A
+			                          , (SELECT @rownum := 0) C
+			                    WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			                    AND     A.PRJT_ID   = #{sPRJT_ID}
+			                    AND     B.WEEK_STRT_DT >= DATE_ADD(PRJT_STRT_DT, INTERVAL(2 - DAYOFWEEK(PRJT_STRT_DT)) DAY) + 0
+			                    AND     B.WEEK_END_DT  <=DATE_ADD(PRJT_END_DT, INTERVAL(9 - DAYOFWEEK(PRJT_END_DT)) DAY) + 0) B
+			                  LEFT OUTER JOIN PRJT_RPRT A
+			                  ON     B.DOMAIN_ID    = A.DOMAIN_ID
+			                  AND    B.PRJT_ID      = A.PRJT_ID
+			                  AND    B.WEEK_STRT_DT = A.STRT_DT
+			                  AND    B.WEEK_END_DT  = A.END_DT ) B
+			WHERE   B.STRT_DT IS NOT NULL
+			AND     B.PRJT_YEAR  LIKE CONCAT('%', #{sPRJT_YEAR}, '%')
+			AND     B.STRT_DT    <= (CASE WHEN #{sCURR_DT} = '' THEN B.STRT_DT ELSE #{sCURR_DT} END)
+			AND     B.END_DT     >= (CASE WHEN #{sCURR_DT} = '' THEN B.END_DT ELSE #{sCURR_DT} END)
+			ORDER BY B.STRT_DT DESC;
+		]]>
+	</select>
+ 
+    <select id="CF010113" parameterType="com.uni.unipms.model.In.CF010101IVO"  resultMap="CF010101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+				  , PRJT_ID
+				  , STRT_DT
+				  , END_DT
+				  , CURR_CONTENTS
+				  , NEXT_CONTENTS
+				  , ETC_CONTENTS
+				  , FILE_NM
+			FROM    PRJT_RPRT
+			WHERE DOMAIN_ID   = #{sDOMAIN_ID}
+			AND   PRJT_ID     = #{sPRJT_ID}
+			AND   STRT_DT     = #{sSTRT_DT};
+		]]>
+	</select>
+   
+    <insert id="CF010121" parameterType="com.uni.unipms.model.In.CF010101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_RPRT (
+						  DOMAIN_ID
+						, PRJT_ID
+						, STRT_DT
+						, END_DT
+						, CURR_CONTENTS
+						, NEXT_CONTENTS
+						, ETC_CONTENTS
+						, FILE_NM )
+			VALUES (
+						  #{sDOMAIN_ID}
+						, #{sPRJT_ID}
+						, #{sSTRT_DT}
+						, #{sEND_DT}
+						, #{sCURR_CONTENTS}
+						, #{sNEXT_CONTENTS}
+						, #{sETC_CONTENTS}
+						, #{sFILE_NM} );
+		]]>
+	</insert>
+	
+	<delete id="CF010141" parameterType="com.uni.unipms.model.In.CF010101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_RPRT
+			WHERE DOMAIN_ID     = #{sDOMAIN_ID}
+			AND   PRJT_ID       = #{sPRJT_ID}
+			AND   STRT_DT       = #{sSTRT_DT};
+		]]>
+	</delete>
+
+    <select id="CF010181A" parameterType="com.uni.unipms.model.In.CF010101IVO"  resultMap="CF010101OVO">
+		<![CDATA[
+			SELECT  B.CURR_YEAR              PRJT_YEAR
+			      , B.WEEK_STRT_DT           STRT_DT
+			      , B.WEEK_END_DT            END_DT
+			FROM    PMS_CALNDR_WEEK B
+			WHERE   B.CURR_YEAR     LIKE CONCAT('%', #{sPRJT_YEAR}, '%')
+			AND     B.WEEK_STRT_DT  <= (CASE WHEN #{sCURR_DT} = '' THEN B.WEEK_STRT_DT ELSE #{sCURR_DT} END)
+      		AND     B.WEEK_END_DT   >= (CASE WHEN #{sCURR_DT} = '' THEN B.WEEK_END_DT ELSE #{sCURR_DT} END);
+		]]>
+	</select>
+	
+    <select id="CF010181B" parameterType="com.uni.unipms.model.In.CF010101IVO"  resultMap="CF010101OVO">
+		<![CDATA[
+			SELECT  A.DOMAIN_ID
+			      , A.PRJT_ID
+			      , B.CURR_YEAR              PRJT_YEAR
+			      , B.WEEK_STRT_DT           STRT_DT
+			      , B.WEEK_END_DT            END_DT
+			FROM    PMS_CALNDR_WEEK B
+			      , PRJT_INFO A
+			WHERE   A.DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     A.PRJT_ID       = #{sPRJT_ID}
+			AND     B.CURR_YEAR     LIKE CONCAT('%', #{sPRJT_YEAR}, '%')
+			AND     A.PRJT_STRT_DT  <= B.WEEK_END_DT
+			AND     DATE_ADD(A.PRJT_END_DT, INTERVAL(9 - DAYOFWEEK(A.PRJT_END_DT)) DAY) + 0 >= B.WEEK_END_DT;
+		]]>
+	</select>
+	
+	<select id="CF010181C" parameterType="com.uni.unipms.model.In.CF010101IVO"  resultMap="CF010101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STRT_DT                      STRT_DT
+			      , B.PRJT_END_DT                       END_DT
+			      , A.CURR_YEAR                         PRJT_YEAR
+			FROM    PRJT_INFO B
+			      , PMS_CALNDR_WEEK A
+			WHERE   B.DOMAIN_ID       = #{sDOMAIN_ID}
+			AND     B.PRJT_ID         = #{sPRJT_ID}
+			AND     B.PRJT_STRT_DT   <= A.WEEK_END_DT
+			AND     DATE_ADD(B.PRJT_END_DT, INTERVAL(9 - DAYOFWEEK(B.PRJT_END_DT)) DAY) + 0 >= A.WEEK_END_DT
+			GROUP BY 1,2,3,4,5
+			ORDER BY 5 DESC;
+		]]>
+	</select>
+	
+    <select id="CF010182" parameterType="com.uni.unipms.model.In.CF010101IVO"  resultMap="CF010101OVO">
+		<![CDATA[
+			SELECT  A.TASK_ID
+			      , A.TASK_NM
+			      , A.STRT_DT
+			      , A.END_DT
+			FROM    PMS_CALNDR_WEEK B
+			      , (SELECT   CONCAT(TASK_ID, '.', '00', '.', '00')       TASK_ID
+			                , TASK_NM                                     TASK_NM
+			                , STRT_DT
+			                , END_DT
+			                , DATE_ADD(STRT_DT, INTERVAL(8 - DAYOFWEEK(STRT_DT)) DAY) + 0  STRT_END_DT
+			                , DATE_ADD(END_DT, INTERVAL(8 - DAYOFWEEK(END_DT)) DAY) + 0    END_END_DT
+			           FROM   PRJT_TASK_INFO
+			           WHERE  DOMAIN_ID = #{sDOMAIN_ID}
+			           AND    PRJT_ID   = #{sPRJT_ID}
+			           UNION ALL
+			           SELECT   CONCAT(TASK_ID, '.', SEG_ID, '.', '00')   TASK_ID
+			                , SEG_NM                                      TASK_NM
+			                , STRT_DT
+			                , END_DT
+			                , DATE_ADD(STRT_DT, INTERVAL(8 - DAYOFWEEK(STRT_DT)) DAY) + 0  STRT_END_DT
+			                , DATE_ADD(END_DT, INTERVAL(8 - DAYOFWEEK(END_DT)) DAY) + 0    END_END_DT
+			           FROM   PRJT_SEG_INFO
+			           WHERE  DOMAIN_ID = #{sDOMAIN_ID}
+			           AND    PRJT_ID   = #{sPRJT_ID}
+			           UNION ALL
+			           SELECT   CONCAT(TASK_ID, '.', SEG_ID, '.', SEG_SUB_ID)    TASK_ID
+			                , SEG_SUB_NM                                         TASK_NM
+			                , STRT_DT
+			                , END_DT
+			                , DATE_ADD(STRT_DT, INTERVAL(8 - DAYOFWEEK(STRT_DT)) DAY) + 0  STRT_END_DT
+			                , DATE_ADD(END_DT, INTERVAL(8 - DAYOFWEEK(END_DT)) DAY) + 0    END_END_DT
+			           FROM   PRJT_SEG_SUB_INFO
+			           WHERE  DOMAIN_ID = #{sDOMAIN_ID}
+			           AND    PRJT_ID   = #{sPRJT_ID} ) A
+			WHERE   B.WEEK_END_DT  BETWEEN A.STRT_END_DT AND A.END_END_DT
+			AND     #{sCURR_DT}    BETWEEN B.WEEK_STRT_DT AND B.WEEK_END_DT
+			ORDER BY A.TASK_ID;
+		]]>
+	</select>
+</mapper>
+
+
+
+

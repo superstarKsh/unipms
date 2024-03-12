@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TS0102Mapper">
+
+    <resultMap id="TS010201OVO" type="com.uni.unipms.model.Out.TS010201OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />            
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="TEST_SCN_ID"				property="sTEST_SCN_ID" />
+		<result column="TEST_CASE_ID"				property="sTEST_CASE_ID" />
+		<result column="TEST_CASE_NM"				property="sTEST_CASE_NM" />
+		<result column="TEST_CASE_DESC"				property="sTEST_CASE_DESC" />
+		<result column="TEST_INPUT_DATA"			property="sTEST_INPUT_DATA" />
+		<result column="TEST_RSLT"					property="sTEST_RSLT" />
+		<result column="TEST_DT"					property="sTEST_DT" />
+		<result column="TEST_SVRT"					property="sTEST_SVRT" />
+		<result column="TEST_IMG_URL"				property="sTEST_IMG_URL" />
+		<result column="TEST_USER_ID"				property="sTEST_USER_ID" />
+		<result column="TEST_USER_NM"				property="sTEST_USER_NM" />
+		<result column="TEST_CONFRM"				property="sTEST_CONFRM" />
+		<result column="TEST_DESC"					property="sTEST_DESC" />
+		<result column="CORRT_SCHD_DT"				property="sCORRT_SCHD_DT" />
+		<result column="CORRT_DT"					property="sCORRT_DT" />
+		<result column="DEV_USER_ID"				property="sDEV_USER_ID" />
+		<result column="DEV_USER_NM"				property="sDEV_USER_NM" />
+		<result column="CORRT_DESC"					property="sCORRT_DESC" />
+    </resultMap>
+
+    <select id="TS010202" parameterType="com.uni.unipms.model.In.TS010201IVO" resultMap="TS010201OVO">
+		<![CDATA[
+			SELECT  IFNULL(A.DOMAIN_ID, B.DOMAIN_ID)                       DOMAIN_ID
+			      , IFNULL(A.PRJT_ID, B.PRJT_ID)                           PRJT_ID
+			      , IFNULL(CONCAT(MAX(SUBSTRING(A.TEST_CASE_ID, 1, LENGTH(A.TEST_CASE_ID) - 4)),
+                                      LPAD(MAX(SUBSTRING(A.TEST_CASE_ID, LENGTH(A.TEST_CASE_ID)-2, 4)) + 1, 4, '0'))
+                           , CONCAT('TC','0001'))                          TEST_CASE_ID
+			FROM    PRJT_INFO B
+            		LEFT OUTER JOIN PRJT_TEST_DETAIL A
+			        ON      B.DOMAIN_ID     = A.DOMAIN_ID
+		          	AND     B.PRJT_ID       = A.PRJT_ID
+		          	AND     A.TEST_SCN_ID   = #{sTEST_SCN_ID}
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID};
+		]]>
+	</select>
+
+	<select id="TS010212" parameterType="com.uni.unipms.model.In.TS010201IVO" resultMap="TS010201OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+				  , B.PRJT_ID
+				  , B.TEST_SCN_ID
+				  , B.TEST_CASE_ID
+				  , B.TEST_CASE_NM
+				  , B.TEST_CASE_DESC
+				  , B.TEST_INPUT_DATA
+				  , B.TEST_RSLT
+				  , B.TEST_DT
+				  , B.TEST_SVRT
+                  , B.TEST_IMG_URL
+				  , B.TEST_USER_ID
+				  , ( SELECT  USER_NM
+					  FROM    MEM_INFO
+					  WHERE   DOMAIN_ID = B.DOMAIN_ID
+					  AND     USER_ID   = B.TEST_USER_ID )    TEST_USER_NM
+				  , B.TEST_CONFRM
+				  , B.TEST_DESC
+				  , B.CORRT_SCHD_DT
+				  , B.CORRT_DT
+				  , B.DEV_USER_ID
+				  , ( SELECT  USER_NM
+					  FROM    MEM_INFO
+					  WHERE   DOMAIN_ID = B.DOMAIN_ID
+					  AND     USER_ID   = B.DEV_USER_ID )     DEV_USER_NM
+				  , B.CORRT_DESC
+			FROM    PRJT_TEST_DETAIL B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    AND     B.TEST_SCN_ID   = #{sTEST_SCN_ID};
+		]]>
+	</select>
+	
+	<select id="TS010215" parameterType="com.uni.unipms.model.In.TS010201IVO" resultMap="TS010201OVO">
+		<![CDATA[
+			SELECT  COUNT(TEST_CASE_ID)    TEST_CASE_ID
+			FROM    PRJT_TEST_DETAIL
+			WHERE   DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     PRJT_ID       = #{sPRJT_ID}
+		    AND     TEST_SCN_ID   = #{sTEST_SCN_ID}
+		    AND     TEST_CASE_ID  = #{sTEST_CASE_ID};
+		]]>
+	</select>
+	
+
+    <insert id="TS010221" parameterType="com.uni.unipms.model.In.TS010201IVO">
+		<![CDATA[
+			INSERT INTO PRJT_TEST_DETAIL (
+					DOMAIN_ID
+				  , PRJT_ID
+				  , TEST_SCN_ID
+				  , TEST_CASE_ID
+				  , TEST_CASE_NM
+				  , TEST_CASE_DESC
+				  , TEST_INPUT_DATA
+				  , TEST_RSLT
+				  , TEST_DT
+				  , TEST_SVRT
+                  , TEST_IMG_URL
+				  , TEST_USER_ID
+				  , TEST_USER_NM
+				  , TEST_CONFRM
+				  , TEST_DESC
+				  , CORRT_SCHD_DT
+				  , CORRT_DT
+				  , DEV_USER_ID
+				  , DEV_USER_NM
+				  , CORRT_DESC )
+			VALUES (
+					#{sDOMAIN_ID}
+				  , #{sPRJT_ID}
+				  , #{sTEST_SCN_ID}
+				  , #{sTEST_CASE_ID}
+				  , #{sTEST_CASE_NM}
+				  , #{sTEST_CASE_DESC}
+				  , #{sTEST_INPUT_DATA}
+				  , #{sTEST_RSLT}
+				  , REPLACE(#{sTEST_DT}, '.', '')
+				  , #{sTEST_SVRT}
+                  , #{sTEST_IMG_URL}
+				  , #{sTEST_USER_ID}
+				  , #{sTEST_USER_NM}
+				  , #{sTEST_CONFRM}
+				  , #{sTEST_DESC}
+				  , REPLACE(#{sCORRT_SCHD_DT}, '.', '')
+				  , REPLACE(#{sCORRT_DT}, '.', '')
+				  , #{sDEV_USER_ID}
+				  , #{sDEV_USER_NM}
+				  , #{sCORRT_DESC} );
+		]]>
+	</insert>
+	
+	<update id="TS010231" parameterType="com.uni.unipms.model.In.TS010201IVO">
+		<![CDATA[
+			UPDATE  PRJT_TEST_DETAIL
+			SET     TEST_CASE_NM       = #{sTEST_CASE_NM}
+				  , TEST_CASE_DESC     = #{sTEST_CASE_DESC}
+				  , TEST_INPUT_DATA    = #{sTEST_INPUT_DATA}
+			  	  , TEST_RSLT          = #{sTEST_RSLT}
+				  , TEST_DT            = REPLACE(#{sTEST_DT}, '.', '')
+				  , TEST_SVRT          = #{sTEST_SVRT}
+                  , TEST_IMG_URL       = #{sTEST_IMG_URL}
+				  , TEST_USER_ID       = #{sTEST_USER_ID}
+				  , TEST_USER_NM       = #{sTEST_USER_NM}
+				  , TEST_CONFRM        = #{sTEST_CONFRM}
+				  , TEST_DESC          = #{sTEST_DESC}
+				  , CORRT_SCHD_DT      = REPLACE(#{sCORRT_SCHD_DT}, '.', '')
+				  , CORRT_DT           = REPLACE(#{sCORRT_DT}, '.', '')
+				  , DEV_USER_ID        = #{sDEV_USER_ID}
+				  , DEV_USER_NM        = #{sDEV_USER_NM}
+				  , CORRT_DESC         = #{sCORRT_DESC}
+			WHERE   DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     PRJT_ID       = #{sPRJT_ID}
+			AND     TEST_SCN_ID   = #{sTEST_SCN_ID}
+			AND     TEST_CASE_ID  = #{sTEST_CASE_ID};
+		]]>
+	</update>
+
+    <update id="TS010232" parameterType="com.uni.unipms.model.In.TS010202IVO">
+        <![CDATA[
+			UPDATE PRJT_TEST_DETAIL A
+			SET    A.TEST_USER_ID = IFNULL((SELECT  USER_ID 
+			                                FROM    MEM_INFO 
+			                                WHERE   DOMAIN_ID = A.DOMAIN_ID 
+			                                AND     USER_NM = A.TEST_USER_NM), '')
+			WHERE  A.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    A.PRJT_ID     = #{sPRJT_ID}
+			AND    A.TEST_SCN_ID = #{sTEST_SCN_ID};
+         ]]>
+	</update>
+
+    <delete id="TS010241" parameterType="com.uni.unipms.model.In.TS010201IVO">
+		<![CDATA[
+			DELETE FROM PRJT_TEST_DETAIL
+			WHERE  DOMAIN_ID    = #{sDOMAIN_ID}
+			AND    PRJT_ID      = #{sPRJT_ID}
+			AND    TEST_SCN_ID  = #{sTEST_SCN_ID}
+			AND    TEST_CASE_ID = #{sTEST_CASE_ID};
+		]]>
+	</delete>
+
+    <delete id="TS010242" parameterType="com.uni.unipms.model.In.TS010202IVO">
+		<![CDATA[
+			DELETE FROM PRJT_TEST_DETAIL
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    TEST_SCN_ID = #{sTEST_SCN_ID};
+		]]>
+	</delete>
+	
+</mapper>

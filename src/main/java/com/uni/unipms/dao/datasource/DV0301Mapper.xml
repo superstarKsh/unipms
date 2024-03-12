@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DV0301Mapper">
+
+    <resultMap id="DV030101OVO" type="com.uni.unipms.model.Out.DV030101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="ACTIVITY_ID"				property="sACTIVITY_ID" />
+		<result column="TASK_ID"					property="sTASK_ID" />
+		<result column="SEG_ID"						property="sSEG_ID" />
+		<result column="SEG_SUB_ID"					property="sSEG_SUB_ID" />
+		<result column="PRG_ID"						property="sPRG_ID" />
+		<result column="PRG_NM"						property="sPRG_NM" />
+		<result column="PRG_EXTN"					property="sPRG_EXTN" />
+		<result column="PRG_TYPE"					property="sPRG_TYPE" />
+		<result column="PRG_TYPE_NM"				property="sPRG_TYPE_NM" />
+		<result column="DEV_USER_ID"				property="sDEV_USER_ID" />
+		<result column="DEV_USER_NM"				property="sDEV_USER_NM" />
+		<result column="IMP_RT"						property="sIMP_RT" />
+		<result column="IMP_RT_NM"					property="sIMP_RT_NM" />
+		<result column="BEFORE_PGM"					property="sBEFORE_PGM" />
+		<result column="AFTER_PGM"					property="sAFTER_PGM" />
+		<result column="PROGRESS_RT"				property="sPROGRESS_RT" />
+		<result column="PRJ_PLAN_STRT_DT"			property="sPRJ_PLAN_STRT_DT" />
+		<result column="PRJ_PLAN_END_DT"			property="sPRJ_PLAN_END_DT" />
+		<result column="PRJ_DEV_STRT_DT"			property="sPRJ_DEV_STRT_DT" />
+		<result column="PRJ_DEV_END_DT"				property="sPRJ_DEV_END_DT" />
+		<result column="TEST_PLAN_STRT_DT"			property="sTEST_PLAN_STRT_DT" />
+		<result column="TEST_PLAN_END_DT"			property="sTEST_PLAN_END_DT" />
+		<result column="TEST_DEV_STRT_DT"			property="sTEST_DEV_STRT_DT" />
+		<result column="TEST_DEV_END_DT"			property="sTEST_DEV_END_DT" />
+		<result column="PM_CNFM"					property="sPM_CNFM" />
+		<result column="CUS_CNFM"					property="sCUS_CNFM" />
+    </resultMap>
+
+	<select id="DV030102" parameterType="com.uni.unipms.model.In.DV030101IVO"  resultMap="DV030101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , IFNULL(CONCAT(MAX(SUBSTRING(B.PRG_ID, 1, LENGTH(B.PRG_ID) - 2)),
+                                      LPAD(MAX(SUBSTRING(B.PRG_ID, LENGTH(B.PRG_ID)-1, 2)) + 1, 2, '0')),
+                           CONCAT(#{sTASK_ID},
+                                  LPAD(#{sSEG_ID}, 2, '0'),
+                                  LPAD(#{sSEG_SUB_ID}, 2, '0'),
+                                  '001'))                                      PRG_ID
+			FROM    PRJT_TASK_INFO A
+					LEFT OUTER JOIN PRJT_DEV_SCHL B
+			        ON   A.DOMAIN_ID = B.DOMAIN_ID 
+			        AND  A.PRJT_ID   = B.PRJT_ID
+			        AND  A.TASK_ID   = B.TASK_ID
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			AND     A.PRJT_STAGE = #{sPRJT_STAGE}
+			AND     A.TASK_ID    = #{sTASK_ID}	
+			AND     B.SEG_ID     LIKE CONCAT('%', #{sSEG_ID}, '%')
+			AND     B.SEG_SUB_ID LIKE CONCAT('%', #{sSEG_SUB_ID}, '%');
+		]]> 
+	</select>
+	
+	<select id="DV030111" parameterType="com.uni.unipms.model.In.DV030101IVO"  resultMap="DV030101OVO"  >
+        <![CDATA[
+			SELECT  DOMAIN_ID
+				  , PRJT_ID
+				  , CONCAT(TASK_ID, '.', SEG_ID, '.', SEG_SUB_ID)          ACTIVITY_ID
+				  , TASK_ID
+				  , SEG_ID
+				  , SEG_SUB_ID
+				  , PRG_ID
+				  , PRG_NM
+				  , PRG_EXTN
+				  , PRG_TYPE
+				  , (SELECT CODE_NAME FROM PMS_COMM_CD
+				     WHERE  DOMAIN_ID = B.DOMAIN_ID
+				     AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+				     AND    CODE_TYPE = 'PRGT'
+				     AND    CODE      = B.PRG_TYPE)                        PRG_TYPE_NM
+				  , DEV_USER_ID
+				  , ( SELECT USER_NM FROM   MEM_INFO
+				      WHERE  DOMAIN_ID = B.DOMAIN_ID
+				      AND USER_ID = B.DEV_USER_ID )                        DEV_USER_NM
+				  , IMP_RT
+				  , (SELECT CODE_NAME FROM PMS_COMM_CD
+				     WHERE  DOMAIN_ID = B.DOMAIN_ID
+				     AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+				     AND    CODE_TYPE = 'PGIM'
+				     AND    CODE      = B.IMP_RT)                          IMP_RT_NM
+				  , BEFORE_PGM
+				  , AFTER_PGM
+				  , PROGRESS_RT
+				  , PRJ_PLAN_STRT_DT
+				  , PRJ_PLAN_END_DT
+				  , PRJ_DEV_STRT_DT
+				  , PRJ_DEV_END_DT
+				  , TEST_PLAN_STRT_DT
+				  , TEST_PLAN_END_DT
+				  , TEST_DEV_STRT_DT
+				  , TEST_DEV_END_DT
+				  , IFNULL(PM_CNFM, 'N')                                   PM_CNFM
+				  , IFNULL(CUS_CNFM, 'N')                                  CUS_CNFM
+			FROM    PRJT_DEV_SCHL B
+			WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     PRJT_ID     = #{sPRJT_ID}
+			AND     TASK_ID     LIKE CONCAT('%', #{sTASK_ID}, '%')
+			AND     SEG_ID      LIKE CONCAT('%', #{sSEG_ID}, '%')
+			AND     SEG_SUB_ID  LIKE CONCAT('%', #{sSEG_SUB_ID}, '%')
+			ORDER BY  DOMAIN_ID , PRJT_ID , TASK_ID, SEG_ID, SEG_SUB_ID;
+         ]]>
+	</select>
+
+	<insert id="DV030121" parameterType="com.uni.unipms.model.In.DV030101IVO">
+        <![CDATA[
+			INSERT INTO PRJT_DEV_SCHL (
+						  DOMAIN_ID
+						, PRJT_ID
+						, TASK_ID
+						, SEG_ID
+						, SEG_SUB_ID
+						, PRG_ID
+						, PRG_NM
+						, PRG_EXTN
+						, PRG_TYPE
+						, PRG_TYPE_NM
+						, DEV_USER_ID
+						, DEV_USER_NM
+						, IMP_RT
+						, IMP_RT_NM
+						, BEFORE_PGM
+						, AFTER_PGM
+						, PRJ_PLAN_STRT_DT
+						, PRJ_PLAN_END_DT
+						, PRJ_DEV_STRT_DT
+						, PRJ_DEV_END_DT
+						, TEST_PLAN_STRT_DT
+						, TEST_PLAN_END_DT
+						, TEST_DEV_STRT_DT
+						, TEST_DEV_END_DT
+						, PM_CNFM
+						, CUS_CNFM
+						, PROGRESS_RT )
+			VALUES (
+						  #{sDOMAIN_ID}
+						, #{sPRJT_ID}
+						, #{sTASK_ID}
+						, #{sSEG_ID}
+						, #{sSEG_SUB_ID}
+						, #{sPRG_ID}
+						, #{sPRG_NM}
+						, #{sPRG_EXTN}
+						, #{sPRG_TYPE}
+						, #{sPRG_TYPE_NM}
+						, #{sDEV_USER_ID}
+						, #{sDEV_USER_NM}
+						, #{sIMP_RT}
+						, #{sIMP_RT_NM}
+						, #{sBEFORE_PGM}
+						, #{sAFTER_PGM}
+						, REPLACE(#{sPRJ_PLAN_STRT_DT}, '.', '')
+						, REPLACE(#{sPRJ_PLAN_END_DT}, '.', '')
+						, REPLACE(#{sPRJ_DEV_STRT_DT}, '.', '')
+						, REPLACE(#{sPRJ_DEV_END_DT}, '.', '')
+						, REPLACE(#{sTEST_PLAN_STRT_DT}, '.', '')
+						, REPLACE(#{sTEST_PLAN_END_DT}, '.', '')
+						, REPLACE(#{sTEST_DEV_STRT_DT}, '.', '')
+						, REPLACE(#{sTEST_DEV_END_DT}, '.', '')
+						, #{sPM_CNFM}
+						, #{sCUS_CNFM} 
+						, #{sPROGRESS_RT} );
+         ]]>
+	</insert>
+
+	<update id="DV030132" parameterType="com.uni.unipms.model.In.DV030101IVO">
+		<![CDATA[
+			UPDATE PRJT_DEV_SCHL A
+			SET    A.DEV_USER_ID = IFNULL((SELECT USER_ID
+				                           FROM   MEM_INFO
+				                           WHERE  DOMAIN_ID = A.DOMAIN_ID
+	                                       AND    USER_NM   = A.DEV_USER_NM), A.DEV_USER_ID)
+			     , A.IMP_RT      = IFNULL((SELECT CODE
+			                               FROM   PMS_COMM_CD
+			                               WHERE  DOMAIN_ID = A.DOMAIN_ID
+			                               AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			                               AND    CODE_NAME = A.IMP_RT_NM
+			                               AND    CODE_TYPE = 'PGIM'), A.IMP_RT)
+			     , A.PRG_TYPE    = IFNULL((SELECT CODE
+			                               FROM   PMS_COMM_CD
+			                               WHERE  DOMAIN_ID = A.DOMAIN_ID
+			                               AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			                               AND    CODE_NAME = A.PRG_TYPE_NM 
+			                               AND    CODE_TYPE = 'PRGT'), A.PRG_TYPE)
+			WHERE  A.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    A.PRJT_ID     = #{sPRJT_ID}
+			AND    A.TASK_ID     = #{sTASK_ID}
+			AND    A.SEG_ID      = #{sSEG_ID}
+			AND    A.SEG_SUB_ID  = #{sSEG_SUB_ID}
+			AND    A.PRG_ID      = #{sPRG_ID};
+		]]>
+	</update>
+	
+	<delete id="DV030141" parameterType="com.uni.unipms.model.In.DV030101IVO">
+        <![CDATA[
+			DELETE FROM PRJT_DEV_SCHL
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    SEG_ID      = #{sSEG_ID}
+			AND    SEG_SUB_ID  = #{sSEG_SUB_ID}
+			AND    PRG_ID      = #{sPRG_ID};
+		]]> 
+	</delete>
+	
+	<delete id="DV030142" parameterType="com.uni.unipms.model.In.DV030101IVO">
+        <![CDATA[
+			DELETE FROM PRJT_DEV_SCHL
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    SEG_ID      = #{sSEG_ID}
+			AND    SEG_SUB_ID  = #{sSEG_SUB_ID};
+		]]> 
+	</delete>
+	
+</mapper>

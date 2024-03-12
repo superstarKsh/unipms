@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TS0101Mapper">
+    
+    <resultMap id="TS010101OVO" type="com.uni.unipms.model.Out.TS010101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />            
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="ACTIVITY_ID"				property="sACTIVITY_ID" />
+		<result column="TASK_ID"					property="sTASK_ID" />
+		<result column="SEG_ID"						property="sSEG_ID" />
+		<result column="SEG_SUB_ID"					property="sSEG_SUB_ID" />
+		<result column="TEST_SCN_ID"				property="sTEST_SCN_ID" />
+		<result column="TEST_SCN_NM"				property="sTEST_SCN_NM" />
+		<result column="REG_USER_ID"				property="sREG_USER_ID" />
+		<result column="REG_USER_NM"				property="sREG_USER_NM" />
+		<result column="TEST_STRT_DT"				property="sTEST_STRT_DT" />
+		<result column="TEST_END_DT"				property="sTEST_END_DT" />
+		<result column="CNFM_TYPE"					property="sCNFM_TYPE" />
+		<result column="CNFM_USER_ID"				property="sCNFM_USER_ID" />
+		<result column="CNFM_USER_NM"				property="sCNFM_USER_NM" />
+		<result column="CNFM_DESC"					property="sCNFM_DESC" />
+		<result column="FILE_NM"					property="sFILE_NM" />
+    </resultMap>
+
+    <select id="TS010102" parameterType="com.uni.unipms.model.In.TS010101IVO" resultMap="TS010101OVO">
+		<![CDATA[
+			SELECT  IFNULL(A.DOMAIN_ID, B.DOMAIN_ID)                       DOMAIN_ID
+			      , IFNULL(A.PRJT_ID, B.PRJT_ID)                           PRJT_ID
+			      , IFNULL(CONCAT(MAX(SUBSTRING(A.TEST_SCN_ID, 1, LENGTH(A.TEST_SCN_ID) - 3)),
+                                      LPAD(MAX(SUBSTRING(A.TEST_SCN_ID, LENGTH(A.TEST_SCN_ID)-2, 3)) + 1, 3, '0'))
+                           , CONCAT('TS', #{sTASK_ID}, '001'))                                      TEST_SCN_ID
+			FROM    PRJT_INFO B
+            		LEFT OUTER JOIN PRJT_TEST_SCNR A
+			        ON      B.DOMAIN_ID     = A.DOMAIN_ID
+		          	AND     B.PRJT_ID       = A.PRJT_ID
+		          	AND     A.TASK_ID       = #{sTASK_ID}
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID};
+		]]>
+	</select>
+	
+    <select id="TS010111" parameterType="com.uni.unipms.model.In.TS010101IVO" resultMap="TS010101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , CONCAT( B.TASK_ID , 
+			                 CONCAT( CASE WHEN B.SEG_ID = '' THEN '' ELSE '.' END , 
+			                         CONCAT( B.SEG_ID , CONCAT( CASE WHEN B.SEG_SUB_ID = '' THEN '' ELSE '.' END , B.SEG_SUB_ID) )
+			                       )
+			        )                                           AS ACTIVITY_ID
+			      , B.TASK_ID
+			      , B.SEG_ID
+			      , B.SEG_SUB_ID
+			      , B.TEST_SCN_ID
+			      , B.TEST_SCN_NM
+			      , B.REG_DT
+			      , B.REG_USER_ID
+			      , ( SELECT  USER_NM
+			          FROM    MEM_INFO
+			          WHERE   DOMAIN_ID = B.DOMAIN_ID
+			          AND     USER_ID   = B.REG_USER_ID )       REG_USER_NM
+			      , B.TEST_STRT_DT
+			      , B.TEST_END_DT
+			      , B.CNFM_TYPE
+			      , B.CNFM_DT
+			      , B.CNFM_USER_ID
+			      , ( SELECT  USER_NM
+			          FROM    MEM_INFO
+			          WHERE   DOMAIN_ID = B.DOMAIN_ID
+			          AND     USER_ID   = B.CNFM_USER_ID )      CNFM_USER_NM
+			      , B.CNFM_DESC
+			      , B.FILE_NM
+			FROM    PRJT_TEST_SCNR B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    AND     B.TASK_ID       LIKE CONCAT('%', #{sTASK_ID}, '%')
+			AND     B.SEG_ID        LIKE CONCAT('%', #{sSEG_ID}, '%')
+			AND     B.SEG_SUB_ID    LIKE CONCAT('%', #{sSEG_SUB_ID}, '%');
+		]]>
+	</select>
+	
+    <insert id="TS010121" parameterType="com.uni.unipms.model.In.TS010101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_TEST_SCNR (
+					DOMAIN_ID
+				  , PRJT_ID
+				  , TASK_ID
+				  , SEG_ID
+				  , SEG_SUB_ID
+				  , TEST_SCN_ID
+				  , TEST_SCN_NM
+				  , REG_USER_ID
+				  , TEST_STRT_DT
+				  , TEST_END_DT
+				  , CNFM_TYPE
+				  , CNFM_DT
+				  , CNFM_USER_ID
+				  , CNFM_DESC
+				  , FILE_NM )
+			VALUES (
+					#{sDOMAIN_ID}
+				  , #{sPRJT_ID}
+				  , #{sTASK_ID}
+				  , #{sSEG_ID}
+				  , #{sSEG_SUB_ID}
+				  , #{sTEST_SCN_ID}
+				  , #{sTEST_SCN_NM}
+				  , #{sREG_USER_ID}
+				  , REPLACE(#{sTEST_STRT_DT}, '.' ,'')
+				  , REPLACE(#{sTEST_END_DT}, '.' ,'')
+				  , #{sCNFM_TYPE}
+				  , #{sCNFM_DT}
+				  , #{sCNFM_USER_ID}
+				  , #{sCNFM_DESC}
+				  , #{sFILE_NM} );
+		]]>
+	</insert>
+	
+    <delete id="TS010141" parameterType="com.uni.unipms.model.In.TS010101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_TEST_SCNR
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    TEST_SCN_ID = #{sTEST_SCN_ID};
+		]]>
+	</delete>
+	
+	<delete id="TS010142" parameterType="com.uni.unipms.model.In.TS010101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_TEST_SCNR
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID};
+		]]>
+	</delete>
+
+</mapper>
