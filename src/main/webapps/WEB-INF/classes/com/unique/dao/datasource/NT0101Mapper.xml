@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NT0101Mapper">
+    
+    <resultMap id="NT010101OVO" type="com.unique.model.Out.NT010101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="SEQ_NO"						property="sSEQ_NO" />
+		<result column="TITLE"						property="sTITLE" />
+		<result column="CONTENTS"					property="sCONTENTS" />
+		<result column="FILE_NM"					property="sFILE_NM" />
+		<result column="REG_DT"						property="sREG_DT" />
+		<result column="REG_USER_ID"				property="sREG_USER_ID" />
+		<result column="REG_USER_NM"				property="sREG_USER_NM" />
+		<result column="PRINT_TOP_YN"				property="sPRINT_TOP_YN" />
+		<result column="PRINT_ST_DTTM"				property="sPRINT_ST_DTTM" />
+		<result column="PRINT_EN_DTTM"				property="sPRINT_EN_DTTM" />
+		<result column="ROW_NO"						property="sROW_NO" />
+    </resultMap>
+    
+	<select id="NT010102" parameterType="com.unique.model.In.NT010101IVO" resultMap="NT010101OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    PRJT_NOTICE 
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID} 
+			AND     PRJT_ID   = #{sPRJT_ID};
+		]]>
+	</select>
+    
+	<select id="NT010111" parameterType="com.unique.model.In.NT010101IVO" resultMap="NT010101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , SEQ_NO
+			      , TITLE
+			      , FILE_NM
+			      , REG_DT
+			      , PRINT_TOP_YN
+			      , REG_USER_NM
+			      , '' AS ROW_NO
+			FROM
+			(		
+				SELECT  B.DOMAIN_ID
+				      , B.PRJT_ID
+				      , B.SEQ_NO
+				      , B.TITLE
+				      , B.FILE_NM
+				      , B.REG_DT
+				      , B.PRINT_TOP_YN
+				      , A.USER_NM      REG_USER_NM
+				FROM    PRJT_NOTICE B
+				        LEFT OUTER JOIN MEM_INFO A
+						ON B.REG_USER_ID = A.USER_ID
+				WHERE   B.PRINT_TOP_YN	= 'Y'
+				AND		B.DOMAIN_ID     = #{sDOMAIN_ID}
+			    AND     B.PRJT_ID       = #{sPRJT_ID}
+			    AND     B.PRJT_ID       LIKE CONCAT('%', TRIM(#{sPRJT_ID}),'%')
+				AND		
+			    (
+						DATE_FORMAT(SYSDATE(),'%Y%m%d%H%i')  BETWEEN DATE_FORMAT(STR_TO_DATE(B.PRINT_ST_DTTM,'%Y%m%d%H%i'),'%Y%m%d%H%i') AND DATE_FORMAT(STR_TO_DATE(B.PRINT_EN_DTTM,'%Y%m%d%H%i'),'%Y%m%d%H%i')
+						OR
+						(
+							PRINT_ST_DTTM = '' AND PRINT_ST_DTTM = ''
+						)
+				)
+			    ORDER BY B.SEQ_NO DESC, B.DOMAIN_ID, B.PRJT_ID ASC
+			)TBL_A
+			UNION ALL
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , SEQ_NO
+			      , TITLE
+			      , FILE_NM
+			      , REG_DT
+			      , PRINT_TOP_YN
+			      , REG_USER_NM
+			      , ROW_NO
+			FROM
+			(		
+				SELECT  B.DOMAIN_ID
+				      , B.PRJT_ID
+				      , B.SEQ_NO
+				      , B.TITLE
+				      , B.FILE_NM
+				      , B.REG_DT
+				      , 'N' AS PRINT_TOP_YN
+				      , A.USER_NM      REG_USER_NM
+				      , @ROWNUM := @ROWNUM + 1 AS ROW_NO
+				FROM    PRJT_NOTICE B
+				        LEFT OUTER JOIN MEM_INFO A
+						ON B.REG_USER_ID = A.USER_ID
+				WHERE   (@ROWNUM := 0) = 0
+				AND   	B.DOMAIN_ID     = #{sDOMAIN_ID}
+			    AND     B.PRJT_ID       = #{sPRJT_ID}
+			    AND     B.PRJT_ID       LIKE CONCAT('%', TRIM(#{sPRJT_ID}),'%')
+			    ORDER BY ROW_NO DESC, DOMAIN_ID, PRJT_ID ASC
+			)TBL_B;
+		]]>
+	</select>
+	
+	<select id="NT010113" parameterType="com.unique.model.In.NT010101IVO" resultMap="NT010101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.SEQ_NO
+			      , B.TITLE
+			      , B.CONTENTS
+			      , B.FILE_NM
+			      , B.REG_DT
+			      , B.REG_USER_ID
+			      , B.PRINT_TOP_YN
+			      , DATE_FORMAT(B.PRINT_ST_DTTM, '%Y%m%d%H%i') AS PRINT_ST_DTTM
+			      , DATE_FORMAT(B.PRINT_EN_DTTM, '%Y%m%d%H%i') AS PRINT_EN_DTTM
+			      , A.USER_NM      REG_USER_NM
+			FROM    PRJT_NOTICE B
+			        LEFT OUTER JOIN MEM_INFO A
+					ON B.REG_USER_ID = A.USER_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    AND     B.SEQ_NO        = #{sSEQ_NO};
+		]]>
+	</select>
+
+	<insert id="NT010121" parameterType="com.unique.model.In.NT010101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_NOTICE (
+					  DOMAIN_ID
+					, PRJT_ID
+					, SEQ_NO
+					, TITLE
+					, CONTENTS
+					, FILE_NM
+					, REG_DT
+					, REG_USER_ID 
+					, PRINT_TOP_YN
+					, PRINT_ST_DTTM
+					, PRINT_EN_DTTM )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sSEQ_NO}
+					, #{sTITLE}
+					, #{sCONTENTS}
+					, #{sFILE_NM}
+					, REPLACE(#{sREG_DT}, '.', '') 
+					, #{sREG_USER_ID}
+					, #{sPRINT_TOP_YN}
+					, REPLACE(REPLACE(#{sPRINT_ST_DTTM}, '.', ''), ':', '')
+					, REPLACE(REPLACE(#{sPRINT_EN_DTTM}, '.', ''), ':', '') );
+		]]>
+	</insert>
+	
+	<delete id="NT010141" parameterType="com.unique.model.In.NT010101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_NOTICE
+			WHERE  DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    PRJT_ID    = #{sPRJT_ID}
+			AND    SEQ_NO     = #{sSEQ_NO};
+		]]>
+	</delete>
+	
+</mapper>

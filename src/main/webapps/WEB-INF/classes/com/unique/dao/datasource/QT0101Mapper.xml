@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="QT0101Mapper">
+    <resultMap id="QT010101OVO" type="com.unique.model.Out.QT010101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="QULTY_ID"					property="sQULTY_ID" />
+		<result column="TITLE"						property="sTITLE" />
+		<result column="STRT_DT"					property="sSTRT_DT" />
+		<result column="END_DT"						property="sEND_DT" />
+		<result column="CNTL_TYPE"					property="sCNTL_TYPE" />
+		<result column="CNTL_TYPE_NM"				property="sCNTL_TYPE_NM" />
+		<result column="CNTL_USER_ID"				property="sCNTL_USER_ID" />
+		<result column="CNTL_USER_NM"				property="sCNTL_USER_NM" />
+		<result column="TARGET_TYPE"				property="sTARGET_TYPE" />
+		<result column="TARGET_TYPE_NM"				property="sTARGET_TYPE_NM" />
+		<result column="CONTENTS"					property="sCONTENTS" />
+    </resultMap>
+    
+	<select id="QT010111" parameterType="com.unique.model.In.QT010101IVO" resultMap="QT010101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.QULTY_ID
+			      , B.TITLE
+			      , B.STRT_DT
+			      , B.END_DT
+			      , B.CNTL_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'QTTP' 
+					 AND    CODE      = B.CNTL_TYPE)         CNTL_TYPE_NM
+			      , B.CNTL_USER_ID
+			      , (SELECT USER_NM
+					 FROM   MEM_INFO
+					 WHERE  DOMAIN_ID  = B.DOMAIN_ID
+					 AND    USER_ID    = B.CNTL_USER_ID)     CNTL_USER_NM
+			      , B.TARGET_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'QMTP' 
+					 AND    CODE      = B.TARGET_TYPE)       TARGET_TYPE_NM
+			      , B.CONTENTS
+			FROM    PRJT_QULTY_SCHL B
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID};
+		]]>
+	</select>
+	
+	<select id="QT010102" parameterType="com.unique.model.In.QT010101IVO" resultMap="QT010101OVO">
+		<![CDATA[
+			SELECT  IFNULL(CONCAT(SUBSTRING(MAX(B.QULTY_ID), 1, 4), LPAD(SUBSTRING(MAX(B.QULTY_ID), 5, 4) + 1, 4, '0')),
+			               CONCAT('QT', #{sCNTL_TYPE}, '0001'))          QULTY_ID
+			FROM    PRJT_INFO A
+			        LEFT OUTER JOIN PRJT_QULTY_SCHL B
+			        ON   B.DOMAIN_ID = A.DOMAIN_ID
+			        AND  B.PRJT_ID   = A.PRJT_ID
+			        AND  B.CNTL_TYPE = #{sCNTL_TYPE}
+			WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.PRJT_ID   = #{sPRJT_ID};
+		]]>
+	</select>
+	
+	<insert id="QT010121" parameterType="com.unique.model.In.QT010101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_QULTY_SCHL (
+					  DOMAIN_ID
+					, PRJT_ID
+					, QULTY_ID
+					, TITLE
+					, STRT_DT
+					, END_DT
+					, CNTL_TYPE
+					, CNTL_USER_ID
+					, TARGET_TYPE
+					, CONTENTS )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sQULTY_ID}
+					, #{sTITLE}
+					, REPLACE(#{sSTRT_DT}, '.' ,'')
+					, REPLACE(#{sEND_DT}, '.' ,'')
+					, #{sCNTL_TYPE}
+					, #{sCNTL_USER_ID}
+					, #{sTARGET_TYPE}
+					, #{sCONTENTS} );
+		]]>
+	</insert>
+	
+	<delete id="QT010141" parameterType="com.unique.model.In.QT010101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_QULTY_SCHL
+			WHERE  DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    PRJT_ID    = #{sPRJT_ID}
+			AND    QULTY_ID   = #{sQULTY_ID};
+		]]>
+	</delete>
+
+</mapper>

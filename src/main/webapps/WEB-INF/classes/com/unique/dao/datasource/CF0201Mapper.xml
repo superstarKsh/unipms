@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CF0201Mapper">
+    
+    <resultMap id="CF020101OVO" type="com.unique.model.Out.CF020101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />            
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="PROCD_NO"					property="sPROCD_NO" />
+		<result column="PROCD_DT"					property="sPROCD_DT" />
+		<result column="PROCD_TIME"					property="sPROCD_TIME" />
+		<result column="PROCD_PLACE"				property="sPROCD_PLACE" />
+		<result column="TITLE"						property="sTITLE" />
+		<result column="ATT_USER"					property="sATT_USER" />
+		<result column="CONTENTS"					property="sCONTENTS" />
+		<result column="FILE_NM1"					property="sFILE_NM1" />
+		<result column="FILE_NM2"					property="sFILE_NM2" />
+		<result column="FILE_NM3"					property="sFILE_NM3" />
+    </resultMap>
+
+    <select id="CF020111" parameterType="com.unique.model.In.CF020101IVO" resultMap="CF020101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+				  , PRJT_ID
+				  , PROCD_NO
+				  , PROCD_DT
+				  , CASE WHEN LENGTH(PROCD_TIME) = '3' THEN CONCAT('0', PROCD_TIME) ELSE PROCD_TIME END AS PROCD_TIME
+				  , PROCD_PLACE
+				  , TITLE
+				  , ATT_USER
+				  , CONTENTS
+				  , FILE_NM1
+				  , FILE_NM2
+				  , FILE_NM3
+			FROM    PRJT_PROCD
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     PRJT_ID   = #{sPRJT_ID}
+			ORDER BY PROCD_DT, PROCD_TIME DESC, DOMAIN_ID, PRJT_ID, PROCD_NO ASC;
+		]]>
+	</select>
+
+    <insert id="CF020121" parameterType="com.unique.model.In.CF020101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_PROCD (
+					  DOMAIN_ID
+					, PRJT_ID
+					, PROCD_NO
+					, PROCD_DT
+					, PROCD_TIME
+					, PROCD_PLACE
+					, TITLE
+					, ATT_USER
+					, CONTENTS
+					, FILE_NM1
+					, FILE_NM2
+					, FILE_NM3 )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sPROCD_NO}
+					, #{sPROCD_DT}
+					, #{sPROCD_TIME}
+					, #{sPROCD_PLACE}
+					, #{sTITLE}
+					, #{sATT_USER}
+					, #{sCONTENTS}
+					, #{sFILE_NM1}
+					, #{sFILE_NM2}
+					, #{sFILE_NM3}   );
+		]]>
+	</insert>
+	
+    <delete id="CF020141" parameterType="com.unique.model.In.CF020101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_PROCD
+			WHERE  DOMAIN_ID =  #{sDOMAIN_ID}
+			AND    PRJT_ID   =  #{sPRJT_ID}
+			AND    PROCD_NO  =  #{sPROCD_NO};
+		]]>
+	</delete>
+	
+    <select id="CF020113" parameterType="com.unique.model.In.CF020101IVO" resultMap="CF020101OVO">
+		<![CDATA[
+			SELECT  DOMAIN_ID
+				  , PRJT_ID
+				  , PROCD_NO
+				  , PROCD_DT
+				  , PROCD_TIME
+				  , PROCD_PLACE
+				  , TITLE
+				  , ATT_USER
+				  , CONTENTS
+				  , FILE_NM1
+				  , FILE_NM2
+				  , FILE_NM3
+			FROM    PRJT_PROCD
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     PRJT_ID   = #{sPRJT_ID}
+			AND     PROCD_NO  = #{sPROCD_NO};
+		]]>
+	</select>
+	
+    <select id="CF020102" parameterType="com.unique.model.In.CF020101IVO" resultMap="CF020101OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(PROCD_NO), 0) + 1  PROCD_NO
+			FROM    PRJT_PROCD
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     PRJT_ID   = #{sPRJT_ID};
+		]]>
+	</select>
+</mapper>
+
+
+
+

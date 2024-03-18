@@ -1,0 +1,4 @@
+database.driverClass=com.mysql.jdbc.Driver
+database.url=ENC(UA+eS62jbqaDuVdaWVO5KWNean1EdksXrTfEO0V7JXDFzKtw4ZiPQXqsZnap8cyQWh6zufNol2fE8KNu7rm1Xg==)
+database.username=ENC(LspLY0qkwRcc3QQm0Q3Tkg==)
+database.password=ENC(W/60pgkJuCdbFLvQ0d1yfA==)

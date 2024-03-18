@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DV0101Mapper">
+	
+    <resultMap id="DV010101OVO" type="com.unique.model.Out.DV010101OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_STAGE"				property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"			property="sPRJT_STAGE_NM" />
+		<result column="STRT_DT"				property="sSTRT_DT" />
+		<result column="END_DT"					property="sEND_DT" />
+		<result column="ETC_DISC"				property="sETC_DISC" />
+		<result column="TASK_ID"				property="sTASK_ID" />
+		<result column="SEG_ID"					property="sSEG_ID" />
+		<result column="SEG_SUB_ID"				property="sSEG_SUB_ID" />
+		<result column="TASK_NM"				property="sTASK_NM" />
+		<result column="SEG_NM"					property="sSEG_NM" />
+		<result column="SEG_SUB_NM"				property="sSEG_SUB_NM" />
+		<result column="TASK_STRT_DT"			property="sTASK_STRT_DT" />
+		<result column="TASK_END_DT"			property="sTASK_END_DT" />
+    </resultMap>
+    
+    <resultMap id="DV010102OVO" type="com.unique.model.Out.DV010102OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="CURR_DT"				property="sCURR_DT" />
+		<result column="CURR_YYYY"				property="sCURR_YYYY" />
+		<result column="CURR_MM"				property="sCURR_MM" />
+		<result column="CURR_DD"				property="sCURR_DD" />
+		<result column="CURR_WEEK"				property="sCURR_WEEK" />
+		<result column="PRJT_WEEK"				property="sPRJT_WEEK" />
+		<result column="WEEK_TYPE"				property="sWEEK_TYPE" />
+		<result column="WEEK_TYPE_NM"			property="sWEEK_TYPE_NM" />
+		<result column="HDAY_TYPE"				property="sHDAY_TYPE" />
+		<result column="WEEK_STRT_DT"			property="sWEEK_STRT_DT" />
+		<result column="WEEK_END_DT"			property="sWEEK_END_DT" />
+    </resultMap>
+    
+	<select id="DV010111" parameterType="com.unique.model.In.DV010101IVO"  resultMap="DV010101OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID                           DOMAIN_ID
+			      , B.PRJT_ID                             PRJT_ID
+			      , B.PRJT_STAGE                          PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = B.PRJT_STAGE)     PRJT_STAGE_NM
+			      , B.STRT_DT                             STRT_DT
+			      , B.END_DT                              END_DT
+			      , '00'                                  TASK_ID
+			      , '00'                                  SEG_ID
+			      , ''                                    SEG_SUB_ID
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = B.PRJT_STAGE)     TASK_NM
+			      , ''                                    SEG_NM
+			      , ''                                    SEG_SUB_NM
+			      , ''                                    TASK_DESC
+			      , B.STRT_DT                             TASK_STRT_DT
+			      , B.END_DT                              TASK_END_DT
+			FROM    PRJT_STAGE B
+			WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     B.PRJT_ID   = #{sPRJT_ID}
+			UNION ALL
+			SELECT  B.DOMAIN_ID                           DOMAIN_ID
+			      , B.PRJT_ID                             PRJT_ID
+			      , B.PRJT_STAGE                          PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = B.PRJT_STAGE)     PRJT_STAGE_NM
+			      , B.STRT_DT                             STRT_DT
+			      , B.END_DT                              END_DT
+			      , A.TASK_ID                             TASK_ID
+			      , '00'                                  SEG_ID
+			      , ''                                    SEG_SUB_ID
+			      , A.TASK_NM                             TASK_NM
+			      , ''                                    SEG_NM
+			      , ''                                    SEG_SUB_NM
+			      , A.TASK_DESC                           TASK_DESC
+			      , IFNULL(A.STRT_DT, B.STRT_DT)          TASK_STRT_DT
+			      , IFNULL(A.END_DT, B.END_DT)            TASK_END_DT
+			FROM    PRJT_STAGE B
+			      , PRJT_TASK_INFO A
+			WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     B.PRJT_ID     = #{sPRJT_ID}
+			AND     B.DOMAIN_ID   = A.DOMAIN_ID
+			AND     B.PRJT_ID     = A.PRJT_ID
+			AND     B.PRJT_STAGE  = A.PRJT_STAGE
+			UNION ALL
+			SELECT  B.DOMAIN_ID                           DOMAIN_ID
+			      , B.PRJT_ID                             PRJT_ID
+			      , B.PRJT_STAGE                          PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = B.PRJT_STAGE)     PRJT_STAGE_NM
+			      , B.STRT_DT                             STRT_DT
+			      , B.END_DT                              END_DT
+			      , A.TASK_ID                             TASK_ID
+			      , A.SEG_ID                              SEG_ID
+			      , ''                                    SEG_SUB_ID
+			      , B.TASK_NM                             TASK_NM
+			      , A.SEG_NM                              SEG_NM
+			      , ''                                    SEG_SUB_NM
+			      , A.SEG_DESC                            TASK_DESC
+			      , IFNULL(A.STRT_DT, B.STRT_DT)          TASK_STRT_DT
+			      , IFNULL(A.END_DT, B.END_DT)            TASK_END_DT
+			FROM    PRJT_TASK_INFO B
+			      , PRJT_SEG_INFO A
+			WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     B.PRJT_ID     = #{sPRJT_ID}
+			AND     B.DOMAIN_ID   = A.DOMAIN_ID
+			AND     B.PRJT_ID     = A.PRJT_ID
+			AND     B.PRJT_STAGE  = A.PRJT_STAGE
+			AND     B.TASK_ID     = A.TASK_ID
+			UNION ALL
+			SELECT  C.DOMAIN_ID                           DOMAIN_ID
+			      , C.PRJT_ID                             PRJT_ID
+			      , C.PRJT_STAGE                          PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = C.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE C.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = C.PRJT_STAGE)     PRJT_STAGE_NM
+			      , C.STRT_DT                             STRT_DT
+			      , C.END_DT                              END_DT
+			      , C.TASK_ID                             TASK_ID
+			      , B.SEG_ID                              SEG_ID
+			      , A.SEG_SUB_ID                          SEG_SUB_ID
+			      , C.TASK_NM                             TASK_NM
+			      , B.SEG_NM                              SEG_NM
+			      , A.SEG_SUB_NM                          SEG_SUB_NM
+			      , A.SEG_SUB_DESC                        TASK_DESC
+			      , IFNULL(A.STRT_DT, B.STRT_DT)          TASK_STRT_DT
+			      , IFNULL(A.END_DT, B.END_DT)            TASK_END_DT
+			FROM    PRJT_TASK_INFO C
+			      , PRJT_SEG_INFO B
+			      , PRJT_SEG_SUB_INFO A
+			WHERE   C.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     C.PRJT_ID     = #{sPRJT_ID}
+			AND     C.DOMAIN_ID   = B.DOMAIN_ID
+			AND     C.PRJT_ID     = B.PRJT_ID
+			AND     C.PRJT_STAGE  = B.PRJT_STAGE
+			AND     C.TASK_ID     = B.TASK_ID
+			AND     C.DOMAIN_ID   = A.DOMAIN_ID
+			AND     C.PRJT_ID     = A.PRJT_ID
+			AND     C.PRJT_STAGE  = A.PRJT_STAGE
+			AND     C.TASK_ID     = A.TASK_ID
+			AND     B.SEG_ID      = A.SEG_ID
+			ORDER BY DOMAIN_ID, PRJT_ID, PRJT_STAGE, CONCAT(TASK_ID, SEG_ID, SEG_SUB_ID);
+         ]]>
+	</select>
+	
+	<select id="DV010111A" parameterType="com.unique.model.In.DV010101IVO"  resultMap="DV010102OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , A.CURR_DT
+			      , SUBSTRING(A.CURR_DT, 1, 4)     CURR_YYYY
+			      , SUBSTRING(A.CURR_DT, 5, 2)     CURR_MM
+			      , SUBSTRING(A.CURR_DT, 7, 2)     CURR_DD
+                  , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+						 	WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+						 	- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+						 WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+						 	WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+						 	- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+					ELSE
+                		 WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                		 + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4)))
+                		 - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+              		END                                                                                                CURR_WEEK
+			      , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+							CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+							- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+                		 WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+                			CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+							- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+              		ELSE
+                		CONCAT('M+', 
+                        WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                        + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4))) 
+                        - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+              		END                                                                                                PRJT_WEEK
+                  , A.WEEK_TYPE
+				  , A.WEEK_TYPE_NM
+				  , A.HDAY_TYPE
+			FROM    PRJT_INFO B
+			      , PMS_CALNDR A
+			WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+        	AND     B.PRJT_ID   = #{sPRJT_ID}
+        	AND     A.CURR_DT BETWEEN B.PRJT_STRT_DT AND B.PRJT_END_DT;
+         ]]>
+	</select>
+	
+	<select id="DV010111B" parameterType="com.unique.model.In.DV010101IVO"  resultMap="DV010102OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+                  , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+						 	WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+						 	- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+						 WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+						 	WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+						 	- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+					ELSE
+                		 WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                		 + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4)))
+                		 - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+              		END                                                                                                CURR_WEEK
+			      , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+							CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+							- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+                		 WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+                			CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+							- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+              		ELSE
+                		CONCAT('M+', 
+                        WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                        + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4))) 
+                        - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+              		END                                                                                                PRJT_WEEK
+			      , MIN(A.CURR_DT)                WEEK_STRT_DT
+			      , MAX(A.CURR_DT)                WEEK_END_DT
+			FROM    PRJT_INFO B
+			      , PMS_CALNDR A
+			WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+        	AND     B.PRJT_ID   = #{sPRJT_ID}
+        	AND     A.CURR_DT BETWEEN B.PRJT_STRT_DT AND B.PRJT_END_DT
+			GROUP BY 1, 2
+         ]]>
+	</select>
+	
+	<select id="DV010115" parameterType="com.unique.model.In.DV010101IVO"  resultMap="DV010101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , COUNT(SEG_SUB_ID)                     SEG_SUB_ID
+			FROM    PRJT_SEG_SUB_INFO
+			WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     PRJT_ID     = #{sPRJT_ID};
+         ]]>
+	</select>
+
+</mapper>
+
+
+
+

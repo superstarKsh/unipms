@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CS0201Mapper">
+	<resultMap id="CS020101OVO" type="com.unique.model.Out.CS020101OVO">
+		<result column="DOMAIN_ID"                  property="sDOMAIN_ID" />
+		<result column="PRJT_ID"                    property="sPRJT_ID" />
+		<result column="CSR_ID"                     property="sCSR_ID" />
+		<result column="REQ_DT"                     property="sREQ_DT" />
+		<result column="REQ_COOP_ID"                property="sREQ_COOP_ID" />
+		<result column="REQ_COOP_NM"                property="sREQ_COOP_NM" />
+		<result column="REQ_PART_ID"                property="sREQ_PART_ID" />
+		<result column="REQ_COOP_NM"                property="sREQ_COOP_NM" />
+		<result column="REQ_USER_ID"                property="sREQ_USER_ID" />
+		<result column="REQ_USER_NM"                property="sREQ_USER_NM" />
+		<result column="REQ_END_DT"                 property="sREQ_END_DT" />
+		<result column="STRT_DT"                    property="sSTRT_DT" />
+		<result column="END_DT"                     property="sEND_DT" />
+		<result column="SYS_TYPE"                   property="sSYS_TYPE" />
+		<result column="SYS_TYPE_NM"                property="sSYS_TYPE_NM" />
+		<result column="DEV_USER_ID"                property="sDEV_USER_ID" />
+		<result column="DEV_USER_NM"                property="sDEV_USER_NM" />
+		<result column="TEST_USER_ID"               property="sTEST_USER_ID" />
+		<result column="TEST_USER_NM"               property="sTEST_USER_NM" />
+		<result column="PROC_TYPE"                  property="sPROC_TYPE" />
+		<result column="PROC_TYPE_NM"               property="sPROC_TYPE_NM" />
+		<result column="TITLE"                      property="sTITLE" />
+		<result column="CONTENTS"                   property="sCONTENTS" />
+		<result column="FILE_NM"                    property="sFILE_NM" />
+    </resultMap>
+    
+	<select id="CS020111" parameterType="com.unique.model.In.CS020101IVO"  resultMap="CS020101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.CSR_ID
+			      , B.REQ_DT
+			      , B.REQ_COOP_ID
+			      , (SELECT  COOP_ID
+			         FROM    COOP_INFO
+			         WHERE   COOP_ID = B.REQ_COOP_ID)         REQ_COOP_NM
+			      , B.REQ_PART_ID
+			      , (SELECT  CODE_NAME
+			         FROM    PMS_COMM_CD
+			         WHERE   DOMAIN_ID = B.DOMAIN_ID
+			         AND     PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND     CODE_TYPE = 'BZQT'
+			         AND     CODE      = B.REQ_PART_ID )      REQ_COOP_NM
+			      , B.REQ_USER_ID
+			      , (SELECT  USER_NM
+			         FROM    MEM_INFO
+			         WHERE   DOMAIN_ID = B.DOMAIN_ID
+			         AND     USER_ID   = B.REQ_USER_ID)       REQ_USER_NM
+			      , B.REQ_END_DT
+			      , B.STRT_DT
+			      , B.END_DT
+			      , B.SYS_TYPE
+			      , (SELECT  CODE_NAME
+			         FROM    PMS_COMM_CD
+			         WHERE   DOMAIN_ID = B.DOMAIN_ID
+			         AND     PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND     CODE_TYPE = 'CRTP'
+			         AND     CODE      = B.REQ_PART_ID )      SYS_TYPE_NM
+			      , B.DEV_USER_ID
+			      , (SELECT  USER_NM
+			         FROM    MEM_INFO
+			         WHERE   DOMAIN_ID = B.DOMAIN_ID
+			         AND     USER_ID   = B.DEV_USER_ID)       DEV_USER_NM
+			      , B.TEST_USER_ID
+			      , (SELECT  USER_NM
+			         FROM    MEM_INFO
+			         WHERE   DOMAIN_ID = B.DOMAIN_ID
+			         AND     USER_ID   = B.TEST_USER_ID)      TEST_USER_NM
+			      , B.PROC_TYPE
+			      , (SELECT  CODE_NAME
+			         FROM    PMS_COMM_CD
+			         WHERE   DOMAIN_ID = B.DOMAIN_ID
+			         AND     PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND     CODE_TYPE = 'CRPR'
+			         AND     CODE      = B.REQ_PART_ID )      PROC_TYPE_NM
+			      , B.TITLE
+			      , B.CONTENTS
+			      , B.FILE_NM
+			FROM    PRJT_CSR_REQ_INFO B
+			WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     B.PRJT_ID     = #{sPRJT_ID}
+			AND     B.CSR_ID      = #{sCSR_ID};
+		]]>
+	</select>
+	
+	<insert id="CS020121" parameterType="com.unique.model.In.CS020101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_CSR_REQ_INFO (
+					  DOMAIN_ID
+					, PRJT_ID
+					, CSR_ID
+					, REQ_DT
+					, REQ_COOP_ID
+					, REQ_PART_ID
+					, REQ_PART_NM
+					, REQ_USER_ID
+					, REQ_END_DT
+					, ACCPT_DT
+					, STRT_DT
+					, END_DT
+					, SYS_TYPE
+					, DEV_USER_ID
+					, TEST_USER_ID
+					, PROC_TYPE
+					, TITLE
+					, CONTENTS
+					, FILE_NM )
+			VALUES (
+					  #{DOMAIN_ID}
+					, #{PRJT_ID}
+					, #{CSR_ID}
+					, #{REQ_DT}
+					, #{REQ_COOP_ID}
+					, #{REQ_PART_ID}
+					, #{REQ_PART_NM}
+					, #{REQ_USER_ID}
+					, #{REQ_END_DT}
+					, #{ACCPT_DT}
+					, #{STRT_DT}
+					, #{END_DT}
+					, #{SYS_TYPE}
+					, #{DEV_USER_ID}
+					, #{TEST_USER_ID}
+					, #{PROC_TYPE}
+					, #{TITLE}
+					, #{CONTENTS}
+					, #{FILE_NM}   );
+		]]>
+	</insert>
+	
+	<delete id="CS020141" parameterType="com.unique.model.In.CS020101IVO">
+		<![CDATA[
+			DELETE  FROM PRJT_CSR_REQ_INFO
+			WHERE   DOMAIN_ID  = #{DOMAIN_ID}
+			AND     PRJT_ID    = #{PRJT_ID}
+			AND     CSR_ID     = #{CSR_ID};
+		]]>
+	</delete>
+</mapper>
+
+
+
+

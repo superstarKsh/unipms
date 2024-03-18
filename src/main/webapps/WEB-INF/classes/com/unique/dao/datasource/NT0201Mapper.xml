@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="NT0201Mapper">
+    
+    <resultMap id="NT020101OVO" type="com.unique.model.Out.NT020101OVO">
+    	<result column="DOMAIN_ID"						property="sDOMAIN_ID" />
+		<result column="PRJT_ID"						property="sPRJT_ID" />
+		<result column="SEQ_NO"							property="sSEQ_NO" />
+		<result column="TITLE"							property="sTITLE" />
+		<result column="CONTENTS"						property="sCONTENTS" />
+		<result column="FILE_NM"						property="sFILE_NM" />
+		<result column="REG_DT"							property="sREG_DT" />
+		<result column="REG_TIME"						property="sREG_TIME" />
+		<result column="REG_USER_ID"					property="sREG_USER_ID" />
+		<result column="REG_USER_NM"					property="sREG_USER_NM" />
+    </resultMap>
+    
+    <resultMap id="NT020102OVO" type="com.unique.model.Out.NT020102OVO">
+    	<result column="DOMAIN_ID"						property="sDOMAIN_ID" />
+		<result column="PRJT_ID"						property="sPRJT_ID" />
+		<result column="SEQ_NO"							property="sSEQ_NO" />
+		<result column="BRD_SEQ_NO"						property="sBRD_SEQ_NO" />
+		<result column="TITLE"							property="sTITLE" />
+		<result column="COMMENTS"						property="sCOMMENTS" />
+		<result column="REG_DT"							property="sREG_DT" />
+		<result column="REG_TIME"						property="sREG_TIME" />
+		<result column="REG_USER_ID"					property="sREG_USER_ID" />
+		<result column="REG_USER_NM"					property="sREG_USER_NM" />
+    </resultMap>
+    
+	<select id="NT020102" parameterType="com.unique.model.In.NT020101IVO" resultMap="NT020101OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    PRJT_BULLTN_BOARD 
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID} 
+			AND     PRJT_ID   = #{sPRJT_ID};
+		]]>
+	</select>
+
+	<select id="NT020103" parameterType="com.unique.model.In.NT020102IVO" resultMap="NT020102OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    PRJT_BOARD_COMMENT 
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID} 
+			AND     PRJT_ID   = #{sPRJT_ID}
+			AND     BRD_SEQ_NO    = #{sBRD_SEQ_NO};
+		]]>
+	</select>
+	    
+	<select id="NT020111" parameterType="com.unique.model.In.NT020101IVO" resultMap="NT020101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.SEQ_NO
+			      , B.TITLE
+			      , B.CONTENTS
+			      , B.FILE_NM
+			      , B.REG_DT
+			      , B.REG_TIME
+			      , B.REG_USER_ID
+			      , A.USER_NM      REG_USER_NM
+			FROM    PRJT_BULLTN_BOARD B
+			        LEFT OUTER JOIN MEM_INFO A
+					ON B.REG_USER_ID = A.USER_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    ORDER BY B.SEQ_NO DESC, B.DOMAIN_ID, B.PRJT_ID ASC;
+		]]>
+	</select>
+	
+	<select id="NT020112" parameterType="com.unique.model.In.NT020102IVO" resultMap="NT020102OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.SEQ_NO
+			      , B.BRD_SEQ_NO
+			      , B.COMMENTS
+			      , B.REG_DT
+			      , B.REG_TIME
+			      , B.REG_USER_ID
+			      , A.USER_NM      REG_USER_NM
+			FROM    PRJT_BOARD_COMMENT B
+			        LEFT OUTER JOIN MEM_INFO A
+					ON B.REG_USER_ID = A.USER_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    AND     B.BRD_SEQ_NO    = #{sBRD_SEQ_NO}
+		    ORDER BY B.SEQ_NO, B.BRD_SEQ_NO, B.DOMAIN_ID, B.PRJT_ID ASC;
+		]]>
+	</select>
+	
+	<select id="NT020113" parameterType="com.unique.model.In.NT020101IVO" resultMap="NT020101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.SEQ_NO
+			      , B.TITLE
+			      , B.CONTENTS
+			      , B.FILE_NM
+			      , B.REG_DT
+			      , B.REG_TIME
+			      , B.REG_USER_ID
+			      , A.USER_NM      REG_USER_NM
+			FROM    PRJT_BULLTN_BOARD B
+			        LEFT OUTER JOIN MEM_INFO A
+					ON B.REG_USER_ID = A.USER_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+		    AND     B.PRJT_ID       = #{sPRJT_ID}
+		    AND     B.SEQ_NO        = #{sSEQ_NO};
+		]]>
+	</select>
+	
+	<insert id="NT020121" parameterType="com.unique.model.In.NT020101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_BULLTN_BOARD (
+					  DOMAIN_ID
+					, PRJT_ID
+					, SEQ_NO
+					, TITLE
+					, CONTENTS
+					, FILE_NM
+					, REG_DT
+					, REG_TIME
+					, REG_USER_ID )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sSEQ_NO}
+					, #{sTITLE}
+					, #{sCONTENTS}
+					, #{sFILE_NM}
+					, #{sREG_DT}
+					, #{sREG_TIME}
+					, #{sREG_USER_ID} );
+		]]>
+	</insert>
+	
+	<insert id="NT020123" parameterType="com.unique.model.In.NT020102IVO">
+		<![CDATA[
+			INSERT INTO PRJT_BOARD_COMMENT (
+					  DOMAIN_ID
+					, PRJT_ID
+					, SEQ_NO
+					, BRD_SEQ_NO
+					, COMMENTS
+					, REG_DT
+					, REG_TIME
+					, REG_USER_ID )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sSEQ_NO}
+					, #{sBRD_SEQ_NO}
+					, #{sCOMMENTS}
+					, #{sREG_DT}
+					, #{sREG_TIME}
+					, #{sREG_USER_ID} );
+		]]>
+	</insert>
+	
+	<update id="NT020133" parameterType="com.unique.model.In.NT020102IVO">
+        <![CDATA[
+        	UPDATE  PRJT_BOARD_COMMENT
+			SET     COMMENTS   = #{sCOMMENTS}
+			      , REG_DT     = #{sREG_DT}
+			      , REG_TIME   = #{sREG_TIME}
+			WHERE   DOMAIN_ID    = #{sDOMAIN_ID}
+		    AND     PRJT_ID      = #{sPRJT_ID}
+		    AND     SEQ_NO       = #{sSEQ_NO}
+		    AND     BRD_SEQ_NO   = #{sBRD_SEQ_NO};
+         ]]>
+	</update>
+
+	<delete id="NT020141" parameterType="com.unique.model.In.NT020101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_BULLTN_BOARD
+			WHERE  DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    PRJT_ID    = #{sPRJT_ID}
+			AND    SEQ_NO     = #{sSEQ_NO};
+		]]>
+	</delete>
+	
+	<delete id="NT020143" parameterType="com.unique.model.In.NT020102IVO">
+		<![CDATA[
+			DELETE FROM PRJT_BOARD_COMMENT
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    SEQ_NO      = #{sSEQ_NO}
+			AND    BRD_SEQ_NO  = #{sBRD_SEQ_NO};
+		]]>
+	</delete>
+	
+	<delete id="NT020144" parameterType="com.unique.model.In.NT020101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_BOARD_COMMENT
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    BRD_SEQ_NO      = #{sSEQ_NO}
+		]]>
+	</delete>
+
+</mapper>

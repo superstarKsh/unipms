@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<settings>
+    <setting name="cacheEnabled" value="false" />
+    <setting name="useGeneratedKeys" value="true" />
+    <setting name="defaultExecutorType" value="REUSE" />
+</settings>
+
+<mappers>
+
+	<mapper resource="com/unique/dao/datasource/MN0101Mapper.xml"/>
+	<mapper resource="com/unique/dao/datasource/MN0201Mapper.xml"/>
+	
+	<mapper resource="com/unique/dao/datasource/MG0101Mapper.xml"/>
+	<mapper resource="com/unique/dao/datasource/MG0201Mapper.xml"/>
+	<mapper resource="com/unique/dao/datasource/MG1101Mapper.xml"/>
+	<mapper resource="com/unique/dao/datasource/MG1201Mapper.xml"/>
+	<mapper resource="com/unique/dao/datasource/MG1301Mapper.xml"/>
+	<mapper resource="com/unique/dao/datasource/MG1401Mapper.xml"/>
+
+    <mapper resource="com/unique/dao/datasource/CM0001Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/CM0011Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/CM0021Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/CM0031Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/CM0101Mapper.xml"/>
+    
+    <mapper resource="com/unique/dao/datasource/PJ0101Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/PJ0201Mapper.xml"/>
+
+    <mapper resource="com/unique/dao/datasource/DV0101Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/DV0201Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/DV0211Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/DV0301Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/DV0311Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/DV0401Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/DV0501Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/DV0601Mapper.xml"/>
+    
+    <mapper resource="com/unique/dao/datasource/CF0101Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/CF0201Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/CF0301Mapper.xml"/>
+    
+	<mapper resource="com/unique/dao/datasource/CS0101Mapper.xml"/>
+
+    <mapper resource="com/unique/dao/datasource/TS0101Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/TS0102Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/TS0103Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/TS0104Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/TS0201Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/TS0301Mapper.xml"/>
+    
+    <mapper resource="com/unique/dao/datasource/QT0101Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/QT0201Mapper.xml"/>
+
+    <mapper resource="com/unique/dao/datasource/NT0101Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/NT0201Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/NT0301Mapper.xml"/>
+
+    <mapper resource="com/unique/dao/datasource/AD0101Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/AD0201Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/AD0301Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/AD0401Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/AD0501Mapper.xml"/>
+    
+    <mapper resource="com/unique/dao/datasource/PU0101Mapper.xml"/>
+    
+    <mapper resource="com/unique/dao/datasource/WSCM0001Mapper.xml"/>
+    <mapper resource="com/unique/dao/datasource/WSAD0101Mapper.xml"/>
+	<mapper resource="com/unique/dao/datasource/WSPJ0201Mapper.xml"/>
+	<mapper resource="com/unique/dao/datasource/WSPU0101Mapper.xml"/>
+
+</mappers>
+
+</configuration>
+

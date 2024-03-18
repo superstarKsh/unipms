@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MG0101Mapper">
+	
+    <resultMap id="MG010101OVO" type="com.unique.model.Out.MG010101OVO">
+    	<result column="DOMAIN_ID"			property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"			property="sPRJT_ID"/>
+        <result column="TASK_LEVEL"			property="sTASK_LEVEL"/>
+        <result column="TASK_ID"			property="sTASK_ID"/>
+        <result column="SEQ"				property="sSEQ"/>
+        <result column="BEFORE_SEQ"			property="sBEFORE_SEQ"/>
+        <result column="UPPER_TASK_ID"		property="sUPPER_TASK_ID"/>
+        <result column="TASK_NM"			property="sTASK_NM"/>
+        <result column="TASK_DESC"			property="sTASK_DESC"/>
+        <result column="BEFORE_TASK_ID"		property="sBEFORE_TASK_ID"/>
+        <result column="STRT_DT"			property="sSTRT_DT"/>
+        <result column="END_DT"				property="sEND_DT"/>
+        <result column="PURPOSE_RT"			property="sPURPOSE_RT"/>
+        <result column="PROGRESS_RT"		property="sPROGRESS_RT"/>
+        <result column="USER_ID"			property="sUSER_ID"/>
+        <result column="OUTPUT_LIST"		property="sOUTPUT_LIST"/>
+        <result column="MEMO"				property="sMEMO"/>
+        <result column="FILE_NM"			property="sFILE_NM"/>
+    </resultMap>
+    
+	<select id="MG010102" parameterType="com.unique.model.In.MG010101IVO"  resultMap="MG010101OVO">
+        <![CDATA[
+			SELECT  IFNULL(MAX(CONCAT(SUBSTRING(B.TASK_ID, 1, ((#{sTASK_LEVEL} - 1) * 2) - 2),
+			                          CASE WHEN LENGTH(SUBSTRING(B.TASK_ID, ((#{sTASK_LEVEL} - 1) * 2) - 1, ((#{sTASK_LEVEL} - 1) * 2))) = 0 THEN '01'
+			                          ELSE
+			                              LPAD(SUBSTRING(B.TASK_ID, ((#{sTASK_LEVEL} - 1) * 2) - 1, ((#{sTASK_LEVEL} - 1) * 2)) + 1,
+			                                   LENGTH(SUBSTRING(B.TASK_ID, ((#{sTASK_LEVEL} - 1) * 2) - 1, ((#{sTASK_LEVEL} - 1) * 2))), '0')
+			                          END)), '01') AS TASK_ID
+			FROM    PMS_RLT_COL A
+			        LEFT OUTER JOIN (SELECT DOMAIN_ID, PRJT_ID, TASK_ID
+			                         FROM   PRJT_MNG_INFO)B
+			        ON   LENGTH(B.TASK_ID)  >= ((#{sTASK_LEVEL} - 1) * 2) - 2
+			WHERE  A.NUM <= '1'
+			AND    DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID};
+         ]]>
+
+	</select>
+
+	<select id="MG010111" parameterType="com.unique.model.In.MG010101IVO" resultMap="MG010101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , A.PRJT_ID
+			      , A.TASK_LEVEL
+			      , A.TASK_ID
+			      , A.SEQ
+			      , A.BEFORE_SEQ
+			      , A.UPPER_TASK_ID
+			      , A.TASK_NM
+			      , A.TASK_DESC
+			      , A.BEFORE_TASK_ID
+			      , A.STRT_DT
+			      , A.END_DT
+			      , A.PURPOSE_RT
+			      , A.PROGRESS_RT
+			      , A.USER_ID
+			      , A.OUTPUT_LIST
+			      , A.MEMO
+			      , A.FILE_NM
+			FROM    PRJT_MNG_INFO A
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			ORDER BY A.TASK_ID;
+         ]]>
+	</select>
+	
+	<insert id="MG010121" parameterType="com.unique.model.In.MG010101IVO">
+        <![CDATA[
+			INSERT INTO PRJT_MNG_INFO (
+						  DOMAIN_ID
+						, PRJT_ID
+						, TASK_LEVEL
+						, TASK_ID
+						, SEQ
+						, BEFORE_SEQ
+						, UPPER_TASK_ID
+						, TASK_NM
+						, TASK_DESC
+						, BEFORE_TASK_ID
+						, STRT_DT
+						, END_DT
+						, PURPOSE_RT
+						, PROGRESS_RT
+						, USER_ID
+						, OUTPUT_LIST
+						, MEMO
+						, FILE_NM )
+			VALUES (
+						  #{sDOMAIN_ID}
+						, #{sPRJT_ID}
+						, #{sTASK_LEVEL}
+						, #{sTASK_ID}
+						, #{sSEQ}
+						, #{sBEFORE_SEQ}
+						, #{sUPPER_TASK_ID}
+						, #{sTASK_NM}
+						, #{sTASK_DESC}
+						, #{sBEFORE_TASK_ID}
+						, REPLACE( #{sSTRT_DT}, '.', '')
+						, REPLACE( #{sEND_DT},  '.', '')
+						, (CASE WHEN #{sPURPOSE_RT} = '' THEN 0 ELSE #{sPURPOSE_RT} END)
+						, (CASE WHEN #{sPROGRESS_RT} = '' THEN 0 ELSE #{sPROGRESS_RT} END)
+						, #{sUSER_ID}
+						, #{sOUTPUT_LIST}
+						, #{sMEMO}
+						, #{sFILE_NM}
+			);
+         ]]>
+	</insert>
+
+	<delete id="MG010141" parameterType="com.unique.model.In.MG010101IVO">
+        <![CDATA[
+			DELETE FROM PRJT_MNG_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    TASK_ID     = #{sTASK_ID};
+         ]]>
+	</delete>
+	
+	<delete id="MG010142" parameterType="com.unique.model.In.MG010102IVO">
+        <![CDATA[
+			DELETE FROM PRJT_MNG_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID};
+         ]]>
+	</delete>
+
+	<update id="MG010132" parameterType="com.unique.model.In.MG010102IVO">
+        <![CDATA[
+			UPDATE PRJT_MNG_INFO C
+			SET    BEFORE_TASK_ID = IFNULL((SELECT  A.TASK_ID      TASK_ID
+			                                FROM   ( SELECT  DOMAIN_ID
+			                                               , PRJT_ID
+			                                               , TASK_ID
+			                                               , SEQ
+			                                               , BEFORE_SEQ
+			                                         FROM    PRJT_MNG_INFO
+			                                         WHERE   SEQ >= '0') A
+			                                     , ( SELECT  DOMAIN_ID
+			                                               , PRJT_ID
+			                                               , TASK_ID
+			                                               , BEFORE_SEQ 
+			                                         FROM    PRJT_MNG_INFO
+			                                         WHERE   SEQ >= '0') B
+			                                WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			                                AND     A.PRJT_ID   = #{sPRJT_ID}
+			                                AND     A.SEQ       = B.BEFORE_SEQ
+			                                AND     A.DOMAIN_ID = B.DOMAIN_ID
+			                                AND     A.PRJT_ID   = B.PRJT_ID
+			                                AND     A.SEQ       = C.BEFORE_SEQ)
+			                        , '')
+			WHERE  BEFORE_SEQ >= '0';
+         ]]>
+	</update>
+	
+	<select id="MG010115" parameterType="com.unique.model.In.MG010101IVO"  resultMap="MG010101OVO">
+        <![CDATA[
+        	SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , TASK_LEVEL
+			      , TASK_ID
+        	      , TASK_LEVEL
+			FROM    PRJT_MNG_INFO
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = #{sPRJT_ID}
+			GROUP BY TASK_LEVEL
+			ORDER BY TASK_ID DESC;
+         ]]>
+	</select>
+	
+	<select id="MG010115A" parameterType="com.unique.model.In.MG010101IVO"  resultMap="MG010101OVO">
+        <![CDATA[
+        	SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , SUBSTRING(TASK_ID,1, (#{sTASK_LEVEL}-2) *2)             TASK_ID
+			      , ROUND(SUM(IFNULL(PROGRESS_RT, 0))/COUNT(TASK_ID), 2)    PROGRESS_RT
+			      , ROUND(SUM(CASE WHEN DATEDIFF(DATE(END_DT), DATE(STRT_DT)) = 0 THEN 100
+			                  ELSE
+			                       DATEDIFF((CASE WHEN CURDATE() >= DATE(END_DT) THEN DATE(END_DT) ELSE CURDATE() + 0 END), 
+			                                (CASE WHEN CURDATE() >= DATE(STRT_DT) THEN DATE(STRT_DT) ELSE CURDATE() + 0 END)) * 100
+                                   / DATEDIFF(DATE(END_DT), DATE(STRT_DT))
+                              END)
+                          /COUNT(TASK_ID), 2)                               PURPOSE_RT
+			FROM    PRJT_MNG_INFO
+			WHERE   DOMAIN_ID       = #{sDOMAIN_ID}
+			AND     PRJT_ID         = #{sPRJT_ID}
+			AND     LENGTH(TASK_ID) = (#{sTASK_LEVEL}-1) *2
+			GROUP BY DOMAIN_ID, PRJT_ID, SUBSTRING(TASK_ID,1, (#{sTASK_LEVEL}-2) *2);
+         ]]>
+	</select>
+
+	<update id="MG010131" parameterType="com.unique.model.In.MG010101IVO">
+        <![CDATA[
+			UPDATE  PRJT_MNG_INFO C
+			SET     PURPOSE_RT  = #{sPURPOSE_RT}
+			      , PROGRESS_RT = #{sPROGRESS_RT}
+			WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     PRJT_ID     = #{sPRJT_ID}
+			AND     TASK_ID     = #{sTASK_ID};
+         ]]>
+	</update>
+	
+	<update id="MG010132A" parameterType="com.unique.model.In.MG010101IVO">
+        <![CDATA[
+			UPDATE  PRJT_MNG_INFO
+			SET     PURPOSE_RT = (CASE WHEN STRT_DT = '' OR END_DT = '' THEN 0
+			                      ELSE
+			                          (CASE WHEN DATEDIFF(DATE(END_DT), DATE(STRT_DT)) = 0 THEN 100
+					                   ELSE
+					                       ROUND(DATEDIFF((CASE WHEN CURDATE() >= DATE(END_DT) THEN DATE(END_DT) ELSE CURDATE() + 0 END), 
+					                                      (CASE WHEN CURDATE() >= DATE(STRT_DT) THEN DATE(STRT_DT) ELSE CURDATE() + 0 END)) * 100
+		                                         / DATEDIFF(DATE(END_DT), DATE(STRT_DT)), 2)
+		                               END)
+		                          END)
+			WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     PRJT_ID     = #{sPRJT_ID};
+         ]]>
+	</update>
+
+</mapper>

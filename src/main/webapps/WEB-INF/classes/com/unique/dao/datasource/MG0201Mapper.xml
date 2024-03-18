@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MG0201Mapper">
+	
+    <resultMap id="MG020101OVO" type="com.unique.model.Out.MG020101OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="TASK_LEVEL"				property="sTASK_LEVEL" />
+		<result column="TASK_ID"				property="sTASK_ID" />
+		<result column="TASK_NM"				property="sTASK_NM" />
+		<result column="TASK_DESC"				property="sTASK_DESC" />
+		<result column="STRT_DT"				property="sSTRT_DT" />
+		<result column="END_DT"					property="sEND_DT" />
+		<result column="PROGRESS_RT"			property="sPROGRESS_RT" />
+		<result column="USER_ID"				property="sUSER_ID" />
+		<result column="MEMO"					property="sMEMO" />
+		<result column="FILE_NM"				property="sFILE_NM" />
+    </resultMap>
+    
+    <resultMap id="MG020102OVO" type="com.unique.model.Out.MG020102OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="CURR_DT"				property="sCURR_DT" />
+		<result column="CURR_YYYY"				property="sCURR_YYYY" />
+		<result column="CURR_MM"				property="sCURR_MM" />
+		<result column="CURR_DD"				property="sCURR_DD" />
+		<result column="CURR_WEEK"				property="sCURR_WEEK" />
+		<result column="PRJT_WEEK"				property="sPRJT_WEEK" />
+		<result column="STRT_DT"				property="sSTRT_DT" />
+		<result column="END_DT"					property="sEND_DT" />
+		<result column="WEEK_TYPE"				property="sWEEK_TYPE" />
+		<result column="WEEK_TYPE_NM"			property="sWEEK_TYPE_NM" />
+		<result column="HDAY_TYPE"				property="sHDAY_TYPE" />
+    </resultMap>
+
+	<select id="MG020111" parameterType="com.unique.model.In.MG020101IVO"  resultMap="MG020101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , TASK_LEVEL
+			      , TASK_ID
+			      , UPPER_TASK_ID
+			      , TASK_NM
+			      , TASK_DESC
+			      , STRT_DT
+			      , END_DT
+			      , PROGRESS_RT
+			      , USER_ID
+			      , OUTPUT_LIST
+			      , MEMO
+			      , FILE_NM
+			FROM    PRJT_MNG_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+        	AND     PRJT_ID   = #{sPRJT_ID}
+        	ORDER BY TASK_ID, TASK_LEVEL;
+         ]]>
+	</select>
+	
+	<select id="MG020111A" parameterType="com.unique.model.In.PJ020101IVO"  resultMap="MG020102OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , A.CURR_DT
+			      , SUBSTRING(A.CURR_DT, 1, 4)     CURR_YYYY
+			      , SUBSTRING(A.CURR_DT, 5, 2)     CURR_MM
+			      , SUBSTRING(A.CURR_DT, 7, 2)     CURR_DD
+                  , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+						 	WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+						 	- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+						 WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+						 	WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+						 	- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+					ELSE
+                		 WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                		 + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4)))
+                		 - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+              		END                                                                                                CURR_WEEK
+			      , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+							CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+							- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+                		 WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+                			CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+							- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+              		ELSE
+                		CONCAT('M+', 
+                        WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                        + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4))) 
+                        - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+              		END                                                                                                PRJT_WEEK
+                  , A.WEEK_TYPE
+				  , A.WEEK_TYPE_NM
+				  , A.HDAY_TYPE
+			FROM    PRJT_INFO B
+			      , PMS_CALNDR A
+			WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+        	AND     B.PRJT_ID   = #{sPRJT_ID}
+        	AND     A.CURR_DT BETWEEN B.PRJT_STRT_DT AND B.PRJT_END_DT;
+         ]]>
+	</select>
+	
+	<select id="MG020111B" parameterType="com.unique.model.In.PJ020101IVO"  resultMap="MG020102OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+                  , B.PRJT_ID
+                  , SUBSTRING(A.CURR_DT, 1, 4)     CURR_YYYY
+                  , SUBSTRING(A.CURR_DT, 5, 2)     CURR_MM
+                  , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+                            WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                            - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+                         WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+                            WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                            - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+                    ELSE
+                         WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                         + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4)))
+                         - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+                    END                                                                                                CURR_WEEK
+                  , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+                            CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                            - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+                         WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+                            CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                            - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+                    ELSE
+                        CONCAT('M+', 
+                        WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                        + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4))) 
+                        - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+                    END                                                                                                PRJT_WEEK
+                  , MIN(A.CURR_DT)                                                                                     STRT_DT
+                  , MAX(A.CURR_DT)                                                                                     END_DT
+            FROM    PRJT_INFO B
+                  , PMS_CALNDR A
+            WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+        	AND     B.PRJT_ID   = #{sPRJT_ID}
+            AND     A.CURR_DT BETWEEN B.PRJT_STRT_DT AND B.PRJT_END_DT
+            GROUP BY 1,2,5;
+         ]]>
+	</select>
+	
+	<select id="MG020111C" parameterType="com.unique.model.In.PJ020101IVO"  resultMap="MG020102OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+                  , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+						 	WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+						 	- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+						 WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+						 	WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+						 	- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+					ELSE
+                		 WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                		 + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4)))
+                		 - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY))
+              		END                                                                                                CURR_WEEK
+			      , CASE WHEN SUBSTRING(A.CURR_DT, 1, 4) = SUBSTRING(B.PRJT_STRT_DT, 1, 4) THEN
+							CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+							- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+                		 WHEN SUBSTRING(A.CURR_DT, 5, 4) = '0101' THEN
+                			CONCAT('M+', WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+							- WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+              		ELSE
+                		CONCAT('M+', 
+                        WEEK(DATE_ADD(A.CURR_DT, INTERVAL -1 DAY))
+                        + (52 * (SUBSTRING(A.CURR_DT, 1, 4) - SUBSTRING(B.PRJT_STRT_DT, 1, 4))) 
+                        - WEEK(DATE_ADD(B.PRJT_STRT_DT, INTERVAL -1 DAY)))
+              		END                                                                                                PRJT_WEEK
+			      , MIN(A.CURR_DT)                STRT_DT
+			      , MAX(A.CURR_DT)                END_DT
+			FROM    PRJT_INFO B
+			      , PMS_CALNDR A
+			WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+        	AND     B.PRJT_ID   = #{sPRJT_ID}
+        	AND     A.CURR_DT BETWEEN B.PRJT_STRT_DT AND B.PRJT_END_DT
+			GROUP BY 1, 2;
+         ]]>
+	</select>
+	
+	<update id="MG020131" parameterType="com.unique.model.In.MG020101IVO">
+        <![CDATA[
+			UPDATE  PRJT_MNG_INFO
+			SET     PROGRESS_RT = #{sPROGRESS_RT}
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+        	AND     PRJT_ID   = #{sPRJT_ID}
+			AND     TASK_ID   = #{sTASK_ID};
+         ]]>
+	</update>
+	
+</mapper>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MG1301Mapper">
+
+    <resultMap id="MG130101OVO" type="com.unique.model.Out.MG130101OVO">
+		<result column="QTYPE"						property="sQTYPE" />
+		<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="MNG_STAGE"					property="sMNG_STAGE" />
+		<result column="ACTIVITY_ID"				property="sACTIVITY_ID" />
+		<result column="TASK_ID"					property="sTASK_ID" />
+		<result column="TASK_NM"					property="sTASK_NM" />
+		<result column="TASK_DESC"					property="sTASK_DESC" />
+		<result column="FILE_VER"					property="sFILE_VER" />
+		<result column="CMPL_DT"					property="sCMPL_DT" />
+		<result column="CMPL_YN"					property="sCMPL_YN" />
+		<result column="DEF_FILE_NM"				property="sDEF_FILE_NM" />
+		<result column="CMPL_FILE_NM"				property="sCMPL_FILE_NM" />
+		<result column="BIT"						property="sBIT" />
+    </resultMap>
+ 
+	<select id="MG130102" parameterType="com.unique.model.In.MG130101IVO"  resultMap="MG130101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , IFNULL(CASE WHEN MAX(SUBSTRING(A.FILE_VER, 3, LENGTH(A.FILE_VER)- 5 )) = '99' THEN
+			                    CASE WHEN MAX(SUBSTRING(A.FILE_VER, 6, LENGTH(A.FILE_VER)- 5 )) = '99' THEN
+			                             CONCAT(MAX(SUBSTRING(A.FILE_VER, 1, LENGTH(A.FILE_VER)- 6 )) + 1, '.', '00', '.', '00')
+			                         WHEN MAX(SUBSTRING(A.FILE_VER, 6, LENGTH(A.FILE_VER)- 5 )) != '99' THEN
+			                             CONCAT(MAX(SUBSTRING(A.FILE_VER, 1, LENGTH(A.FILE_VER)- 6 )) + 1 ,'.','00', '.',
+			                                        LPAD(MAX(SUBSTRING(A.FILE_VER, 6, LENGTH(A.FILE_VER)- 5 )) + 1 , 2, '0'))
+			                    END
+			                    WHEN MAX(SUBSTRING(A.FILE_VER, 6, LENGTH(A.FILE_VER)- 5 )) = '99' THEN
+			                         CONCAT(MAX(SUBSTRING(A.FILE_VER, 1, LENGTH(A.FILE_VER)- 6 )), '.',
+			                                    LPAD(MAX(SUBSTRING(A.FILE_VER, 3, LENGTH(A.FILE_VER)- 5 )) + 1 , 2, '0'), '.','00')
+			               ELSE
+			                    CONCAT(MAX(SUBSTRING(A.FILE_VER, 1, LENGTH(A.FILE_VER)- 6 )), '.',
+			                               MAX(SUBSTRING(A.FILE_VER, 3, LENGTH(A.FILE_VER)- 5 )),'.',
+			                               LPAD(MAX(SUBSTRING(A.FILE_VER, 6, LENGTH(A.FILE_VER)- 5 )) + 1 , 2, '0'))
+			               END
+			               ,'1.00.00')                                                         AS FILE_VER
+			FROM    PRJT_INFO B
+			        LEFT OUTER JOIN PMS_MNG_OUTPUT_VER A
+			        ON      B.DOMAIN_ID    = A.DOMAIN_ID
+			        AND     B.PRJT_ID      = A.PRJT_ID
+			        AND     A.MNG_STAGE    = #{sMNG_STAGE}
+			        AND     A.ACTIVITY_ID  LIKE CONCAT('%', #{sACTIVITY_ID}, '%')
+			        AND     A.TASK_ID      LIKE CONCAT('%', #{sTASK_ID}, '%')
+			WHERE   B.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     B.PRJT_ID    = #{sPRJT_ID};
+		]]> 
+	</select>
+
+    <select id="MG130111" parameterType="com.unique.model.In.MG130101IVO" resultMap="MG130101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID             DOMAIN_ID
+			      , PRJT_ID               PRJT_ID
+			      , 'STG'                 QTYPE
+			      , MNG_STAGE             TASK_ID
+			      , MNG_STAGE_NM          TASK_NM
+			      , MNG_STAGE_DESC        TASK_DESC
+			      , CMPL_DT               CMPL_DT
+			      , CMPL_YN               CMPL_YN
+			      , '' 					  BIT
+			      , ''					  DEF_FILE_NM
+			      , ''					  CMPL_FILE_NM
+			      ,	''					  FILE_VER
+			FROM    PMS_MNG_STAGE
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = #{sPRJT_ID}
+			UNION ALL
+			SELECT  DOMAIN_ID             DOMAIN_ID
+			      , PRJT_ID               PRJT_ID
+			      , 'ACT'                 QTYPE
+			      , ACTIVITY_ID           TASK_ID
+			      , ACTIVITY_NM           TASK_NM
+			      , ACTIVITY_DESC         TASK_DESC
+			      , CMPL_DT               CMPL_DT
+			      , CMPL_YN               CMPL_YN
+			      , ACTIVITY_BIT		  BIT
+			      , DEF_FILE_NM			  DEF_FILE_NM
+			      ,	CMPL_FILE_NM		  CMPL_FILE_NM	
+			      , CMPL_FILE_VER		  FILE_VER	
+			FROM    PMS_MNG_ACTIVITY
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = #{sPRJT_ID}
+			UNION ALL
+			SELECT  DOMAIN_ID             DOMAIN_ID
+			      , PRJT_ID               PRJT_ID
+			      , 'TSK'                 QTYPE
+			      , TASK_ID               TASK_ID
+			      , TASK_NM               TASK_NM
+			      , TASK_DESC             TASK_DESC
+			      , CMPL_DT               CMPL_DT
+			      , CMPL_YN               CMPL_YN
+			      , TASK_BIT              BIT
+			      , DEF_FILE_NM			  DEF_FILE_NM
+			      ,	CMPL_FILE_NM		  CMPL_FILE_NM
+			      , CMPL_FILE_VER		  FILE_VER
+			FROM    PMS_MNG_TASK
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = #{sPRJT_ID}
+			ORDER BY DOMAIN_ID, PRJT_ID, TASK_ID
+         ]]>
+	</select>
+	
+    <select id="MG130112" parameterType="com.unique.model.In.MG130101IVO" resultMap="MG130101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID
+				  , PRJT_ID
+				  , MNG_STAGE
+				  , ACTIVITY_ID
+				  , TASK_ID
+				  , FILE_VER
+				  , CMPL_DT
+				  , FILE_NM                   CMPL_FILE_NM       
+			FROM    PMS_MNG_OUTPUT_VER
+			WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     PRJT_ID     = #{sPRJT_ID}
+			AND     MNG_STAGE   = #{sMNG_STAGE}
+			AND  	ACTIVITY_ID LIKE CONCAT( '%' , #{sACTIVITY_ID} , '%' )
+			AND  	TASK_ID     LIKE CONCAT( '%' , #{sTASK_ID} , '%' )
+			ORDER BY FILE_VER DESC;
+         ]]>
+	</select>
+	
+    <insert id="MG130121" parameterType="com.unique.model.In.MG130101IVO">
+        <![CDATA[
+			INSERT INTO PMS_MNG_OUTPUT_VER (
+			         DOMAIN_ID
+			       , PRJT_ID
+			       , MNG_STAGE
+			       , ACTIVITY_ID
+			       , TASK_ID
+			       , FILE_VER
+			       , CMPL_DT
+			       , FILE_NM)
+			VALUES (
+			         #{sDOMAIN_ID}
+			       , #{sPRJT_ID}
+			       , #{sMNG_STAGE}
+			       , #{sACTIVITY_ID}
+			       , #{sTASK_ID}
+			       , #{sFILE_VER}
+			       , REPLACE(#{sCMPL_DT}, '.' ,'')
+			       , #{sFILE_NM});
+         ]]>
+	</insert>
+	
+    <delete id="MG130141" parameterType="com.unique.model.In.MG130101IVO">
+        <![CDATA[
+        	DELETE FROM PMS_MNG_OUTPUT_VER
+			WHERE  DOMAIN_ID    = #{sDOMAIN_ID}
+			AND    PRJT_ID      = #{sPRJT_ID}
+			AND    MNG_STAGE    = #{sMNG_STAGE}
+			AND    ACTIVITY_ID  = #{sACTIVITY_ID}
+			AND    TASK_ID      = #{sTASK_ID}
+			AND    FILE_VER     = #{sFILE_VER};
+         ]]>
+	</delete>
+	
+    <update id="MG130131" parameterType="com.unique.model.In.MG130101IVO">
+        <![CDATA[
+        	UPDATE  PMS_MNG_ACTIVITY
+        	SET     CMPL_DT       = REPLACE(#{sCMPL_DT}, '.' ,'')
+        	      , CMPL_YN       = #{sCMPL_YN}
+        	      , CMPL_FILE_VER = #{sFILE_VER}
+			      , CMPL_FILE_NM  = #{sFILE_NM}
+			WHERE   DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     PRJT_ID       = #{sPRJT_ID}
+			AND     MNG_STAGE     = #{sMNG_STAGE}
+			AND     ACTIVITY_ID   = #{sACTIVITY_ID};
+         ]]>
+	</update>
+
+    <update id="MG130133" parameterType="com.unique.model.In.MG130101IVO">
+        <![CDATA[
+        	UPDATE  PMS_MNG_TASK
+        	SET    	CMPL_DT       = REPLACE(#{sCMPL_DT}, '.' ,'')
+        	      , CMPL_YN       = #{sCMPL_YN}
+        	      , CMPL_FILE_NM  = #{sFILE_NM}
+        	      , CMPL_FILE_VER = #{sFILE_VER}
+			WHERE   DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     PRJT_ID       = #{sPRJT_ID}
+			AND     MNG_STAGE     = #{sMNG_STAGE}
+			AND     ACTIVITY_ID   = #{sACTIVITY_ID}
+			AND     TASK_ID    	  = #{sTASK_ID};
+         ]]>
+	</update>
+
+</mapper>

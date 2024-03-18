@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DV0201Mapper">
+	
+    <resultMap id="DV020101OVO" type="com.unique.model.Out.DV020101OVO">
+    	<result column="DOMAIN_ID"			property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"			property="sPRJT_ID"/>
+        <result column="PRJT_STAGE"			property="sPRJT_STAGE"/>
+        <result column="PRJT_STAGE_NM"		property="sPRJT_STAGE_NM"/>
+        <result column="TASK_ID"			property="sTASK_ID"/>
+        <result column="TASK_NM"			property="sTASK_NM"/>
+        <result column="TASK_DESC"			property="sTASK_DESC"/>
+        <result column="SEG_ID"				property="sSEG_ID"/>
+        <result column="SEG_NM"				property="sSEG_NM"/>
+        <result column="SEG_DESC"			property="sSEG_DESC"/>
+        <result column="SEG_SUB_ID"			property="sSEG_SUB_ID"/>
+        <result column="SEG_SUB_NM"			property="sSEG_SUB_NM"/>
+        <result column="SEG_SUB_DESC"		property="sSEG_SUB_DESC"/>
+        <result column="STRT_DT"			property="sSTRT_DT"/>
+        <result column="END_DT"				property="sEND_DT"/>
+        <result column="CORP_MNG_ID"		property="sCORP_MNG_ID"/>
+        <result column="CORP_MNG_NM"		property="sCORP_MNG_NM"/>
+        <result column="DEF_YN"				property="sDEF_YN"/>
+    </resultMap>
+    
+	<select id="DV020102" parameterType="com.unique.model.In.DV020101IVO"  resultMap="DV020101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+				  , IFNULL(CONCAT(MAX(SUBSTRING(A.TASK_ID, 1, LENGTH(A.TASK_ID) - 2)),
+                           LPAD(MAX(SUBSTRING(A.TASK_ID, LENGTH(A.TASK_ID)-1, 2)) + 1, 2, '0'))
+                  , CONCAT(#{sPRJT_STAGE}, '01'))                                      TASK_ID
+			FROM    PRJT_INFO B
+				    LEFT OUTER JOIN PRJT_TASK_INFO A
+				    ON      B.DOMAIN_ID     = A.DOMAIN_ID
+		            AND     B.PRJT_ID       = A.PRJT_ID  
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			AND     A.PRJT_STAGE = #{sPRJT_STAGE};
+		]]> 
+	</select>
+
+	<select id="DV020111" parameterType="com.unique.model.In.DV020101IVO"  resultMap="DV020101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , A.PRJT_ID
+			      , A.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = A.PRJT_STAGE)   PRJT_STAGE_NM
+			      , A.TASK_ID
+			      , A.TASK_NM
+			      , A.TASK_DESC
+			      , A.STRT_DT
+			      , A.END_DT
+			      , A.CORP_MNG_ID
+			      , B.USER_NM         CORP_MNG_NM
+			      , A.DEF_YN
+			FROM    PRJT_TASK_INFO A
+					LEFT OUTER JOIN MEM_INFO B
+			        ON   B.DOMAIN_ID = A.DOMAIN_ID 
+			        AND  B.USER_ID   = A.CORP_MNG_ID
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			AND     A.PRJT_STAGE = #{sPRJT_STAGE}
+			ORDER BY A.DOMAIN_ID, A.PRJT_ID, A.PRJT_STAGE, A.TASK_ID;
+         ]]>
+	</select>
+	
+	<insert id="DV020121" parameterType="com.unique.model.In.DV020101IVO">
+        <![CDATA[
+			INSERT INTO PRJT_TASK_INFO (
+						  DOMAIN_ID
+						, PRJT_ID
+						, PRJT_STAGE
+						, TASK_ID
+						, TASK_NM
+						, TASK_DESC
+						, STRT_DT
+						, END_DT
+						, CORP_MNG_ID
+						, CORP_MNG_NM
+						, DEF_YN )
+			VALUES (
+						  #{sDOMAIN_ID}
+						, #{sPRJT_ID}
+						, #{sPRJT_STAGE}
+						, #{sTASK_ID}
+						, #{sTASK_NM}
+						, #{sTASK_DESC}
+						, REPLACE(#{sSTRT_DT}, '.', '')
+						, REPLACE(#{sEND_DT}, '.', '')
+						, #{sCORP_MNG_ID}
+						, #{sCORP_MNG_NM}
+						, #{sDEF_YN} );
+         ]]>
+	</insert>
+	
+	<delete id="DV020141" parameterType="com.unique.model.In.DV020101IVO">
+        <![CDATA[
+			DELETE FROM PRJT_TASK_INFO
+			WHERE DOMAIN_ID   = #{sDOMAIN_ID}
+			AND   PRJT_ID     = #{sPRJT_ID}
+			AND   PRJT_STAGE  = #{sPRJT_STAGE}
+			AND   TASK_ID     = #{sTASK_ID};
+         ]]>
+	</delete>
+	
+	<delete id="DV020142" parameterType="com.unique.model.In.DV020102IVO">
+        <![CDATA[
+			DELETE FROM PRJT_TASK_INFO
+			WHERE DOMAIN_ID   = #{sDOMAIN_ID}
+			AND   PRJT_ID     = #{sPRJT_ID}
+			AND   PRJT_STAGE  = #{sPRJT_STAGE};
+         ]]>
+	</delete>
+
+	<select id="DV020102A" parameterType="com.unique.model.In.DV020103IVO"  resultMap="DV020101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , IFNULL(LPAD(MAX(SEG_ID) + 1,2,'0'),'01')  SEG_ID
+			FROM    PRJT_INFO B
+				    LEFT OUTER JOIN PRJT_SEG_INFO A
+				    ON      B.DOMAIN_ID     = A.DOMAIN_ID
+		            AND     B.PRJT_ID       = A.PRJT_ID 
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			AND     A.PRJT_STAGE = #{sPRJT_STAGE}
+			AND     A.TASK_ID    = #{sTASK_ID} ;
+		]]> 
+	</select>
+
+	<select id="DV020111A" parameterType="com.unique.model.In.DV020103IVO"  resultMap="DV020101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , A.PRJT_ID
+			      , A.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = A.PRJT_STAGE)   PRJT_STAGE_NM
+			      , A.TASK_ID
+			      , A.SEG_ID
+			      , A.SEG_NM
+			      , A.SEG_DESC
+			      , A.STRT_DT
+			      , A.END_DT
+			      , A.CORP_MNG_ID
+			      , B.USER_NM         CORP_MNG_NM
+			      , A.DEF_YN
+			FROM    PRJT_SEG_INFO A
+					LEFT OUTER JOIN MEM_INFO B
+			        ON   B.DOMAIN_ID = A.DOMAIN_ID 
+			        AND  B.USER_ID   = A.CORP_MNG_ID
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			AND     A.PRJT_STAGE = #{sPRJT_STAGE}
+			AND     A.TASK_ID    = #{sTASK_ID}
+			ORDER BY A.DOMAIN_ID, A.PRJT_ID, A.PRJT_STAGE, A.TASK_ID, A.SEG_ID;
+         ]]>
+	</select>
+	
+	<insert id="DV020121A" parameterType="com.unique.model.In.DV020103IVO">
+        <![CDATA[
+			INSERT INTO PRJT_SEG_INFO (
+						  DOMAIN_ID
+						, PRJT_ID
+						, PRJT_STAGE
+						, TASK_ID
+						, SEG_ID
+						, SEG_NM
+						, SEG_DESC
+						, STRT_DT
+						, END_DT
+						, CORP_MNG_ID
+						, DEF_YN 
+						, CORP_MNG_NM )
+			VALUES (
+						  #{sDOMAIN_ID}
+						, #{sPRJT_ID}
+						, #{sPRJT_STAGE}
+						, #{sTASK_ID}
+						, #{sSEG_ID}
+						, #{sSEG_NM}
+						, #{sSEG_DESC}
+						, REPLACE(#{sSTRT_DT}, '.', '')
+						, REPLACE(#{sEND_DT}, '.', '')
+						, #{sCORP_MNG_ID}
+						, #{sDEF_YN}         
+						, #{sCORP_MNG_NM} 	);
+         ]]>
+	</insert>
+	
+	<delete id="DV020141A" parameterType="com.unique.model.In.DV020103IVO">
+        <![CDATA[
+			DELETE FROM PRJT_SEG_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE}
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    SEG_ID      = #{sSEG_ID};
+         ]]>
+	</delete>
+	
+	<delete id="DV020142A" parameterType="com.unique.model.In.DV020104IVO">
+        <![CDATA[
+			DELETE FROM PRJT_SEG_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE}
+			AND    TASK_ID     = #{sTASK_ID}
+         ]]>
+	</delete>
+
+	<select id="DV020102B" parameterType="com.unique.model.In.DV020105IVO"  resultMap="DV020101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , IFNULL(LPAD(MAX(SEG_SUB_ID) + 1,2,'0'),'01')  SEG_SUB_ID
+			FROM    PRJT_INFO B
+				    LEFT OUTER JOIN PRJT_SEG_SUB_INFO A
+				    ON      B.DOMAIN_ID     = A.DOMAIN_ID
+		            AND     B.PRJT_ID       = A.PRJT_ID 
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			AND     A.PRJT_STAGE = #{sPRJT_STAGE}
+			AND     A.TASK_ID    = #{sTASK_ID} 
+			AND     A.SEG_ID     = #{sSEG_ID} ;
+		]]> 
+	</select>
+
+	<select id="DV020111B" parameterType="com.unique.model.In.DV020105IVO"  resultMap="DV020101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , A.PRJT_ID
+			      , A.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = A.PRJT_STAGE)   PRJT_STAGE_NM
+			      , A.TASK_ID
+			      , A.SEG_ID
+			      , A.SEG_SUB_ID
+			      , A.SEG_SUB_NM
+			      , A.SEG_SUB_DESC
+			      , A.STRT_DT
+				  , A.END_DT
+			      , A.CORP_MNG_ID
+			      , B.USER_NM         CORP_MNG_NM
+			      , A.DEF_YN
+			FROM    PRJT_SEG_SUB_INFO A
+					LEFT OUTER JOIN MEM_INFO B
+			        ON   B.DOMAIN_ID = A.DOMAIN_ID 
+			        AND  B.USER_ID   = A.CORP_MNG_ID
+			WHERE   A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     A.PRJT_ID    = #{sPRJT_ID}
+			AND     A.PRJT_STAGE = #{sPRJT_STAGE}
+			AND     A.TASK_ID    = #{sTASK_ID}
+			AND     A.SEG_ID     = #{sSEG_ID}
+			ORDER BY A.DOMAIN_ID, A.PRJT_ID, A.PRJT_STAGE, A.TASK_ID, A.SEG_ID, A.SEG_SUB_ID;
+         ]]>
+	</select>
+	
+	<insert id="DV020121B" parameterType="com.unique.model.In.DV020105IVO">
+        <![CDATA[
+			INSERT INTO PRJT_SEG_SUB_INFO (
+						  DOMAIN_ID
+						, PRJT_ID
+						, PRJT_STAGE
+						, TASK_ID
+						, SEG_ID
+						, SEG_SUB_ID
+						, SEG_SUB_NM
+						, SEG_SUB_DESC
+						, STRT_DT
+						, END_DT
+						, CORP_MNG_ID
+						, DEF_YN
+						, CORP_MNG_NM )
+			VALUES (
+						  #{sDOMAIN_ID}
+						, #{sPRJT_ID}
+						, #{sPRJT_STAGE}
+						, #{sTASK_ID}
+						, #{sSEG_ID}
+						, #{sSEG_SUB_ID}
+						, #{sSEG_SUB_NM}
+						, #{sSEG_SUB_DESC}
+						, REPLACE(#{sSTRT_DT}, '.', '')
+						, REPLACE(#{sEND_DT}, '.', '')
+						, #{sCORP_MNG_ID}
+						, #{sDEF_YN}         
+						, #{sCORP_MNG_NM} );
+         ]]>
+	</insert>
+	
+	<delete id="DV020141B" parameterType="com.unique.model.In.DV020105IVO">
+        <![CDATA[
+			DELETE FROM PRJT_SEG_SUB_INFO
+			WHERE DOMAIN_ID   = #{sDOMAIN_ID}
+			AND   PRJT_ID     = #{sPRJT_ID}
+			AND   PRJT_STAGE  = #{sPRJT_STAGE}
+			AND   TASK_ID     = #{sTASK_ID}
+			AND   SEG_ID      = #{sSEG_ID}
+			AND   SEG_SUB_ID  = #{sSEG_SUB_ID};
+         ]]>
+	</delete>
+	
+	<delete id="DV020142B" parameterType="com.unique.model.In.DV020106IVO">
+        <![CDATA[
+			DELETE FROM PRJT_SEG_SUB_INFO
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE}
+			AND    TASK_ID     = #{sTASK_ID}
+			AND    SEG_ID      = #{sSEG_ID};
+         ]]>
+	</delete>
+</mapper>

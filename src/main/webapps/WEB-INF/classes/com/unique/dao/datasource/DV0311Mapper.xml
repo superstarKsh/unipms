@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DV0311Mapper">
+
+    <resultMap id="DV031101OVO" type="com.unique.model.Out.DV031101OVO">
+		<result column="TASK_ID"					property="sTASK_ID" />
+		<result column="SEG_ID"						property="sSEG_ID" />
+		<result column="SEG_SUB_ID"					property="sSEG_SUB_ID" />
+		<result column="TASK_NM"					property="sTASK_NM" />
+		<result column="SEG_NM"						property="sSEG_NM" />
+		<result column="SEG_SUB_NM"					property="sSEG_SUB_NM" />
+		<result column="PRG_ID"						property="sPRG_ID" />
+		<result column="PRG_NM"						property="sPRG_NM" />
+		<result column="PRG_EXTN"					property="sPRG_EXTN" />
+		<result column="PRG_TYPE_NM"				property="sPRG_TYPE_NM" />
+		<result column="IMP_RT_NM"					property="sIMP_RT_NM" />
+		<result column="PRJ_PLAN_STRT_DT"			property="sPRJ_PLAN_STRT_DT" />
+		<result column="PRJ_PLAN_END_DT"			property="sPRJ_PLAN_END_DT" />
+		<result column="PRJ_DEV_STRT_DT"			property="sPRJ_DEV_STRT_DT" />
+		<result column="PRJ_DEV_END_DT"				property="sPRJ_DEV_END_DT" />
+		<result column="BEFORE_PGM"					property="sBEFORE_PGM" />
+		<result column="AFTER_PGM"					property="sAFTER_PGM" />
+		<result column="TEST_PLAN_STRT_DT"			property="sTEST_PLAN_STRT_DT" />
+		<result column="TEST_PLAN_END_DT"			property="sTEST_PLAN_END_DT" />
+		<result column="TEST_DEV_STRT_DT"			property="sTEST_DEV_STRT_DT" />
+		<result column="TEST_DEV_END_DT"			property="sTEST_DEV_END_DT" />
+		<result column="DEV_USER_NM"				property="sDEV_USER_NM" />
+		<result column="PM_CNFM"					property="sPM_CNFM" />
+		<result column="CUS_CNFM"					property="sCUS_CNFM" />
+		<result column="PROGRESS_RT"				property="sPROGRESS_RT" />
+    </resultMap>
+
+	<select id="DV031154" parameterType="com.unique.model.In.DV031101IVO"  resultMap="DV031101OVO">
+        <![CDATA[
+            SELECT  A.TASK_ID                                            TASK_ID
+                  , A.SEG_ID                                             SEG_ID
+                  , A.SEG_SUB_ID                                         SEG_SUB_ID
+                  , A.TASK_NM                                            TASK_NM
+                  , A.SEG_NM                                             SEG_NM
+                  , A.SEG_SUB_NM                                         SEG_SUB_NM
+                  , IFNULL(B.PRG_ID, '')                                 PRG_ID
+                  , IFNULL(B.PRG_NM, '')                                 PRG_NM
+                  , IFNULL(B.PRG_EXTN, '')                               PRG_EXTN
+                  , IFNULL((SELECT CODE_NAME FROM PMS_COMM_CD
+                            WHERE  DOMAIN_ID = B.DOMAIN_ID
+                            AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+                            AND    CODE_TYPE = 'PGIM'
+                            AND    CODE      = B.IMP_RT), '')            IMP_RT_NM
+                  , IFNULL((SELECT CODE_NAME FROM PMS_COMM_CD
+                            WHERE  DOMAIN_ID = B.DOMAIN_ID
+                            AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+                            AND    CODE_TYPE = 'PRGT'
+                            AND    CODE      = B.PRG_TYPE), '')          PRG_TYPE_NM
+                  , IFNULL(B.PRJ_PLAN_STRT_DT, '')                       PRJ_PLAN_STRT_DT
+                  , IFNULL(B.PRJ_PLAN_END_DT, '')                        PRJ_PLAN_END_DT
+                  , IFNULL(B.PRJ_DEV_STRT_DT, '')                        PRJ_DEV_STRT_DT
+                  , IFNULL(B.PRJ_DEV_END_DT, '')                         PRJ_DEV_END_DT
+                  , IFNULL(B.BEFORE_PGM, '')                             BEFORE_PGM
+                  , IFNULL(B.AFTER_PGM, '')                              AFTER_PGM
+                  , IFNULL(B.TEST_PLAN_STRT_DT, '')                      TEST_PLAN_STRT_DT
+                  , IFNULL(B.TEST_PLAN_END_DT, '')                       TEST_PLAN_END_DT
+                  , IFNULL(B.TEST_DEV_STRT_DT, '')                       TEST_DEV_STRT_DT
+                  , IFNULL(B.TEST_DEV_END_DT, '')                        TEST_DEV_END_DT
+                  , IFNULL((SELECT USER_NM
+                            FROM   MEM_INFO
+                            WHERE  DOMAIN_ID = B.DOMAIN_ID
+                            AND    USER_ID   = B.DEV_USER_ID ), '')      DEV_USER_NM
+                  , IFNULL(B.PM_CNFM, 'N')                               PM_CNFM
+                  , IFNULL(B.CUS_CNFM, 'N')                              CUS_CNFM
+                  , IFNULL(B.PROGRESS_RT, '')                            PROGRESS_RT
+            FROM  ( SELECT  B.DOMAIN_ID
+					      , B.PRJT_ID
+					      , CONCAT(B.TASK_ID, '.', B.SEG_ID, '.', B.SEG_SUB_ID, '00')   ACTIVITY_ID
+					      , B.TASK_ID                      TASK_ID
+					      , B.TASK_NM                      TASK_NM
+					      , B.SEG_ID                       SEG_ID
+					      , B.SEG_NM                       SEG_NM
+					      , B.SEG_SUB_ID                   SEG_SUB_ID
+					      , B.SEG_SUB_NM                   SEG_SUB_NM
+					FROM ( SELECT  DOMAIN_ID
+					             , PRJT_ID
+					             , TASK_ID                 TASK_ID
+					             , TASK_NM                 TASK_NM
+					             , '00'                    SEG_ID
+					             , ''                      SEG_NM
+					             , '00'                    SEG_SUB_ID
+					             , ''                      SEG_SUB_NM
+					       FROM    PRJT_TASK_INFO
+					       WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+					       AND     PRJT_ID     = #{sPRJT_ID}
+					       UNION ALL
+					       SELECT  DOMAIN_ID
+					             , PRJT_ID
+					             , TASK_ID                 TASK_ID
+					             , ''                      TASK_NM
+					             , SEG_ID                  SEG_ID
+					             , SEG_NM                  SEG_NM
+					             , '00'                    SEG_SUB_ID
+					             , ''                      SEG_SUB_NM
+					       FROM    PRJT_SEG_INFO
+					       WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+					       AND     PRJT_ID     = #{sPRJT_ID}
+					       UNION ALL
+					       SELECT  DOMAIN_ID
+					             , PRJT_ID
+					             , TASK_ID                  TASK_ID
+					             , ''                       TASK_NM
+					             , SEG_ID                   SEG_ID
+					             , ''                       SEG_NM
+					             , SEG_SUB_ID               SEG_SUB_ID
+					             , SEG_SUB_NM               SEG_SUB_NM
+					       FROM    PRJT_SEG_SUB_INFO
+					       WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+					       AND     PRJT_ID     = #{sPRJT_ID} ) B ) A
+                    LEFT OUTER JOIN PRJT_DEV_SCHL B
+                    ON   A.DOMAIN_ID  = B.DOMAIN_ID
+                    AND  A.PRJT_ID    = B.PRJT_ID
+                    AND  A.TASK_ID    = B.TASK_ID
+                    AND  A.SEG_ID     = B.SEG_ID
+                    AND  A.SEG_SUB_ID = B.SEG_SUB_ID
+			ORDER BY 1,2,3;
+		]]>
+	</select>
+
+</mapper>
+

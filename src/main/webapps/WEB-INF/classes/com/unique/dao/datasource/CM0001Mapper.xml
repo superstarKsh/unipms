@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CM0001Mapper">
+	
+    <resultMap id="CM000101OVO" type="com.unique.model.Out.CM000101OVO">
+        <result column="USER_ID"			property="sUSER_ID"/>
+        <result column="USER_NM"			property="sUSER_NM"/>
+        <result column="USER_NO"			property="sUSER_NO"/>
+        <result column="USER_PSTN"			property="sUSER_PSTN"/>
+        <result column="CURR_PRJT_ID"		property="sCURR_PRJT_ID"/>
+        <result column="PMS_AUTH"			property="sPMS_AUTH"/>
+        <result column="PRJT_ID"			property="sPRJT_ID"/>
+        <result column="PRJT_NM"			property="sPRJT_NM"/>
+        <result column="PRJT_CNT"			property="sPRJT_CNT"/>
+        <result column="CURR_STAGE"			property="sCURR_STAGE"/>
+        <result column="PRJT_TYPE"			property="sPRJT_TYPE"/>
+        <result column="DEV_STAGE"			property="sDEV_STAGE"/>
+        <result column="TEST_STAGE"			property="sTEST_STAGE"/>
+    </resultMap>
+    
+    <select id="CM000101" parameterType="com.unique.model.In.CM000101IVO"  resultMap="CM000101OVO">
+        <![CDATA[
+			SELECT  A.USER_ID
+			      , A.USER_NM
+			      , IFNULL(A.USER_NO, '')            	USER_NO
+			      , IFNULL(A.USER_PSTN, '00')			USER_PSTN
+			      , CASE WHEN B.PRJT_CNT > 1 THEN
+			            CASE WHEN A.PMS_AUTH IN ('01', '03') THEN '00000000'
+                        ELSE '99999999'
+						END
+			        ELSE
+			            IFNULL(B.PRJT_ID, '00000000')
+			        END                              	CURR_PRJT_ID
+			      ,	IFNULL(B.PRJT_CNT, '0')			 	PRJT_CNT
+			      , A.PMS_AUTH
+			      , IFNULL(B.PRJT_ID, '00000000')    	PRJT_ID
+			      , IFNULL(B.PRJT_NM, '')            	PRJT_NM
+			      , IFNULL(B.CURR_STAGE, '')         	CURR_STAGE
+			      , IFNULL(B.PRJT_TYPE, '')          	PRJT_TYPE
+			      , IFNULL(B.DEV_STAGE, '')          	DEV_STAGE
+			      , IFNULL(B.TEST_STAGE, '')         	TEST_STAGE
+			FROM    MEM_INFO A
+			        LEFT OUTER JOIN ( SELECT  B.PRJT_ID
+			                                , B.PRJT_NM
+			                                , B.CURR_STAGE
+			                                , B.PRJT_TYPE
+			                                , (SELECT CODE FROM PMS_COMM_CD 
+			                                   WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                                   AND    PRJT_ID   = (CASE WHEN '1' = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                                   AND    CODE_TYPE = 'PJST' 
+			                                   AND    RPLC_CODE = '03')   DEV_STAGE
+			                                , (SELECT CODE FROM PMS_COMM_CD 
+			                                   WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			                                   AND    PRJT_ID   = (CASE WHEN '1' = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                                   AND    CODE_TYPE = 'PJST' 
+			                                   AND    RPLC_CODE = '04')   TEST_STAGE
+			                                , COUNT(A.PRJT_ID)             PRJT_CNT
+			                          FROM    PRJT_INFO B
+			                                , PRJT_MEM A
+			                          WHERE   B.DOMAIN_ID   = A.DOMAIN_ID
+			                          AND     B.PRJT_ID     = A.PRJT_ID
+			                          AND     A.USER_ID     = #{sUSER_ID}
+			                          AND     CURDATE() + 0 BETWEEN A.STRT_DT AND A.END_DT ) B
+			        ON   B.PRJT_ID = A.CURR_PRJT_ID
+			WHERE   A.USER_ID    = #{sUSER_ID}
+			AND     A.USER_PW    = #{sUSER_PW};
+         ]]>
+	</select>
+    
+</mapper>
+

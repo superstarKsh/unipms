@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DV0211Mapper">
+
+    <resultMap id="DV021101OVO" type="com.unique.model.Out.DV021101OVO">
+    	<result column="DOMAIN_ID"				property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"				property="sPRJT_ID"/>
+        <result column="PRJT_STAGE"				property="sPRJT_STAGE"/>
+        <result column="TASK_ID"				property="sTASK_ID"/>
+        <result column="SEG_ID"					property="sSEG_ID"/>
+        <result column="SEG_SUB_ID"				property="sSEG_SUB_ID"/>
+        <result column="ACTIVITY_ID"			property="sACTIVITY_ID"/>
+        <result column="TASK_NM"				property="sTASK_NM"/>
+        <result column="TASK_DESC"				property="sTASK_DESC"/>
+        <result column="STRT_DT"				property="sSTRT_DT"/>
+        <result column="END_DT"					property="sEND_DT"/>
+        <result column="CORP_MNG_ID"			property="sCORP_MNG_ID"/>
+        <result column="CORP_MNG_NM"			property="sCORP_MNG_NM"/>
+        <result column="DEF_YN"					property="sDEF_YN"/>
+    </resultMap>
+
+	<select id="DV021111" parameterType="com.unique.model.In.DV021101IVO"  resultMap="DV021101OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID                           DOMAIN_ID
+                  , B.PRJT_ID                             PRJT_ID
+                  , B.TASK_ID
+                  , B.SEG_ID
+                  , B.SEG_SUB_ID
+                  , CASE WHEN SUBSTRING(B.ACTIVITY_ID, LENGTH(B.ACTIVITY_ID) -1, LENGTH(B.ACTIVITY_ID)) = '.'
+                         THEN SUBSTRING(B.ACTIVITY_ID, 1, LENGTH(B.ACTIVITY_ID) -1)
+                    ELSE B.ACTIVITY_ID
+                    END                                   ACTIVITY_ID
+                  , B.TASK_NM                             TASK_NM
+                  , B.TASK_DESC                           TASK_DESC
+                  , B.TASK_STRT_DT                        STRT_DT
+                  , B.TASK_END_DT                         END_DT
+                  , B.CORP_MNG_ID                         CORP_MNG_ID
+                  , A.USER_NM                             CORP_MNG_NM
+                  , B.DEF_YN
+            FROM  ( SELECT  A.DOMAIN_ID                           DOMAIN_ID
+                          , A.PRJT_ID                             PRJT_ID
+                          , A.TASK_ID                             TASK_ID
+                          , ''                                    SEG_ID
+                          , ''                                    SEG_SUB_ID
+                          , CONCAT(A.TASK_ID)                     ACTIVITY_ID
+                          , A.TASK_NM                             TASK_NM
+                          , A.TASK_DESC                           TASK_DESC
+                          , IFNULL(A.STRT_DT, B.STRT_DT)          TASK_STRT_DT
+                          , IFNULL(A.END_DT, B.END_DT)            TASK_END_DT
+                          , A.CORP_MNG_ID
+                          , A.DEF_YN
+                    FROM    PRJT_STAGE B
+                          , PRJT_TASK_INFO A
+                    WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+                    AND     B.PRJT_ID     = #{sPRJT_ID}
+                    AND     B.PRJT_STAGE  LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+                    AND     B.DOMAIN_ID   = A.DOMAIN_ID
+                    AND     B.PRJT_ID     = A.PRJT_ID
+                    AND     B.PRJT_STAGE  = A.PRJT_STAGE
+                    UNION ALL
+                    SELECT  A.DOMAIN_ID                           DOMAIN_ID
+                          , A.PRJT_ID                             PRJT_ID
+                          , A.TASK_ID                             TASK_ID
+                          , A.SEG_ID                              SEG_ID
+                          , ''                                    SEG_SUB_ID
+                          , CONCAT(A.TASK_ID, '.', A.SEG_ID)      ACTIVITY_ID
+                          , A.SEG_NM                              TASK_NM
+                          , A.SEG_DESC                            TASK_DESC
+                          , IFNULL(A.STRT_DT, B.STRT_DT)          TASK_STRT_DT
+                          , IFNULL(A.END_DT, B.END_DT)            TASK_END_DT
+                          , A.CORP_MNG_ID
+                          , A.DEF_YN
+                    FROM    PRJT_TASK_INFO B
+                          , PRJT_SEG_INFO A
+                    WHERE   B.DOMAIN_ID   = #{sDOMAIN_ID}
+                    AND     B.PRJT_ID     = #{sPRJT_ID}
+                    AND     B.PRJT_STAGE  LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+                    AND     B.DOMAIN_ID   = A.DOMAIN_ID
+                    AND     B.PRJT_ID     = A.PRJT_ID
+                    AND     B.PRJT_STAGE  = A.PRJT_STAGE
+                    AND     B.TASK_ID     = A.TASK_ID
+                    UNION ALL
+                    SELECT  A.DOMAIN_ID                           DOMAIN_ID
+                          , A.PRJT_ID                             PRJT_ID
+                          , C.TASK_ID                                             TASK_ID
+                          , B.SEG_ID                                              SEG_ID
+                          , A.SEG_SUB_ID                                          SEG_SUB_ID
+                          , CONCAT(A.TASK_ID, '.', A.SEG_ID, '.', A.SEG_SUB_ID)   ACTIVITY_ID
+                          , A.SEG_SUB_NM                                          TASK_NM
+                          , A.SEG_SUB_DESC                                        TASK_DESC
+                          , IFNULL(A.STRT_DT, B.STRT_DT)                          TASK_STRT_DT
+                          , IFNULL(A.END_DT, B.END_DT)                            TASK_END_DT
+                          , A.CORP_MNG_ID
+                          , A.DEF_YN
+                    FROM    PRJT_TASK_INFO C
+                          , PRJT_SEG_INFO B
+                          , PRJT_SEG_SUB_INFO A
+                    WHERE   C.DOMAIN_ID   = #{sDOMAIN_ID}
+                    AND     C.PRJT_ID     = #{sPRJT_ID}
+                    AND     C.PRJT_STAGE  LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+                    AND     C.DOMAIN_ID   = B.DOMAIN_ID
+                    AND     C.PRJT_ID     = B.PRJT_ID
+                    AND     C.PRJT_STAGE  = B.PRJT_STAGE
+                    AND     C.TASK_ID     = B.TASK_ID
+                    AND     C.DOMAIN_ID   = A.DOMAIN_ID
+                    AND     C.PRJT_ID     = A.PRJT_ID
+                    AND     C.PRJT_STAGE  = A.PRJT_STAGE
+                    AND     C.TASK_ID     = A.TASK_ID
+                    AND     B.SEG_ID      = A.SEG_ID ) B
+                  LEFT OUTER JOIN MEM_INFO A
+                  ON   B.CORP_MNG_ID  = A.USER_ID
+            ORDER BY B.ACTIVITY_ID;
+         ]]>
+	</select>
+	
+	<delete id="DV021142" parameterType="com.unique.model.In.DV021101IVO">
+        <![CDATA[
+			DELETE FROM PRJT_TASK_INFO
+			WHERE DOMAIN_ID   = #{sDOMAIN_ID}
+			AND   PRJT_ID     = #{sPRJT_ID}
+			AND   PRJT_STAGE  = #{sPRJT_STAGE};
+         ]]>
+	</delete>
+	
+	<delete id="DV021142A" parameterType="com.unique.model.In.DV021101IVO">
+        <![CDATA[
+			DELETE FROM PRJT_SEG_INFO
+			WHERE DOMAIN_ID   = #{sDOMAIN_ID}
+			AND   PRJT_ID     = #{sPRJT_ID}
+			AND   PRJT_STAGE  = #{sPRJT_STAGE};
+         ]]>
+	</delete>
+	
+	<delete id="DV021142B" parameterType="com.unique.model.In.DV021101IVO">
+        <![CDATA[
+			DELETE FROM PRJT_SEG_SUB_INFO
+			WHERE DOMAIN_ID   = #{sDOMAIN_ID}
+			AND   PRJT_ID     = #{sPRJT_ID}
+			AND   PRJT_STAGE  = #{sPRJT_STAGE};
+         ]]>
+	</delete>
+	
+	<update id="DV021131" parameterType="com.unique.model.In.DV021101IVO">
+        <![CDATA[
+			UPDATE PRJT_TASK_INFO A
+			SET    A.CORP_MNG_ID = IFNULL((SELECT  USER_ID
+			                               FROM    MEM_INFO
+                                           WHERE   DOMAIN_ID = A.DOMAIN_ID 
+                                           AND     USER_NM   = A.CORP_MNG_NM), '')
+			WHERE  A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    A.PRJT_ID    = #{sPRJT_ID}
+			AND    A.PRJT_STAGE = #{sPRJT_STAGE};
+         ]]>
+	</update>
+	
+    <update id="DV021131A" parameterType="com.unique.model.In.DV021101IVO">
+        <![CDATA[
+			UPDATE PRJT_SEG_INFO A
+			SET    A.CORP_MNG_ID = IFNULL((SELECT  USER_ID 
+			                               FROM    MEM_INFO 
+			                               WHERE   DOMAIN_ID = A.DOMAIN_ID 
+			                               AND     USER_NM   = A.CORP_MNG_NM), '')
+			WHERE  A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    A.PRJT_ID    = #{sPRJT_ID}
+			AND    A.PRJT_STAGE = #{sPRJT_STAGE};
+         ]]>
+	</update>
+	
+    <update id="DV021131B" parameterType="com.unique.model.In.DV021101IVO">
+        <![CDATA[
+			UPDATE PRJT_SEG_SUB_INFO A
+			SET    A.CORP_MNG_ID = IFNULL((SELECT  USER_ID 
+			                               FROM    MEM_INFO 
+			                               WHERE   DOMAIN_ID = A.DOMAIN_ID 
+			                               AND     USER_NM   = A.CORP_MNG_NM), '')
+			WHERE  A.DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    A.PRJT_ID    = #{sPRJT_ID}
+			AND    A.PRJT_STAGE = #{sPRJT_STAGE};
+         ]]>
+	</update>
+
+</mapper>
+

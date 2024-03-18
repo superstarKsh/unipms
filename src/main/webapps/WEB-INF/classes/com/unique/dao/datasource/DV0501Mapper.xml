@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DV0501Mapper">
+
+    <resultMap id="DV050101OVO" type="com.unique.model.Out.DV050101OVO">
+		<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="PRJT_STAGE"					property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"				property="sPRJT_STAGE_NM" />
+		<result column="TASK_ID"					property="sTASK_ID" />
+		<result column="TASK_NM"					property="sTASK_NM" />
+		<result column="OUTPUT_ID"					property="sOUTPUT_ID" />
+		<result column="OUTPUT_NM"					property="sOUTPUT_NM" />
+		<result column="OUTPUT_DESC"				property="sOUTPUT_DESC" />
+		<result column="MAKE_USER_ID"				property="sMAKE_USER_ID" />
+		<result column="MAKE_USER_NM"				property="sMAKE_USER_NM" />
+		<result column="MAKE_DT"					property="sMAKE_DT" />
+		<result column="MAKE_YN"					property="sMAKE_YN" />
+		<result column="DEF_FILE_NM"				property="sDEF_FILE_NM" />
+		<result column="CMPL_FILE_NM"				property="sCMPL_FILE_NM" />
+		<result column="OUPUT_POOL_ID"				property="sOUPUT_POOL_ID" />
+		<result column="OUPUT_POOL_NM"				property="sOUPUT_POOL_NM" />
+    </resultMap>
+    
+ 	<select id="DV050102" parameterType="com.unique.model.In.DV050101IVO"  resultMap="DV050101OVO">
+        <![CDATA[
+			SELECT  IFNULL(B.DOMAIN_ID, #{sDOMAIN_ID})                DOMAIN_ID
+				  , IFNULL(B.PRJT_ID, #{sPRJT_ID})                    PRJT_ID
+				  , IFNULL(CONCAT('OP', #{sPRJT_STAGE}, LPAD(MAX(SUBSTRING(OUTPUT_ID, 5, 4)) + 1, 4, '0')), CONCAT('OP', #{sPRJT_STAGE}, '0001'))   OUTPUT_ID
+			FROM    PMS_COMM_CD A
+					LEFT OUTER JOIN PRJT_OUTPUT_MNG B
+					ON    B.DOMAIN_ID  = #{sDOMAIN_ID}
+			        AND   B.PRJT_ID    = #{sPRJT_ID}
+			        AND   B.PRJT_STAGE = #{sPRJT_STAGE}
+			        AND   A.DOMAIN_ID  = B.DOMAIN_ID
+			        AND   A.PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.CODE = 'JOIN';
+         ]]>
+	</select>
+    	
+    <select id="DV050111" parameterType="com.unique.model.In.DV050101IVO"  resultMap="DV050101OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PJST' 
+					 AND    CODE      = B.PRJT_STAGE)        PRJT_STAGE_NM
+			      , B.TASK_ID
+            	  , IFNULL(A.TASK_NM, '')                    TASK_NM   
+			      , B.OUTPUT_ID
+			      , B.OUTPUT_NM
+			      , B.OUTPUT_DESC
+			      , B.MAKE_USER_ID
+			      , (SELECT USER_NM FROM   MEM_INFO
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID
+			         AND    USER_ID   = B.MAKE_USER_ID )     MAKE_USER_NM
+			      , B.MAKE_DT
+			      , B.MAKE_YN
+			      , B.DEF_FILE_NM
+			      , B.CMPL_FILE_NM
+			FROM    PRJT_OUTPUT_MNG B
+            	    LEFT OUTER JOIN PRJT_TASK_INFO A
+		      		ON      B.DOMAIN_ID     = A.DOMAIN_ID
+		      		AND     B.PRJT_ID       = A.PRJT_ID
+		      		AND     B.PRJT_STAGE    = A.PRJT_STAGE
+		      		AND     B.TASK_ID       = A.TASK_ID
+			WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			AND     B.PRJT_ID       = #{sPRJT_ID}
+			AND     B.PRJT_STAGE    LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+			ORDER BY 1,2,3,5,7;
+         ]]>
+	</select>
+	
+    <select id="DV050114" parameterType="com.unique.model.In.DV050101IVO"  resultMap="DV050101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+				  , A.PRJT_ID
+				  , C.CODE PRJT_STAGE
+				  , A.PRJT_STAGE_NM
+				  , A.RPLC_CODE
+				  , C.RPLC_CODE
+				  , A.DEF_FILE_NM
+				  , A.OUTPUT_DESC
+				  , A.OUTPUT_ID
+				  , A.OUTPUT_NM
+			FROM    (SELECT  B.DOMAIN_ID
+						   , B.PRJT_ID
+						   , B.PRJT_STAGE
+						   , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			          		  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			          		  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			          		  AND    CODE_TYPE = 'PJST' 
+			          		  AND    CODE      = B.PRJT_STAGE)   PRJT_STAGE_NM
+			          	   , (SELECT RPLC_CODE FROM PMS_COMM_CD 
+			          		  WHERE  DOMAIN_ID = B.DOMAIN_ID 
+			          		  AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			          		  AND    CODE_TYPE = 'PJST' 
+			          		  AND    CODE      = B.PRJT_STAGE)   RPLC_CODE
+			          	   , B.FILE_NM                           DEF_FILE_NM
+			          	   , B.OUTPUT_DESC
+			          	   , B.OUPUT_POOL_ID                     OUTPUT_ID
+			          	   , B.OUTPUT_NM                         OUTPUT_NM
+			         FROM    OUTPUT_POOL B
+			         WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+			         AND     B.PRJT_ID = '00000000' ) A        
+			         LEFT OUTER JOIN PMS_COMM_CD C
+			         ON A.DOMAIN_ID = C.DOMAIN_ID
+			         AND C.PRJT_ID = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+			         AND C.CODE_TYPE = 'PJST'
+			         AND A.RPLC_CODE = C.RPLC_CODE;
+				        
+         ]]>
+	</select>
+
+    <insert id="DV050121" parameterType="com.unique.model.In.DV050101IVO">
+        <![CDATA[
+        	INSERT INTO PRJT_OUTPUT_MNG (
+					DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_STAGE
+			      , TASK_ID
+			      , OUTPUT_ID
+			      , OUTPUT_NM
+			      , OUTPUT_DESC
+			      , MAKE_USER_ID
+			      , MAKE_DT
+			      , MAKE_YN
+			      , DEF_FILE_NM
+			      , CMPL_FILE_NM )
+			VALUES ( 
+					#{sDOMAIN_ID}
+			      , #{sPRJT_ID}
+			      , #{sPRJT_STAGE}
+			      , #{sTASK_ID}
+			      , #{sOUTPUT_ID}
+			      , #{sOUTPUT_NM}
+			      , #{sOUTPUT_DESC}
+			      , #{sMAKE_USER_ID}
+			      , #{sMAKE_DT}
+			      , #{sMAKE_YN}
+			      , #{sDEF_FILE_NM}
+			      , #{sCMPL_FILE_NM} );
+         ]]>
+	</insert>
+	
+    <delete id="DV050141" parameterType="com.unique.model.In.DV050101IVO">
+        <![CDATA[
+        	DELETE FROM PRJT_OUTPUT_MNG
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID}
+			AND    PRJT_STAGE  = #{sPRJT_STAGE}
+			AND    OUTPUT_ID   = #{sOUTPUT_ID};
+         ]]>
+	</delete>
+	
+    <delete id="DV050142" parameterType="com.unique.model.In.DV050102IVO">
+        <![CDATA[
+        	DELETE FROM PRJT_OUTPUT_MNG
+			WHERE  DOMAIN_ID   = #{sDOMAIN_ID}
+			AND    PRJT_ID     = #{sPRJT_ID};
+         ]]>
+	</delete>
+
+</mapper>
+
+
+
+

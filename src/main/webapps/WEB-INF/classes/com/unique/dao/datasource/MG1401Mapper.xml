@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MG1401Mapper">
+
+    <resultMap id="MG140101OVO" type="com.unique.model.Out.MG140101OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="ACTIVITY_ID"			property="sACTIVITY_ID" />
+		<result column="CMPL_YN"				property="sCMPL_YN" />
+    </resultMap>
+ 
+    <select id="MG140111" parameterType="com.unique.model.In.MG140101IVO" resultMap="MG140101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID             DOMAIN_ID
+			      , PRJT_ID               PRJT_ID
+			      , ACTIVITY_ID           ACTIVITY_ID
+			      , CMPL_YN               CMPL_YN
+			FROM    PMS_MNG_ACTIVITY
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = #{sPRJT_ID}
+			AND     CMPL_YN    = 'Y'
+			ORDER BY DOMAIN_ID, PRJT_ID, MNG_STAGE, ACTIVITY_ID
+         ]]>
+	</select>
+	
+</mapper>

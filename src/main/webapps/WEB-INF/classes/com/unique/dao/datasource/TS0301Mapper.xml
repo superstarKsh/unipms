@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TS0301Mapper">
+    
+    <resultMap id="TS030101OVO" type="com.unique.model.Out.TS030101OVO">
+    	<result column="DOMAIN_ID"                  property="sDOMAIN_ID" />
+		<result column="PRJT_ID"                    property="sPRJT_ID" />    
+		<result column="PRJT_NM"                    property="sPRJT_NM" />
+		<result column="PRJT_STAGE"                 property="sPRJT_STAGE" />
+		<result column="PRJT_STAGE_NM"              property="sPRJT_STAGE_NM" />
+		<result column="ACTIVITY_ID"                property="sACTIVITY_ID" />
+		<result column="ACTIVITY_NM"                property="sACTIVITY_NM" />
+		<result column="TASK_ID"                    property="sTASK_ID" />
+		<result column="TASK_NM"                    property="sTASK_NM" />
+		<result column="SEG_ID"                     property="sSEG_ID" />
+		<result column="SEG_NM"                     property="sSEG_NM" />
+		<result column="SEG_SUB_ID"                 property="sSEG_SUB_ID" />
+		<result column="SEG_SUB_NM"                 property="sSEG_SUB_NM" />
+		<result column="PRG_ID"                     property="sPRG_ID" />
+		<result column="PRG_NM"                     property="sPRG_NM" />
+		<result column="PRJ_DEV_STRT_DT"            property="sPRJ_DEV_STRT_DT" />
+		<result column="PRJ_DEV_END_DT"             property="sPRJ_DEV_END_DT" />
+		<result column="TEST_PLAN_STRT_DT"          property="sTEST_PLAN_STRT_DT" />
+		<result column="TEST_PLAN_END_DT"           property="sTEST_PLAN_END_DT" />
+		<result column="TEST_DEV_STRT_DT"           property="sTEST_DEV_STRT_DT" />
+		<result column="TEST_DEV_END_DT"            property="sTEST_DEV_END_DT" />
+		<result column="SEQ_NO"                     property="sSEQ_NO" />
+		<result column="TEST_DT"                    property="sTEST_DT" />
+		<result column="TEST_INPUT_DATA"            property="sTEST_INPUT_DATA" />
+		<result column="TEST_RSLT"                  property="sTEST_RSLT" />
+		<result column="TEST_SVRT"                  property="sTEST_SVRT" />
+		<result column="TEST_USER_ID"               property="sTEST_USER_ID" />
+		<result column="TEST_USER_NM"               property="sTEST_USER_NM" />
+		<result column="TEST_CONFRM"                property="sTEST_CONFRM" />
+		<result column="TEST_DESC"                  property="sTEST_DESC" />
+		<result column="CORRT_SCHD_DT"              property="sCORRT_SCHD_DT" />
+		<result column="CORRT_DT"                   property="sCORRT_DT" />
+		<result column="DEV_USER_ID"                property="sDEV_USER_ID" />
+		<result column="DEV_USER_NM"                property="sDEV_USER_NM" />
+		<result column="CORRT_DESC"                 property="sCORRT_DESC" />
+    </resultMap>
+
+	<select id="TS030111" parameterType="com.unique.model.In.TS030101IVO"  resultMap="TS030101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+				  , B.PRJT_ID
+				  , CONCAT(B.TASK_ID, ".",
+				           B.SEG_ID, ".",
+				           B.SEG_SUB_ID)                                ACTIVITY_ID
+				  , B.TASK_ID
+				  , IFNULL(( SELECT TASK_NM
+				      FROM   PRJT_TASK_INFO
+				      WHERE  DOMAIN_ID = B.DOMAIN_ID
+			          AND    PRJT_ID   = B.PRJT_ID
+			          AND    TASK_ID   = B.TASK_ID ), '')               TASK_NM
+				  , B.SEG_ID
+				  , IFNULL(( SELECT SEG_NM
+				      FROM   PRJT_SEG_INFO
+				      WHERE  DOMAIN_ID = B.DOMAIN_ID
+			          AND    PRJT_ID   = B.PRJT_ID
+			          AND    TASK_ID   = B.TASK_ID
+			          AND    SEG_ID    = B.SEG_ID ), '')                SEG_NM
+				  , B.SEG_SUB_ID
+				  , IFNULL(( SELECT SEG_SUB_NM
+				      FROM   PRJT_SEG_SUB_INFO
+				      WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			          AND    PRJT_ID    = B.PRJT_ID
+			          AND    TASK_ID    = B.TASK_ID
+			          AND    SEG_ID     = B.SEG_ID 
+			          AND    SEG_SUB_ID = B.SEG_SUB_ID), '')            SEG_SUB_NM
+				  , B.PRG_ID
+				  , B.PRG_NM
+				  , B.PRJ_DEV_STRT_DT
+				  , B.PRJ_DEV_END_DT
+				  , B.TEST_PLAN_STRT_DT
+				  , B.TEST_PLAN_END_DT
+				  , B.TEST_DEV_STRT_DT
+				  , B.TEST_DEV_END_DT
+				  , IFNULL(A.SEQ_NO, '')                                SEQ_NO
+				  , IFNULL(A.TEST_DT, '')                               TEST_DT
+				  , IFNULL(A.TEST_INPUT_DATA, '')                       TEST_INPUT_DATA
+				  , IFNULL(A.TEST_RSLT, '')                             TEST_RSLT
+				  , IFNULL(A.TEST_SVRT, '')                             TEST_SVRT
+				  , IFNULL(A.TEST_USER_ID, '')                          TEST_USER_ID
+				  , IFNULL((SELECT USER_NM
+							FROM   MEM_INFO
+							WHERE  DOMAIN_ID = A.DOMAIN_ID
+							AND    USER_ID   = A.TEST_USER_ID ), '')    TEST_USER_NM
+				  , IFNULL(A.TEST_CONFRM, '')                           TEST_CONFRM
+				  , IFNULL(A.TEST_DESC, '')                             TEST_DESC
+				  , IFNULL(A.CORRT_SCHD_DT, '')                         CORRT_SCHD_DT
+				  , IFNULL(A.CORRT_DT, '')                              CORRT_DT
+				  , IFNULL(A.DEV_USER_ID, '')                           DEV_USER_ID
+				  , IFNULL((SELECT USER_NM
+							FROM   MEM_INFO
+							WHERE  DOMAIN_ID = A.DOMAIN_ID
+							AND    USER_ID   = A.DEV_USER_ID ), '')     DEV_USER_NM
+				  , IFNULL(A.CORRT_DESC, '')                            CORRT_DESC
+			FROM    PRJT_DEV_SCHL B
+			        LEFT OUTER JOIN PRJT_DEV_TEST A
+			        ON      B.DOMAIN_ID  = A.DOMAIN_ID
+			        AND     B.PRJT_ID    = A.PRJT_ID
+			        AND     B.PRG_ID     = A.PRG_ID
+			WHERE   B.DOMAIN_ID       = #{sDOMAIN_ID}
+			AND     B.PRJT_ID         = #{sPRJT_ID}
+			AND     B.TASK_ID         LIKE CONCAT('%', #{sTASK_ID}, '%')
+			AND     B.SEG_ID          LIKE CONCAT('%', #{sSEG_ID}, '%')
+			AND     B.SEG_SUB_ID      LIKE CONCAT('%', #{sSEG_SUB_ID}, '%')
+			AND     B.DEV_USER_ID     LIKE CONCAT('%', #{sDEV_USER_ID}, '%')
+			AND     B.PRJ_DEV_END_DT  = (CASE WHEN #{sDEV_CMPL_TYPE} = '1' THEN 
+					                          CASE WHEN B.PRJ_DEV_END_DT = '' THEN '1'
+					                          ELSE B.PRJ_DEV_END_DT END
+					                     ELSE B.PRJ_DEV_END_DT END)
+			AND     B.TEST_DEV_END_DT = (CASE WHEN #{sDEV_CMPL_TYPE} = '2' THEN 
+					                          CASE WHEN B.TEST_DEV_END_DT = '' THEN '2'
+					                          ELSE B.TEST_DEV_END_DT END
+					                     ELSE B.TEST_DEV_END_DT END); 
+		]]>
+	</select>
+
+    <select id="TS030113" parameterType="com.unique.model.In.TS030101IVO" resultMap="TS030101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+				  , B.PRJT_ID
+				  , CONCAT(B.TASK_ID, ".",
+				           B.SEG_ID, ".",
+				           B.SEG_SUB_ID)                                ACTIVITY_ID
+				  , B.TASK_ID
+				  , IFNULL(( SELECT TASK_NM
+				      FROM   PRJT_TASK_INFO
+				      WHERE  DOMAIN_ID = B.DOMAIN_ID
+			          AND    PRJT_ID   = B.PRJT_ID
+			          AND    TASK_ID   = B.TASK_ID ), '')               TASK_NM
+				  , B.SEG_ID
+				  , IFNULL(( SELECT SEG_NM
+				      FROM   PRJT_SEG_INFO
+				      WHERE  DOMAIN_ID = B.DOMAIN_ID
+			          AND    PRJT_ID   = B.PRJT_ID
+			          AND    TASK_ID   = B.TASK_ID
+			          AND    SEG_ID    = B.SEG_ID ), '')                SEG_NM
+				  , B.SEG_SUB_ID
+				  , IFNULL(( SELECT SEG_SUB_NM
+				      FROM   PRJT_SEG_SUB_INFO
+				      WHERE  DOMAIN_ID  = B.DOMAIN_ID
+			          AND    PRJT_ID    = B.PRJT_ID
+			          AND    TASK_ID    = B.TASK_ID
+			          AND    SEG_ID     = B.SEG_ID 
+			          AND    SEG_SUB_ID = B.SEG_SUB_ID), '')            SEG_SUB_NM
+				  , B.PRG_ID
+				  , B.PRG_NM
+				  , B.PRJ_DEV_STRT_DT
+				  , B.PRJ_DEV_END_DT
+				  , B.TEST_PLAN_STRT_DT
+				  , B.TEST_PLAN_END_DT
+				  , B.TEST_DEV_STRT_DT
+				  , B.TEST_DEV_END_DT
+				  , IFNULL(A.SEQ_NO, '')                                SEQ_NO
+				  , IFNULL(A.TEST_DT, '')                               TEST_DT
+				  , IFNULL(A.TEST_INPUT_DATA, '')                       TEST_INPUT_DATA
+				  , IFNULL(A.TEST_RSLT, '')                             TEST_RSLT
+				  , IFNULL(A.TEST_SVRT, '')                             TEST_SVRT
+				  , IFNULL(A.TEST_USER_ID, '')                          TEST_USER_ID
+				  , IFNULL((SELECT USER_NM
+							FROM   MEM_INFO
+							WHERE  DOMAIN_ID = A.DOMAIN_ID
+							AND    USER_ID   = A.TEST_USER_ID ), '')    TEST_USER_NM
+				  , IFNULL(A.TEST_CONFRM, '')                           TEST_CONFRM
+				  , IFNULL(A.TEST_DESC, '')                             TEST_DESC
+				  , IFNULL(A.CORRT_SCHD_DT, '')                         CORRT_SCHD_DT
+				  , IFNULL(A.CORRT_DT, '')                              CORRT_DT
+				  , IFNULL(A.DEV_USER_ID, '')                           DEV_USER_ID
+				  , IFNULL((SELECT USER_NM
+							FROM   MEM_INFO
+							WHERE  DOMAIN_ID = A.DOMAIN_ID
+							AND    USER_ID   = A.DEV_USER_ID ), '')     DEV_USER_NM
+				  , IFNULL(A.CORRT_DESC, '')                            CORRT_DESC
+			FROM    PRJT_DEV_SCHL B
+			        LEFT OUTER JOIN PRJT_DEV_TEST A
+			        ON   A.DOMAIN_ID = B.DOMAIN_ID
+					AND  A.PRJT_ID   = B.PRJT_ID
+					AND  A.PRG_ID    = B.PRG_ID
+			WHERE   B.DOMAIN_ID	 = #{sDOMAIN_ID}
+			AND     B.PRJT_ID	 = #{sPRJT_ID}
+			AND     B.TASK_ID    = #{sTASK_ID}
+			AND     B.SEG_ID     = #{sSEG_ID}
+			AND     B.SEG_SUB_ID = #{sSEG_SUB_ID}
+			AND     B.PRG_ID	 = #{sPRG_ID};
+		]]>
+	</select>
+
+    <insert id="TS030121" parameterType="com.unique.model.In.TS030101IVO">
+		<![CDATA[
+			INSERT INTO PRJT_DEV_TEST (
+					  DOMAIN_ID
+					, PRJT_ID
+					, TASK_ID
+					, SEG_ID
+					, SEG_SUB_ID
+					, PRG_ID
+					, SEQ_NO
+					, TEST_DT
+					, TEST_INPUT_DATA
+					, TEST_RSLT
+					, TEST_SVRT
+					, TEST_USER_ID
+					, TEST_CONFRM
+					, TEST_DESC
+					, CORRT_SCHD_DT
+					, CORRT_DT
+					, DEV_USER_ID
+					, CORRT_DESC )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sTASK_ID}
+					, #{sSEG_ID}
+					, #{sSEG_SUB_ID}
+					, #{sPRG_ID}
+					, #{sSEQ_NO}
+					, REPLACE(#{sTEST_DT}, '.' ,'')
+					, #{sTEST_INPUT_DATA}
+					, #{sTEST_RSLT}
+					, #{sTEST_SVRT}
+					, #{sTEST_USER_ID}
+					, #{sTEST_CONFRM}
+					, #{sTEST_DESC}
+					, REPLACE(#{sCORRT_SCHD_DT}, '.' ,'')
+					, REPLACE(#{sCORRT_DT}, '.' ,'')
+					, #{sDEV_USER_ID}
+					, #{sCORRT_DESC}
+			);
+		]]>
+	</insert>
+
+	<update id="TS030131" parameterType="com.unique.model.In.TS030101IVO">
+		<![CDATA[
+			UPDATE  PRJT_DEV_SCHL B
+			SET     TEST_DEV_STRT_DT  = (CASE WHEN IFNULL(B.TEST_DEV_STRT_DT, '') = '' THEN REPLACE(#{sTEST_DT}, '.' ,'')
+			                             ELSE B.TEST_DEV_STRT_DT END)
+				  , TEST_DEV_END_DT	  = (CASE WHEN #{sTEST_CONFRM} = 'Y' THEN REPLACE(#{sTEST_DT}, '.' ,'')
+				                         ELSE '' END)
+			WHERE   DOMAIN_ID	= #{sDOMAIN_ID}
+			AND     PRJT_ID     = #{sPRJT_ID}
+			AND     TASK_ID		= #{sTASK_ID}
+			AND     SEG_ID		= #{sSEG_ID}
+			AND     SEG_SUB_ID	= #{sSEG_SUB_ID}
+			AND     PRG_ID		= #{sPRG_ID};
+		]]>
+	</update>
+
+    <delete id="TS030141" parameterType="com.unique.model.In.TS030101IVO">
+		<![CDATA[
+			DELETE FROM PRJT_DEV_TEST
+			WHERE   DOMAIN_ID    = #{sDOMAIN_ID}
+			AND     PRJT_ID      = #{sPRJT_ID}
+			AND     PRG_ID       = #{sPRG_ID}
+			AND     SEQ_NO       = #{sSEQ_NO};
+		]]>
+	</delete>
+</mapper>

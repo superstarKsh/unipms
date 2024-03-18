@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CM0101Mapper">
+	
+    <resultMap id="CM010101OVO" type="com.unique.model.Out.CM010101OVO">
+    	<result column="DOMAIN_ID"		property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"		property="sPRJT_ID"/>
+        <result column="CURR_DT"		property="sCURR_DT"/>
+        <result column="BATCH_ID"		property="sBATCH_ID"/>
+        <result column="SEQ_NO"			property="sSEQ_NO"/>
+        <result column="STRT_TIME"		property="sSTRT_TIME"/>
+        <result column="END_TIME"		property="sEND_TIME"/>
+        <result column="CMPL_YN"		property="sCMPL_YN"/>
+    </resultMap>
+
+	<select id="CM010111" parameterType="com.unique.model.In.CM010101IVO"  resultMap="CM010101OVO">
+        <![CDATA[
+        	SELECT  PRJT_ID
+			FROM    PRJT_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     CURDATE() + 0  BETWEEN PRJT_STRT_DT AND PRJT_END_DT;
+         ]]>
+	</select>
+	
+    <select id="CM010115" parameterType="com.unique.model.In.CM010101IVO"  resultMap="CM010101OVO">
+        <![CDATA[
+        	SELECT  COUNT(BATCH_ID)      BATCH_ID
+			FROM    PMS_BATCH
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     CURR_DT   = #{sCURR_DT}
+			AND     BATCH_ID  = #{sBATCH_ID}
+			AND     SEQ_NO    = #{sSEQ_NO};
+         ]]>
+	</select>
+
+	<insert id="CM010121" parameterType="com.unique.model.In.CM010101IVO">
+        <![CDATA[
+        	INSERT INTO PMS_BATCH (
+						  DOMAIN_ID
+						, PRJT_ID
+						, CURR_DT
+						, BATCH_ID
+						, SEQ_NO
+						, STRT_TIME
+						, END_TIME
+						, CMPL_YN )
+			VALUES (
+						  #{sDOMAIN_ID}
+						, #{sPRJT_ID}
+						, #{sCURR_DT}
+						, #{sBATCH_ID}
+						, #{sSEQ_NO}
+						, #{sSTRT_TIME}
+						, #{sEND_TIME}
+						, #{sCMPL_YN}
+			);
+         ]]>
+	</insert>
+	
+	<update id="CM010131" parameterType="com.unique.model.In.CM010101IVO">
+        <![CDATA[
+        	UPDATE PMS_BATCH
+        	SET    END_TIME = #{sEND_TIME} + 0
+        	     , CMPL_YN  = #{sCMPL_YN}
+			WHERE  DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    PRJT_ID    = #{sPRJT_ID}
+			AND    CURR_DT    = #{sCURR_DT}
+			AND    BATCH_ID   = #{sBATCH_ID}
+			AND    SEQ_NO     = #{sSEQ_NO};
+         ]]>
+	</update>
+
+	<delete id="CM010141" parameterType="com.unique.model.In.CM010101IVO">
+        <![CDATA[
+        	DELETE FROM PMS_BATCH
+			WHERE  DOMAIN_ID  = #{sDOMAIN_ID}
+			AND    PRJT_ID    = #{sPRJT_ID}
+			AND    CURR_DT    = #{sCURR_DT}
+			AND    BATCH_ID   = #{sBATCH_ID}
+			AND    SEQ_NO     = #{sSEQ_NO};
+         ]]>
+	</delete>
+</mapper>

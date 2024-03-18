@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CM0011Mapper">
+	
+    <resultMap id="CM001101OVO" type="com.unique.model.Out.CM001101OVO">
+    	<result column="DOMAIN_ID"		property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"		property="sPRJT_ID"/>
+        <result column="CODE"			property="sCODE"/>
+        <result column="CODE_NAME"		property="sCODE_NM"/>
+        <result column="RPLC_CODE"		property="sRPLC_CODE"/>
+    </resultMap>
+
+    <select id="CM001101" parameterType="com.unique.model.In.CM001101IVO"  resultMap="CM001101OVO">
+        <![CDATA[
+        	SELECT  DOMAIN_ID
+        	      , PRJT_ID
+			      , CODE
+			      , CODE_NAME
+			FROM    PMS_COMM_CD
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE #{sPRJT_ID} END)
+			AND     CODE_TYPE = #{sCODE_TYPE}
+			AND     CODE      != '0000'
+			AND     USE_YN    = 'Y'
+			ORDER BY USE_ORDER;
+         ]]>
+	</select>
+
+	<select id="CM001102" parameterType="com.unique.model.In.CM001101IVO"  resultMap="CM001101OVO">
+        <![CDATA[
+        	SELECT  DOMAIN_ID
+        	      , PRJT_ID
+			      , CODE
+			      , CODE_NAME
+			      , RPLC_CODE
+			FROM    PMS_COMM_CD
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID}
+			AND     PRJT_ID    = #{sPRJT_ID}
+			AND     CODE_TYPE  = #{sCODE_TYPE}
+			AND     CODE      != '0000'
+			AND     USE_YN     = 'Y'
+			AND		RPLC_CODE  ='03'
+			ORDER BY USE_ORDER;
+         ]]>
+	</select>
+</mapper>

@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AD0201Mapper">
+
+    <resultMap id="AD020101OVO" type="com.unique.model.Out.AD020101OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="USER_ID" 	    		property="sUSER_ID" />
+		<result column="USER_NM"				property="sUSER_NM" />
+		<result column="USER_PW"				property="sUSER_PW" />
+		<result column="PSNL_NO"				property="sPSNL_NO" />
+		<result column="BRTH"					property="sBRTH" />
+		<result column="LUNAR_DIV"				property="sLUNAR_DIV" />
+		<result column="LUNAR_DIV_NM"			property="sLUNAR_DIV_NM" />
+		<result column="JOIN_DT"				property="sJOIN_DT" />
+		<result column="RTRE_DT"    	 		property="sRTRE_DT" />
+		<result column="CARR_YY"				property="sCARR_YY" />
+		<result column="CARR_MM"				property="sCARR_MM" />
+		<result column="ZIP_CD_JI"				property="sZIP_CD_JI" />
+		<result column="ZIP_CD_DO"				property="sZIP_CD_DO" />
+		<result column="ADDR_JI"				property="sADDR_JI" />
+		<result column="ADDR_DO"				property="sADDR_DO" />
+		<result column="OFFICE_NUM" 			property="sOFFICE_NUM" />
+		<result column="PHONE_NUM"				property="sPHONE_NUM" />
+		<result column="EMAIL"    		 		property="sEMAIL" />
+		<result column="PHOTO"					property="sPHOTO" />
+		<result column="COOP_ID"    	 		property="sCOOP_ID" />
+		<result column="COOP_NM"    	 		property="sCOOP_NM" />
+		<result column="BIZ_QUARTER"   			property="sBIZ_QUARTER" />
+		<result column="BIZ_QUARTER_NM"   		property="sBIZ_QUARTER_NM" />
+		<result column="USER_PSTN"				property="sUSER_PSTN" />
+		<result column="USER_PSTN_NM"			property="sUSER_PSTN_NM" />
+		<result column="EMP_TYPE"				property="sEMP_TYPE" />
+		<result column="EMP_TYPE_NM"			property="sEMP_TYPE_NM" />
+		<result column="CURR_PRJT_ID"  			property="sCURR_PRJT_ID" />
+		<result column="CURR_PRJT_NM"  			property="sCURR_PRJT_NM" />
+		<result column="PMS_AUTH"				property="sPMS_AUTH" />
+		<result column="PMS_AUTH_NM"			property="sPMS_AUTH_NM" />
+		<result column="DUP_YN"					property="sDUP_YN" />
+		<result column="USER_NO"				property="sUSER_NO" />
+    </resultMap>
+
+    <resultMap id="AD020111OVO" type="com.unique.model.Out.AD020111OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="USER_ID"				property="sUSER_ID" />
+		<result column="SEQ_NO"					property="sSEQ_NO" />
+		<result column="SCHL_NM"				property="sSCHL_NM" />
+		<result column="SCHL_DEPT"				property="sSCHL_DEPT" />
+		<result column="GRAD_YYYYMM"			property="sGRAD_YYYYMM" />
+    </resultMap>
+
+    <resultMap id="AD020121OVO" type="com.unique.model.Out.AD020121OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="USER_ID"				property="sUSER_ID" />
+		<result column="SEQ_NO"					property="sSEQ_NO" />
+		<result column="CERTIFCT_NM"			property="sCERTIFCT_NM" />
+		<result column="ACQ_YYYYMM"				property="sACQ_YYYYMM" />
+		<result column="PUB_ORG_NM"				property="sPUB_ORG_NM" />
+    </resultMap>
+
+    <resultMap id="AD020131OVO" type="com.unique.model.Out.AD020131OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="USER_ID"				property="sUSER_ID" />
+		<result column="SEQ_NO"					property="sSEQ_NO" />
+		<result column="EDUT_NM"				property="sEDUT_NM" />
+		<result column="EDUT_STRT_DT"			property="sEDUT_STRT_DT" />
+		<result column="EDUT_END_DT"			property="sEDUT_END_DT" />
+		<result column="EDUT_ORG_NM"			property="sEDUT_ORG_NM" />
+    </resultMap>
+
+    <resultMap id="AD020141OVO" type="com.unique.model.Out.AD020141OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="USER_ID"				property="sUSER_ID" />
+		<result column="SEQ_NO"					property="sSEQ_NO" />
+		<result column="CORP_NM"				property="sCORP_NM" />
+		<result column="CORP_JOIN_DT"			property="sCORP_JOIN_DT" />
+		<result column="CORP_RTRE_DT"			property="sCORP_RTRE_DT" />
+		<result column="LAST_PSTN"				property="sLAST_PSTN" />
+		<result column="ASSGN_BIZ"				property="sASSGN_BIZ" />
+    </resultMap>
+
+    <resultMap id="AD020151OVO" type="com.unique.model.Out.AD020151OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="USER_ID"				property="sUSER_ID" />
+		<result column="SEQ_NO"					property="sSEQ_NO" />
+		<result column="PRJT_NM"				property="sPRJT_NM" />
+		<result column="STRT_YYYYMM"			property="sSTRT_YYYYMM" />
+		<result column="END_YYYYMM"				property="sEND_YYYYMM" />
+		<result column="ORDER_ORG_NM"			property="sORDER_ORG_NM" />
+		<result column="EXEC_ORG_NM"			property="sEXEC_ORG_NM" />
+		<result column="PRJT_PSTN"				property="sPRJT_PSTN" />
+		<result column="ASSGN_BIZ"				property="sASSGN_BIZ" />
+		<result column="SERVER"					property="sSERVER" />
+		<result column="OS"						property="sOS" />
+		<result column="PRG_LANG"				property="sPRG_LANG" />
+		<result column="DBMS"					property="sDBMS" />
+		<result column="ETC_INFO"				property="sETC_INFO" />
+    </resultMap>
+
+	<select id="AD020111"  parameterType="com.unique.model.In.AD020101IVO"  resultMap="AD020101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID
+			      , USER_ID
+			      , USER_NM
+			      , USER_PW
+			      , PSNL_NO
+			      , BRTH
+			      , LUNAR_DIV
+			      , (SELECT CODE_NAME
+			         FROM   PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'LUNA' 
+			         AND    CODE      = A.LUNAR_DIV)        LUNAR_DIV_NM
+			      , JOIN_DT
+			      , RTRE_DT
+			      , CARR_YY
+			      , CARR_MM
+			      , ZIP_CD_JI
+			      , ZIP_CD_DO
+			      , ADDR_JI
+			      , ADDR_DO
+			      , OFFICE_NUM
+			      , PHONE_NUM
+			      , EMAIL
+			      , PHOTO
+			      , COOP_ID
+			      , IFNULL((SELECT COOP_NM 
+			                FROM   COOP_INFO
+			                WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			                AND    COOP_ID   = A.COOP_ID), '')      COOP_NM
+			      , BIZ_QUARTER
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'BZQT' 
+			         AND    CODE      = A.BIZ_QUARTER)              BIZ_QUARTER_NM
+			      , USER_PSTN
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'PSTN' 
+			         AND    CODE      = A.USER_PSTN)                USER_PSTN_NM
+			      , EMP_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'EMPC' 
+			         AND    CODE      = A.EMP_TYPE)                 EMP_TYPE_NM
+			      , PMS_AUTH
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'PMAT' 
+			         AND    CODE      = A.PMS_AUTH)                 PMS_AUTH_NM
+			      , CURR_PRJT_ID
+			      , IFNULL((SELECT  PRJT_NM
+			                FROM    PRJT_INFO
+			                WHERE   DOMAIN_ID  = A.DOMAIN_ID
+			                AND     PRJT_ID    = A.CURR_PRJT_ID), '')     CURR_PRJT_NM
+			      , USER_NO
+			FROM    MEM_INFO A
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     USER_NM   LIKE CONCAT('%', #{sUSER_NM}, '%');
+         ]]>
+	</select>
+
+    <select id="AD020113"  parameterType="com.unique.model.In.AD020101IVO"  resultMap="AD020101OVO">
+        <![CDATA[
+			SELECT  DOMAIN_ID
+			      , USER_ID
+			      , USER_NM
+			      , USER_PW
+			      , PSNL_NO
+			      , BRTH
+			      , LUNAR_DIV
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'LUNA' 
+			         AND    CODE      = A.LUNAR_DIV)        LUNAR_DIV_NM
+			      , JOIN_DT
+			      , RTRE_DT
+			      , CARR_YY
+			      , CARR_MM
+			      , ZIP_CD_JI
+			      , ZIP_CD_DO
+			      , ADDR_JI
+			      , ADDR_DO
+			      , OFFICE_NUM
+			      , PHONE_NUM
+			      , EMAIL
+			      , PHOTO
+			      , COOP_ID
+			      , IFNULL((SELECT COOP_NM 
+			                FROM   COOP_INFO
+			                WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			                AND    COOP_ID   = A.COOP_ID), '')      COOP_NM
+			      , BIZ_QUARTER
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'BZQT' 
+			         AND    CODE      = A.BIZ_QUARTER)              BIZ_QUARTER_NM
+			      , USER_PSTN
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'PSTN' 
+			         AND    CODE      = A.USER_PSTN)                USER_PSTN_NM
+			      , EMP_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'EMPC' 
+			         AND    CODE      = A.EMP_TYPE)                 EMP_TYPE_NM
+			      , PMS_AUTH
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = '00000000'
+			         AND    CODE_TYPE = 'PMAT' 
+			         AND    CODE      = A.PMS_AUTH)                 PMS_AUTH_NM
+			      , CURR_PRJT_ID
+			      , IFNULL((SELECT  PRJT_NM
+			                FROM    PRJT_INFO
+			                WHERE   DOMAIN_ID  = A.DOMAIN_ID
+			                AND     PRJT_ID    = A.CURR_PRJT_ID), '')     CURR_PRJT_NM
+			FROM    MEM_INFO A
+			WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.USER_ID   = #{sUSER_ID};
+         ]]>
+	</select>
+
+    <select id="AD020115" parameterType="com.unique.model.In.AD020101IVO"  resultMap="AD020101OVO">
+        <![CDATA[
+        	SELECT  CASE WHEN COUNT(USER_ID) = 0  THEN "N"
+				    ELSE "Y"
+				    END                         AS DUP_YN
+			FROM    MEM_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     USER_ID   = #{sUSER_ID};
+         ]]>
+	</select>
+
+    <insert id="AD020121" parameterType="com.unique.model.In.AD020101IVO">
+        <![CDATA[
+        	INSERT INTO MEM_INFO (
+					  DOMAIN_ID
+					, USER_ID
+					, USER_NM
+					, USER_PW
+					, PSNL_NO
+					, BRTH
+					, LUNAR_DIV
+					, JOIN_DT
+					, RTRE_DT
+					, CARR_YY
+					, CARR_MM
+			      	, ZIP_CD_JI
+			      	, ZIP_CD_DO
+			      	, ADDR_JI
+			      	, ADDR_DO
+					, OFFICE_NUM
+					, PHONE_NUM
+					, EMAIL
+					, PHOTO
+					, COOP_ID
+					, BIZ_QUARTER
+					, USER_PSTN
+					, EMP_TYPE
+					, PMS_AUTH
+					, CURR_PRJT_ID )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sUSER_ID}
+					, #{sUSER_NM}
+					, #{sUSER_PW}
+					, #{sPSNL_NO}
+					, #{sBRTH}
+					, #{sLUNAR_DIV}
+					, REPLACE(#{sJOIN_DT}, '.', '')
+					, REPLACE(#{sRTRE_DT}, '.', '')
+					, #{sCARR_YY}
+					, #{sCARR_MM}
+			      	, #{sZIP_CD_JI}
+			      	, #{sZIP_CD_DO}
+			      	, #{sADDR_JI}
+			      	, #{sADDR_DO}
+					, #{sOFFICE_NUM}
+					, #{sPHONE_NUM}
+					, #{sEMAIL}
+					, #{sPHOTO}
+					, #{sCOOP_ID}
+					, #{sBIZ_QUARTER}
+					, #{sUSER_PSTN}
+					, #{sEMP_TYPE}
+					, #{sPMS_AUTH}
+					, (CASE WHEN #{sCURR_PRJT_ID} = '' THEN '00000000' ELSE #{sCURR_PRJT_ID} END) );
+         ]]>
+	</insert>
+
+    <delete id="AD020141" parameterType="com.unique.model.In.AD020101IVO">
+        <![CDATA[
+        	DELETE FROM MEM_INFO
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    USER_ID       = #{sUSER_ID};
+         ]]>
+	</delete>
+	
+	<select id="AD020111A" parameterType="com.unique.model.In.AD020111IVO"  resultMap="AD020111OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.USER_ID
+			      , B.SEQ_NO
+			      , B.SCHL_NM
+			      , B.SCHL_DEPT
+			      , B.GRAD_YYYYMM
+			FROM    MEM_INFO A
+			      , MEM_SCHL_INFO B
+			WHERE 	A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.USER_ID   = #{sUSER_ID}
+			AND     A.DOMAIN_ID = B.DOMAIN_ID
+			AND     A.USER_ID   = B.USER_ID;
+         ]]>
+	</select>
+	
+	<select id="AD020102A" parameterType="com.unique.model.In.AD020112IVO"  resultMap="AD020111OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    MEM_SCHL_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     USER_ID   = #{sUSER_ID};
+		]]>
+	</select>
+	
+	<insert id="AD020121A" parameterType="com.unique.model.In.AD020111IVO">
+        <![CDATA[
+			INSERT INTO MEM_SCHL_INFO (
+					  DOMAIN_ID
+					, USER_ID
+					, SEQ_NO
+					, SCHL_NM
+					, SCHL_DEPT
+					, GRAD_YYYYMM )
+				VALUES (
+					  #{sDOMAIN_ID}
+					, #{sUSER_ID}
+					, #{sSEQ_NO}
+					, #{sSCHL_NM}
+					, #{sSCHL_DEPT}
+					, #{sGRAD_YYYYMM} );
+         ]]>
+	</insert>
+
+    <delete id="AD020142A" parameterType="com.unique.model.In.AD020112IVO" >
+        <![CDATA[
+        	DELETE FROM MEM_SCHL_INFO
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    USER_ID       = #{sUSER_ID};
+		 ]]>
+	</delete>
+
+	<select id="AD020111B" parameterType="com.unique.model.In.AD020121IVO"  resultMap="AD020121OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.USER_ID
+			      , B.SEQ_NO
+			      , B.CERTIFCT_NM
+			      , B.ACQ_YYYYMM
+			      , B.PUB_ORG_NM
+			FROM    MEM_INFO A
+			      , MEM_CERTIFCT_INFO B
+			WHERE 	A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.USER_ID   = #{sUSER_ID}
+			AND     A.DOMAIN_ID = B.DOMAIN_ID
+			AND     A.USER_ID   = B.USER_ID;
+         ]]>
+	</select>
+	
+	<select id="AD020102B" parameterType="com.unique.model.In.AD020122IVO"  resultMap="AD020121OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    MEM_CERTIFCT_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     USER_ID   = #{sUSER_ID};
+		]]>
+	</select>
+	
+
+    <insert id="AD020121B" parameterType="com.unique.model.In.AD020121IVO">
+        <![CDATA[
+			INSERT INTO MEM_CERTIFCT_INFO (
+					  DOMAIN_ID
+					, USER_ID
+					, SEQ_NO
+					, CERTIFCT_NM
+					, ACQ_YYYYMM
+					, PUB_ORG_NM )
+				VALUES (
+					  #{sDOMAIN_ID}
+					, #{sUSER_ID}
+					, #{sSEQ_NO}
+					, #{sCERTIFCT_NM}
+					, #{sACQ_YYYYMM}
+					, #{sPUB_ORG_NM} );
+         ]]>
+	</insert>
+
+    <delete id="AD020142B" parameterType="com.unique.model.In.AD020122IVO" >
+        <![CDATA[
+        	DELETE FROM MEM_CERTIFCT_INFO
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    USER_ID       = #{sUSER_ID};
+		 ]]>
+	</delete>
+	
+	<select id="AD020111C" parameterType="com.unique.model.In.AD020131IVO"  resultMap="AD020131OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.USER_ID
+			      , B.SEQ_NO
+			      , B.EDUT_NM
+				  , B.EDUT_STRT_DT
+				  , B.EDUT_END_DT
+				  , B.EDUT_ORG_NM
+			FROM    MEM_INFO A
+			      , MEM_EDUT_INFO B
+			WHERE 	A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.USER_ID   = #{sUSER_ID}
+			AND     A.DOMAIN_ID = B.DOMAIN_ID
+			AND     A.USER_ID   = B.USER_ID;
+         ]]>
+	</select>
+	
+	<select id="AD020102C" parameterType="com.unique.model.In.AD020132IVO"  resultMap="AD020131OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    MEM_EDUT_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     USER_ID   = #{sUSER_ID};
+		]]>
+	</select>
+
+    <insert id="AD020121C" parameterType="com.unique.model.In.AD020131IVO">
+        <![CDATA[
+        	INSERT INTO MEM_EDUT_INFO (
+					  DOMAIN_ID
+					, USER_ID
+					, SEQ_NO
+					, EDUT_NM
+					, EDUT_STRT_DT
+					, EDUT_END_DT
+					, EDUT_ORG_NM )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sUSER_ID}
+					, #{sSEQ_NO}
+					, #{sEDUT_NM}
+					, #{sEDUT_STRT_DT}
+					, #{sEDUT_END_DT}
+					, #{sEDUT_ORG_NM} );
+         ]]>
+	</insert>
+
+    <delete id="AD020142C" parameterType="com.unique.model.In.AD020132IVO" >
+        <![CDATA[
+        	DELETE FROM MEM_EDUT_INFO
+			WHERE DOMAIN_ID     = #{sDOMAIN_ID}
+			AND   USER_ID       = #{sUSER_ID};
+		 ]]>
+	</delete>
+	
+	<select id="AD020111D" parameterType="com.unique.model.In.AD020141IVO"  resultMap="AD020141OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+			      , B.USER_ID
+			      , B.SEQ_NO
+			      , B.CORP_NM
+				  , B.CORP_JOIN_DT
+				  , B.CORP_RTRE_DT
+				  , B.LAST_PSTN
+				  , B.ASSGN_BIZ
+			FROM    MEM_INFO A
+			      , MEM_CARR_INFO B
+			WHERE 	A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.USER_ID   = #{sUSER_ID}
+			AND     A.DOMAIN_ID = B.DOMAIN_ID
+			AND     A.USER_ID   = B.USER_ID;
+         ]]>
+	</select>
+
+	<select id="AD020102D" parameterType="com.unique.model.In.AD020142IVO"  resultMap="AD020141OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    MEM_CARR_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     USER_ID   = #{sUSER_ID};
+		]]>
+	</select>
+
+    <insert id="AD020121D" parameterType="com.unique.model.In.AD020141IVO">
+        <![CDATA[
+        	INSERT INTO MEM_CARR_INFO (
+					  DOMAIN_ID
+					, USER_ID
+				 	, SEQ_NO
+					, CORP_NM
+					, CORP_JOIN_DT
+					, CORP_RTRE_DT
+					, LAST_PSTN
+					, ASSGN_BIZ )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sUSER_ID}
+					, #{sSEQ_NO}
+					, #{sCORP_NM}
+					, #{sCORP_JOIN_DT}
+					, #{sCORP_RTRE_DT}
+					, #{sLAST_PSTN}
+					, #{sASSGN_BIZ} );
+         ]]>
+	</insert>
+
+    <delete id="AD020142D" parameterType="com.unique.model.In.AD020142IVO" >
+        <![CDATA[
+        	DELETE FROM MEM_CARR_INFO
+			WHERE  DOMAIN_ID     = #{sDOMAIN_ID}
+			AND    USER_ID       = #{sUSER_ID};
+		 ]]>
+	</delete>
+	
+	<select id="AD020111E" parameterType="com.unique.model.In.AD020151IVO"  resultMap="AD020151OVO">
+        <![CDATA[
+        	SELECT  B.DOMAIN_ID
+                  , B.USER_ID
+                  , B.SEQ_NO
+                  , B.PRJT_NM
+                  , B.STRT_YYYYMM
+                  , B.END_YYYYMM
+                  , B.ORDER_ORG_NM
+                  , B.EXEC_ORG_NM
+                  , B.PRJT_PSTN
+                  , B.ASSGN_BIZ
+                  , B.SERVER
+                  , B.OS
+                  , B.PRG_LANG
+                  , B.DBMS
+                  , B.ETC_INFO
+			FROM    MEM_INFO A
+			      , MEM_PRJT_CARR_INFO B
+			WHERE 	A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.USER_ID   = #{sUSER_ID}
+			AND     A.DOMAIN_ID = B.DOMAIN_ID
+			AND     A.USER_ID   = B.USER_ID;
+         ]]>
+	</select>
+
+	<select id="AD020102E" parameterType="com.unique.model.In.AD020152IVO"  resultMap="AD020151OVO">
+		<![CDATA[
+			SELECT  IFNULL(MAX(A.SEQ_NO) + 1, 1)  SEQ_NO
+			FROM    PMS_RLT_COL B
+			        LEFT OUTER JOIN MEM_PRJT_CARR_INFO A
+			        ON    A.DOMAIN_ID = #{sDOMAIN_ID}
+			        AND   A.USER_ID   = #{sUSER_ID}
+			WHERE   B.NUM      <= 1;
+		]]>
+	</select>
+	
+    <insert id="AD020121E" parameterType="com.unique.model.In.AD020151IVO">
+        <![CDATA[
+        	INSERT INTO MEM_PRJT_CARR_INFO (
+					  DOMAIN_ID
+				  	, USER_ID
+				 	, SEQ_NO
+					, PRJT_NM
+					, STRT_YYYYMM
+					, END_YYYYMM
+					, ORDER_ORG_NM
+					, EXEC_ORG_NM
+					, PRJT_PSTN
+					, ASSGN_BIZ
+					, SERVER
+					, OS
+					, PRG_LANG
+					, DBMS
+					, ETC_INFO )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sUSER_ID}
+					, #{sSEQ_NO}
+					, #{sPRJT_NM}
+					, REPLACE(#{sSTRT_YYYYMM}, '.', '')
+					, REPLACE(#{sEND_YYYYMM}, '.', '')
+					, #{sORDER_ORG_NM}
+					, #{sEXEC_ORG_NM}
+					, #{sPRJT_PSTN}
+					, #{sASSGN_BIZ}
+					, #{sSERVER}
+					, #{sOS}
+					, #{sPRG_LANG}
+					, #{sDBMS}
+					, #{sETC_INFO} );
+         ]]>
+	</insert>
+
+	<delete id="AD020141E" parameterType="com.unique.model.In.AD020151IVO" >
+        <![CDATA[
+        	DELETE FROM MEM_PRJT_CARR_INFO
+			WHERE  DOMAIN_ID = #{sDOMAIN_ID}
+			AND    USER_ID   = #{sUSER_ID}
+			AND    SEQ_NO    = #{sSEQ_NO};
+		 ]]>
+	</delete>
+	
+    <delete id="AD020142E" parameterType="com.unique.model.In.AD020152IVO" >
+        <![CDATA[
+        	DELETE FROM MEM_PRJT_CARR_INFO
+			WHERE  DOMAIN_ID = #{sDOMAIN_ID}
+			AND    USER_ID   = #{sUSER_ID};
+		 ]]>
+	</delete>
+
+</mapper>

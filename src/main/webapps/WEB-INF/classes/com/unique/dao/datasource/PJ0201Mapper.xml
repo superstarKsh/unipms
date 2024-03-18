@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PJ0201Mapper">
+	
+    <resultMap id="PJ020101OVO" type="com.unique.model.Out.PJ020101OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_SUB_PART_ID"		property="sPRJT_SUB_PART_ID" />
+		<result column="PRJT_SUB_PART_NM"		property="sPRJT_SUB_PART_NM" />
+		<result column="USER_ID"				property="sUSER_ID" />
+		<result column="USER_NM"				property="sUSER_NM" />
+		<result column="USER_PSTN"				property="sUSER_PSTN" />
+		<result column="USER_PSTN_NM"			property="sUSER_PSTN_NM" />
+		<result column="PRJT_ROLE"				property="sPRJT_ROLE" />
+		<result column="PRJT_ROLE_NM"			property="sPRJT_ROLE_NM" />
+		<result column="STRT_DT"				property="sSTRT_DT" />
+		<result column="END_DT"					property="sEND_DT" />
+		<result column="PRJT_TASK"				property="sPRJT_TASK" />
+		<result column="PROC_RATIO"				property="sPROC_RATIO" />
+		<result column="PROC_MM"				property="sPROC_MM" />
+		<result column="USER_NO"				property="sUSER_NO" />
+    </resultMap>
+
+	<select id="PJ020111" parameterType="com.unique.model.In.PJ020101IVO" resultMap="PJ020101OVO">
+        <![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , B.PRJT_SUB_PART_ID
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'SBPT' 
+					 AND    CODE      = B.PRJT_SUB_PART_ID)  PRJT_SUB_PART_NM
+			      , B.USER_ID
+			      , A.USER_NM
+			      , B.PRJT_ROLE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PTRL' 
+					 AND    CODE      = B.PRJT_ROLE)         PRJT_ROLE_NM
+			      , B.STRT_DT
+			      , B.END_DT
+			      , A.USER_PSTN
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+					 WHERE  DOMAIN_ID = B.DOMAIN_ID 
+					 AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+					 AND    CODE_TYPE = 'PSTN' 
+					 AND    CODE      = A.USER_PSTN)         USER_PSTN_NM
+				  , PRJT_TASK
+				  , PROC_RATIO
+				  , PROC_MM
+				  , USER_NO
+			FROM    PRJT_MEM B,
+			        MEM_INFO A
+			WHERE   B.DOMAIN_ID         = #{sDOMAIN_ID}
+			AND     B.PRJT_ID           = #{sPRJT_ID}
+			AND     B.PRJT_SUB_PART_ID  LIKE CONCAT('%', #{sPRJT_SUB_PART_ID}, '%')
+			AND     B.DOMAIN_ID         = A.DOMAIN_ID
+			AND     B.USER_ID           = A.USER_ID;
+         ]]>
+	</select>
+	
+	<insert id="PJ020121" parameterType="com.unique.model.In.PJ020101IVO">
+        <![CDATA[
+        	INSERT INTO PRJT_MEM (
+					  DOMAIN_ID
+					, PRJT_ID
+					, PRJT_SUB_PART_ID
+					, USER_ID
+					, PRJT_ROLE
+					, STRT_DT
+					, END_DT )
+			VALUES (  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sPRJT_SUB_PART_ID}
+					, #{sUSER_ID}
+					, #{sPRJT_ROLE}
+					, #{sSTRT_DT}
+					, #{sEND_DT} );
+         ]]>
+	</insert>
+	
+	<delete id="PJ020142" parameterType="com.unique.model.In.PJ020102IVO">
+        <![CDATA[
+        	DELETE FROM PRJT_MEM
+        	WHERE  DOMAIN_ID         =  #{sDOMAIN_ID}
+        	AND    PRJT_ID           =  #{sPRJT_ID};
+         ]]>
+	</delete>
+	
+	<update id="PJ020131" parameterType="com.unique.model.In.PJ020103IVO">
+        <![CDATA[
+			UPDATE  MEM_INFO
+			SET     CURR_PRJT_ID = #{sCURR_PRJT_ID}
+			WHERE   DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     USER_ID     = #{sUSER_ID}	
+	 	]]>
+	</update>
+
+</mapper>
+
+
+
+

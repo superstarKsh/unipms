@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TS0104Mapper">
+
+    <resultMap id="TS010401OVO" type="com.unique.model.Out.TS010401OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID" />
+		<result column="TEST_SCN_ID"				property="sTEST_SCN_ID" />
+		<result column="TEST_SCN_NM"				property="sTEST_SCN_NM" />
+		<result column="TEST_CASE_CNT"				property="sTEST_CASE_CNT" />
+		<result column="TEST_PROC_CNT"				property="sTEST_PROC_CNT" />
+		<result column="TEST_PROC_RT"				property="sTEST_PROC_RT" />
+		<result column="TEST_ERR_CNT"				property="sTEST_ERR_CNT" />
+		<result column="TEST_ERR_RT"				property="sTEST_ERR_RT" />
+		<result column="TEST_CPL_CNT"				property="sTEST_CPL_CNT" />
+		<result column="TEST_CPL_RT"				property="sTEST_CPL_RT" />
+    </resultMap>
+
+    <select id="TS010415" parameterType="com.unique.model.In.TS010401IVO" resultMap="TS010401OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , A.TASK_ID
+			      , A.SEG_ID
+                  , A.SEG_SUB_ID
+			      , A.TEST_SCN_ID
+			      , A.TEST_SCN_NM
+			      , B.TEST_CASE_CNT
+			      , B.TEST_PROC_CNT
+			      , (CASE ROUND((B.TEST_PROC_CNT / B.TEST_CASE_CNT) * 100, 2)
+				       WHEN '' THEN ROUND((B.TEST_PROC_CNT / B.TEST_CASE_CNT) * 100, 2)
+				       ELSE CONCAT(ROUND((B.TEST_PROC_CNT / B.TEST_CASE_CNT) * 100, 2),'%' )END)  TEST_PROC_RT
+			      , B.TEST_ERR_CNT
+			      , (CASE ROUND((B.TEST_ERR_CNT / B.TEST_CASE_CNT) * 100, 2) WHEN '' THEN ROUND((B.TEST_ERR_CNT / B.TEST_CASE_CNT) * 100, 2)
+       				 ELSE CONCAT(ROUND((B.TEST_ERR_CNT / B.TEST_CASE_CNT) * 100, 2),'%') END) 	  TEST_ERR_RT
+			      , B.TEST_CPL_CNT
+			      , (CASE ROUND((B.TEST_CPL_CNT / B.TEST_CASE_CNT) * 100, 2) WHEN '' THEN ROUND((B.TEST_CPL_CNT / B.TEST_CASE_CNT) * 100, 2)
+       				 ELSE  CONCAT(ROUND((B.TEST_CPL_CNT / B.TEST_CASE_CNT) * 100, 2),'%')END )    TEST_CPL_RT
+			FROM    ( SELECT  B.DOMAIN_ID
+			          		, B.PRJT_ID
+			          		, B.TEST_SCN_ID
+			          		, COUNT(B.TEST_CASE_ID)                                   TEST_CASE_CNT
+			          		, SUM(CASE WHEN B.TEST_DT = '' THEN 0 ELSE 1 END)         TEST_PROC_CNT
+			                , SUM(CASE WHEN B.TEST_CONFRM = 'N' THEN 1 ELSE 0 END)    TEST_ERR_CNT
+			                , SUM(CASE WHEN B.TEST_CONFRM = 'Y' THEN 1 ELSE 0 END)    TEST_CPL_CNT
+			          FROM    PRJT_TEST_DETAIL B
+			          WHERE   B.DOMAIN_ID     = #{sDOMAIN_ID}
+					  AND     B.PRJT_ID       = #{sPRJT_ID}
+					  AND     B.TEST_SCN_ID   = #{sTEST_SCN_ID}
+			          GROUP BY B.DOMAIN_ID, B.PRJT_ID,B.TEST_SCN_ID ) B
+			      , PRJT_TEST_SCNR A
+			WHERE   A.DOMAIN_ID   = #{sDOMAIN_ID}
+			AND     A.PRJT_ID     = #{sPRJT_ID}
+			AND     A.TEST_SCN_ID = #{sTEST_SCN_ID}
+			AND     A.DOMAIN_ID   = B.DOMAIN_ID
+			AND     A.PRJT_ID     = B.PRJT_ID
+			AND     A.TEST_SCN_ID = B.TEST_SCN_ID;
+		]]>
+	</select>
+</mapper>

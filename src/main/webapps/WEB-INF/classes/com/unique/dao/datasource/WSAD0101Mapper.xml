@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WSAD0101Mapper">
+	
+	<resultMap id="AD010101OVO" type="com.unique.model.Out.AD010101OVO">
+		<result column="DOMAIN_ID"				property="sDOMAIN_ID" />
+		<result column="PRJT_ID"				property="sPRJT_ID" />
+		<result column="PRJT_NM"				property="sPRJT_NM" />
+		<result column="CURR_STAGE"				property="sCURR_STAGE" />
+		<result column="BIZ_QUARTER"			property="sBIZ_QUARTER" />
+		<result column="BIZ_TYPE"				property="sBIZ_TYPE" />
+		<result column="BIZ_AMOUNT"				property="sBIZ_AMOUNT" />
+		<result column="DEV_METHOD"				property="sDEV_METHOD" />
+		<result column="CUS_CD"					property="sCUS_CD" />
+		<result column="CUS_NM"					property="sCUS_NM" />
+		<result column="MAIN_BIZ_PART_CD"		property="sMAIN_BIZ_PART_CD" />
+		<result column="MAIN_BIZ_PART_NM"		property="sMAIN_BIZ_PART_NM" />
+		<result column="PRJT_STRT_DT"			property="sPRJT_STRT_DT" />
+		<result column="PRJT_END_DT"			property="sPRJT_END_DT" />
+		<result column="PRJT_MANG_ID"			property="sPRJT_MANG_ID" />
+		<result column="PRJT_MANG_NM"			property="sPRJT_MANG_NM" />
+		<result column="MAN_MONTH"				property="sMAN_MONTH" />
+		<result column="PRJT_TYPE"				property="sPRJT_TYPE" />
+		<result column="PRJT_TYPE_NM"			property="sPRJT_TYPE_NM" />
+		<result column="SERVER_TYPE"			property="sSERVER_TYPE" />
+		<result column="OS_TYPE"				property="sOS_TYPE" />
+		<result column="PRGM_LANG"				property="sPRGM_LANG" />
+		<result column="USE_TOOL"				property="sUSE_TOOL" />
+		<result column="DBMS_TYPE"				property="sDBMS_TYPE" />
+		<result column="ETC_TYPE"				property="sETC_TYPE" />
+		<result column="PRJT_DISC"				property="sPRJT_DISC" />
+		<result column="ETC_DISC"				property="sETC_DISC" />
+		<result column="ATTACH_FILE_NM1"		property="sATTACH_FILE_NM1" />
+		<result column="ATTACH_FILE_NM2"		property="sATTACH_FILE_NM2" />
+		<result column="ATTACH_FILE_NM3"		property="sATTACH_FILE_NM3" />
+    </resultMap>
+
+    <select id="AD010102" parameterType="com.unique.model.In.AD010101IVO"  resultMap="AD010101OVO">
+        <![CDATA[
+        	SELECT  IFNULL(DOMAIN_ID, #{sDOMAIN_ID})                                         DOMAIN_ID
+        	      , CONCAT(SUBSTRING(DATE_FORMAT(NOW(), '%Y%m%d'), 1, 6), 
+							IFNULL(LPAD(SUBSTRING(MAX(PRJT_ID), 7, 2)  + 1, 2,  '0')
+						  , '01'))                                                           PRJT_ID
+			FROM    PRJT_INFO
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     PRJT_ID   LIKE CONCAT(SUBSTRING(DATE_FORMAT(NOW(), '%Y%m%d'), 1, 6), '%');
+         ]]>
+	</select>
+    
+	<select id="AD010113" parameterType="com.unique.model.In.AD010101IVO" resultMap="AD010101OVO">
+        <![CDATA[
+        	SELECT  DOMAIN_ID
+			      , PRJT_ID
+			      , PRJT_NM
+			      , CURR_STAGE
+			      , BIZ_QUARTER
+			      , BIZ_TYPE
+			      , FORMAT(BIZ_AMOUNT, 0) BIZ_AMOUNT
+			      , DEV_METHOD
+			      , CUS_CD
+			      , IFNULL((SELECT A.COOP_NM 
+			                FROM   COOP_INFO A 
+			                WHERE  A.DOMAIN_ID = B.DOMAIN_ID 
+			                AND    A.COOP_ID   = B.CUS_CD), '') CUS_NM
+			      , MAIN_BIZ_PART_CD
+			      , IFNULL((SELECT A.COOP_NM 
+			                FROM   COOP_INFO A 
+			                WHERE  A.DOMAIN_ID = B.DOMAIN_ID 
+			                AND    A.COOP_ID   = B.MAIN_BIZ_PART_CD), '')  MAIN_BIZ_PART_NM
+			      , PRJT_STRT_DT
+            	  , PRJT_END_DT
+			      , PRJT_MANG_ID
+			      , IFNULL((SELECT A.USER_NM
+			                FROM   MEM_INFO A
+			                WHERE  A.DOMAIN_ID  = B.DOMAIN_ID
+			                AND    A.USER_ID    = B.PRJT_MANG_ID), '')     PRJT_MANG_NM
+  	             , IFNULL((
+	                       SELECT MAN_MONTH
+	                  	   FROM PRJT_INFO_V
+						   WHERE   DOMAIN_ID    = B.DOMAIN_ID
+						   AND     PRJT_ID      = B.PRJT_ID
+	                  	   AND PRJT_ID = B.PRJT_ID), '')                   AS MAN_MONTH
+			      , SERVER_TYPE
+			      , OS_TYPE
+			      , PRGM_LANG
+			      , USE_TOOL
+			      , DBMS_TYPE
+			      , ETC_TYPE
+			      , PRJT_DISC
+			      , ETC_DISC
+			      , ATTACH_FILE_NM1
+			      , ATTACH_FILE_NM2
+			      , ATTACH_FILE_NM3
+			      , CONT_NO
+			      , FORMAT(CONT_AMT, 0) CONT_AMT
+			      , CONT_DT
+			      , IFNULL((SELECT A.CODE_NAME
+			                FROM   PMS_COMM_CD A
+			                WHERE  A.DOMAIN_ID  = B.DOMAIN_ID
+			                AND    A.CODE_TYPE  = 'CTTP'
+			                AND    A.PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                AND    A.CODE       = B.CONT_TYP  ), '')     CONT_TYP
+			      , IFNULL((SELECT A.CODE_NAME
+			                FROM   PMS_COMM_CD A
+			                WHERE  A.DOMAIN_ID  = B.DOMAIN_ID
+			                AND    A.CODE_TYPE  = 'SLTP'
+			                AND    A.PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			                AND    A.CODE       = B.ACTIVE_TYP  ), '')     ACTIVE_TYP
+			      , LIVE_ED_DT
+			      , ESTI_ED_DT
+			      , FORMAT(OUTSRC_AMT, 0) OUTSRC_AMT
+			      , FORMAT(FIXD_AMT, 0) FIXD_AMT
+			      , FORMAT(CIRC_AMT, 0) CIRC_AMT
+			FROM    PRJT_INFO B
+			WHERE   B.DOMAIN_ID = #{sDOMAIN_ID}
+        	AND     B.PRJT_ID   = #{sPRJT_ID}
+         ]]>
+	</select>
+	
+	<insert id="AD010121" parameterType="com.unique.model.In.AD010101IVO">
+        <![CDATA[
+        	INSERT INTO PRJT_INFO_PMS (
+					  DOMAIN_ID
+					, PRJT_ID
+					, PRJT_NM
+					, CURR_STAGE
+					, BIZ_QUARTER
+					, BIZ_TYPE
+					, BIZ_AMOUNT
+					, DEV_METHOD
+					, CUS_CD
+					, MAIN_BIZ_PART_CD
+					, PRJT_STRT_DT
+					, PRJT_END_DT
+					, PRJT_MANG_ID
+					, MAN_MONTH
+					, SERVER_TYPE
+					, OS_TYPE
+					, PRGM_LANG
+					, USE_TOOL
+					, DBMS_TYPE
+					, ETC_TYPE
+					, PRJT_DISC
+					, ETC_DISC
+					, ATTACH_FILE_NM1
+					, ATTACH_FILE_NM2
+					, ATTACH_FILE_NM3 )
+			VALUES (
+					  #{sDOMAIN_ID}
+					, #{sPRJT_ID}
+					, #{sPRJT_NM}
+					, #{sCURR_STAGE}
+					, #{sBIZ_QUARTER}
+					, #{sBIZ_TYPE}
+					, REPLACE(#{sBIZ_AMOUNT}, ',', '')
+					, #{sDEV_METHOD}
+					, #{sCUS_CD}
+					, #{sMAIN_BIZ_PART_CD}
+					, REPLACE(#{sPRJT_STRT_DT}, '.', '')
+					, REPLACE(#{sPRJT_END_DT}, '.', '')
+					, #{sPRJT_MANG_ID}
+					, #{sMAN_MONTH}
+					, #{sSERVER_TYPE}
+					, #{sOS_TYPE}
+					, #{sPRGM_LANG}
+					, #{sUSE_TOOL}
+					, #{sDBMS_TYPE}
+					, #{sETC_TYPE}
+					, #{sPRJT_DISC}
+					, #{sETC_DISC}
+					, #{sATTACH_FILE_NM1}
+					, #{sATTACH_FILE_NM2}
+					, #{sATTACH_FILE_NM3} );
+         ]]>
+	</insert>
+	
+	<delete id="AD010141" parameterType="com.unique.model.In.AD010101IVO">
+        <![CDATA[
+        	DELETE FROM PRJT_INFO_PMS
+        	WHERE  DOMAIN_ID = #{sDOMAIN_ID}
+        	AND    PRJT_ID   = #{sPRJT_ID};
+         ]]>
+	</delete>
+
+</mapper>
+
+
+
+

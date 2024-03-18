@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AD0301Mapper">
+
+    <resultMap id="AD030101OVO" type="com.unique.model.Out.AD030101OVO">
+		<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="COOP_ID"					property="sCOOP_ID" />          
+		<result column="COOP_NM"					property="sCOOP_NM" />         
+		<result column="COOP_REG_NUM"				property="sCOOP_REG_NUM" />		
+		<result column="COOP_TYPE"					property="sCOOP_TYPE" />    
+		<result column="PHONE_NUM"					property="sPHONE_NUM" />   
+		<result column="FAX_NUM"					property="sFAX_NUM" />    
+		<result column="COOP_EMAIL"					property="sCOOP_EMAIL" />   
+		<result column="COOP_HOMEPAGE"				property="sCOOP_HOMEPAGE" />  
+		<result column="ZIP_CD_JI"					property="sZIP_CD_JI" />  
+		<result column="ADDR_JI"					property="sADDR_JI" />   
+		<result column="ZIP_CD_DO"					property="sZIP_CD_DO" />  
+		<result column="ADDR_DO"					property="sADDR_DO" />
+    </resultMap>
+    
+    <select id="AD030102"  parameterType="com.unique.model.In.AD030101IVO"  resultMap="AD030101OVO">
+        <![CDATA[
+        	SELECT  IFNULL(CONCAT(MAX(SUBSTRING(A.COOP_ID, 1, LENGTH(A.COOP_ID) - 4)), LPAD(MAX(SUBSTRING(A.COOP_ID, LENGTH(A.COOP_ID) - 3, 4)) + 1, 4, '0'))
+			              , 'COOP0001')      COOP_ID
+			FROM    PMS_RLT_COL B
+			        LEFT OUTER JOIN COOP_INFO A
+			        ON    A.DOMAIN_ID = #{sDOMAIN_ID}
+			WHERE   B.NUM      <= 1;
+         ]]>
+	</select>
+	
+    <select id="AD030111"  parameterType="com.unique.model.In.AD030101IVO"  resultMap="AD030101OVO">
+    		SELECT  DOMAIN_ID
+				  , COOP_ID
+				  , COOP_NM
+				  , COOP_REG_NUM
+				  , COOP_TYPE
+				  , ''        COOP_TYPE_NM
+				  , PHONE_NUM
+				  , FAX_NUM
+				  , COOP_EMAIL
+				  , COOP_HOMEPAGE
+				  , ZIP_CD_JI
+				  , ADDR_JI
+				  , ZIP_CD_DO
+				  , ADDR_DO
+			FROM    COOP_INFO A
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     COOP_ID LIKE CONCAT('%', #{sCOOP_ID}, '%');
+    </select>
+    
+    <select id="AD030113"  parameterType="com.unique.model.In.AD030101IVO"  resultMap="AD030101OVO">
+    		SELECT  DOMAIN_ID
+				  , COOP_ID
+				  , COOP_NM
+				  , COOP_REG_NUM
+				  , COOP_TYPE
+				  , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    CODE_TYPE = 'LUNA' 
+			         AND    CODE      = A.COOP_TYPE)        COOP_TYPE_NM
+				  , PHONE_NUM
+				  , FAX_NUM
+				  , COOP_EMAIL
+				  , COOP_HOMEPAGE
+				  , ZIP_CD_JI
+				  , ADDR_JI
+				  , ZIP_CD_DO
+				  , ADDR_DO
+			FROM    COOP_INFO A
+			WHERE   DOMAIN_ID = #{sDOMAIN_ID}
+			AND     COOP_ID   = #{sCOOP_ID};
+    </select>
+
+	<insert id="AD030121" parameterType="com.unique.model.In.AD030101IVO">
+        <![CDATA[
+        	INSERT INTO COOP_INFO (
+					  DOMAIN_ID
+					, COOP_ID
+					, COOP_NM
+					, COOP_REG_NUM
+					, COOP_TYPE
+					, PHONE_NUM
+					, FAX_NUM
+					, COOP_EMAIL
+					, COOP_HOMEPAGE
+					, ZIP_CD_JI
+					, ADDR_JI
+					, ZIP_CD_DO
+					, ADDR_DO )
+			VALUES ( 
+				      #{sDOMAIN_ID}
+					, #{sCOOP_ID}
+					, #{sCOOP_NM}
+					, #{sCOOP_REG_NUM}
+					, #{sCOOP_TYPE}
+					, #{sPHONE_NUM}
+					, #{sFAX_NUM}
+					, #{sCOOP_EMAIL}
+					, #{sCOOP_HOMEPAGE}
+					, #{sZIP_CD_JI}
+					, #{sADDR_JI}
+					, #{sZIP_CD_DO}
+					, #{sADDR_DO} );
+         ]]>
+	</insert>
+	
+    <delete id="AD030141" parameterType="com.unique.model.In.AD030101IVO">
+        <![CDATA[
+        	DELETE FROM COOP_INFO
+			WHERE DOMAIN_ID     = #{sDOMAIN_ID}
+			AND   COOP_ID       = #{sCOOP_ID};
+         ]]>
+	</delete>
+
+</mapper>
+
+
+
+

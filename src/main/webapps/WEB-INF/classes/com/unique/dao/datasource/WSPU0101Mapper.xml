@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WSPU0101Mapper">
+	
+    <resultMap id="WSPU010101OVO" type="com.unique.model.Out.WSPU010101OVO">
+        <result column="DOMAIN_ID"				property="sDOMAIN_ID"/>
+        <result column="PRJT_ID"				property="sPRJT_ID"/>
+        <result column="PRJT_NM"				property="sPRJT_NM"/>
+        <result column="CURR_STAGE"				property="sCURR_STAGE"/>
+        <result column="PRJT_MANG_NM"			property="sPRJT_MANG_NM"/>
+        <result column="USER_PSTN"				property="sUSER_PSTN"/>
+        <result column="PRJT_STRT_DT"			property="sPRJT_STRT_DT"/>
+        <result column="PRJT_END_DT"			property="sPRJT_END_DT"/>
+		<result column="CONT_NO"				property="sCONT_NO" />
+		<result column="CONT_AMT"				property="sCONT_AMT" />
+		<result column="CONT_DT"				property="sCONT_DT" />
+		<result column="CONT_TYP"				property="sCONT_TYP" />
+		<result column="ACTIVE_TYP"				property="sACTIVE_TYP" />
+		<result column="LIVE_ED_DT"				property="sLIVE_ED_DT" />
+		<result column="ESTI_ED_DT"				property="sESTI_ED_DT" />
+		<result column="OUTSRC_AMT"				property="sOUTSRC_AMT" />
+		<result column="FIXD_AMT"				property="sFIXD_AMT" />
+		<result column="CIRC_AMT"				property="sCIRC_AMT" />
+    </resultMap>
+
+    <select id="PU010101" parameterType="com.unique.model.In.WSPU010101IVO"  resultMap="WSPU010101OVO">
+        <![CDATA[
+        	SELECT  A.DOMAIN_ID
+			      , A.PRJT_ID
+			      , A.PRJT_NM
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST' 
+			         AND    CODE      = A.CURR_STAGE)   CURR_STAGE
+			      , B.USER_NM							PRJT_MANG_NM
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD 
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID 
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PSTN' 
+			         AND    CODE      = B.USER_PSTN)    USER_PSTN
+			      , A.PRJT_STRT_DT
+			      , A.PRJT_END_DT
+			      
+			      , A.CONT_NO
+			      , FORMAT(A.CONT_AMT, 0) CONT_AMT 
+			      , A.CONT_DT
+			      , IFNULL((SELECT CODE_NAME
+			                FROM   PMS_COMM_CD
+			                WHERE  DOMAIN_ID  = A.DOMAIN_ID
+			                AND    CODE_TYPE  = 'CTTP'
+			                AND    PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			                AND    CODE       = A.CONT_TYP  ), '')     CONT_TYP
+			      , IFNULL((SELECT CODE_NAME
+			                FROM   PMS_COMM_CD
+			                WHERE  DOMAIN_ID  = A.DOMAIN_ID
+			                AND    CODE_TYPE  = 'SLTP'
+			                AND    PRJT_ID    = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			                AND    CODE       = A.ACTIVE_TYP  ), '')     ACTIVE_TYP
+			      , A.LIVE_ED_DT
+			      , A.ESTI_ED_DT
+			      , FORMAT(A.OUTSRC_AMT, 0) OUTSRC_AMT
+			      , FORMAT(A.FIXD_AMT, 0) FIXD_AMT
+			      , FORMAT(A.CIRC_AMT, 0) CIRC_AMT
+			FROM    PRJT_INFO_V A
+			        LEFT OUTER JOIN MEM_INFO B
+			        ON   B.DOMAIN_ID = A.DOMAIN_ID 
+			        AND  B.USER_ID   = A.PRJT_MANG_ID
+			WHERE   A.DOMAIN_ID = #{sDOMAIN_ID}
+			AND     A.PRJT_ID   NOT IN (SELECT PRJT_ID
+			                            FROM   PRJT_INFO
+			                            WHERE  DOMAIN_ID = #{sDOMAIN_ID})
+			AND     A.PRJT_NM   LIKE CONCAT('%', TRIM(#{sPRJT_NM}),'%')
+			ORDER BY A.PRJT_END_DT DESC;
+         ]]>
+	</select>
+
+</mapper>

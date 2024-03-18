@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DV0401Mapper">
+
+    <resultMap id="DV040101OVO" type="com.unique.model.Out.DV040101OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID"	/>
+		<result column="PRJT_STAGE"					property="sPRJT_STAGE" />
+        <result column="ACTIVITY_ID"				property="sACTIVITY_ID" />
+		<result column="TASK_ID"					property="sTASK_ID"	/>
+        <result column="SEG_ID"						property="sSEG_ID"/>
+        <result column="SEG_SUB_ID"					property="sSEG_SUB_ID"/>
+		<result column="TASK_NM"					property="sTASK_NM"	/>
+		<result column="PRG_ID"						property="sPRG_ID" />
+		<result column="PRG_NM"						property="sPRG_NM" />
+		<result column="PRG_EXTN"					property="sPRG_EXTN" />
+		<result column="PRG_TYPE"					property="sPRG_TYPE" />
+		<result column="PRG_TYPE_NM"				property="sPRG_TYPE_NM"	/>
+		<result column="DEV_USER_ID"				property="sDEV_USER_ID"	/>
+		<result column="DEV_USER_NM"				property="sDEV_USER_NM"	/>
+		<result column="IMP_RT"						property="sIMP_RT" />
+		<result column="IMP_RT_NM"					property="sIMP_RT_NM" />
+		<result column="BEFORE_PGM"					property="sBEFORE_PGM" />
+		<result column="AFTER_PGM"					property="sAFTER_PGM" />
+		<result column="PRJ_PLAN_STRT_DT"			property="sPRJ_PLAN_STRT_DT" />
+		<result column="PRJ_PLAN_END_DT"			property="sPRJ_PLAN_END_DT"	/>
+		<result column="PRJ_DEV_STRT_DT"			property="sPRJ_DEV_STRT_DT"	/>
+		<result column="PRJ_DEV_END_DT"				property="sPRJ_DEV_END_DT" />
+		<result column="TEST_PLAN_STRT_DT"			property="sTEST_PLAN_STRT_DT" />
+		<result column="TEST_PLAN_END_DT"			property="sTEST_PLAN_END_DT" />
+		<result column="TEST_DEV_STRT_DT"			property="sTEST_DEV_STRT_DT" />
+		<result column="TEST_DEV_END_DT"			property="sTEST_DEV_END_DT"	/>
+		<result column="PM_CNFM"					property="sPM_CNFM"	/>
+		<result column="CUS_CNFM"					property="sCUS_CNFM" />
+		<result column="DEV_CMPL_TYPE"				property="sDEV_CMPL_TYPE" />
+		<result column="PROGRESS_RT"				property="sPROGRESS_RT" />
+    </resultMap>
+    
+    <resultMap id="DV040102OVO" type="com.unique.model.Out.DV040102OVO">
+    	<result column="DOMAIN_ID"					property="sDOMAIN_ID" />
+		<result column="PRJT_ID"					property="sPRJT_ID"	/>
+		<result column="PRJT_STAGE"					property="sPRJT_STAGE" />
+		<result column="TOT_CNT"					property="sTOT_CNT"	/>
+		<result column="COMPLETE_CNT"				property="sCOMPLETE_CNT" />
+		<result column="DELAY_CNT"					property="sDELAY_CNT" />
+		<result column="CUR_WEEK_CNT"				property="sCUR_WEEK_CNT" />
+		<result column="NEXT_WEEK_CNT"				property="sNEXT_WEEK_CNT" />
+		<result column="PROGRESS_RT"				property="sPROGRESS_RT" />
+    </resultMap>
+    
+    <resultMap id="DV040103OVO" type="com.unique.model.Out.DV040103OVO">    
+	    <result column="ACTIVITY_ID"				property="sACTIVITY_ID" />
+		<result column="TASK_NM"					property="sTASK_NM" />
+		<result column="SEG_NM"						property="sSEG_NM" />
+		<result column="SEG_SUB_NM"					property="sSEG_SUB_NM" />
+		<result column="PRG_ID"						property="sPRG_ID" />
+		<result column="PRG_NM"						property="sPRG_NM" />
+		<result column="PRG_EXTN"					property="sPRG_EXTN" />
+		<result column="PRG_TYPE_NM"				property="sPRG_TYPE_NM" />
+		<result column="IMP_RT_NM"					property="sIMP_RT_NM" />
+		<result column="BEFORE_PGM"					property="sBEFORE_PGM" />
+		<result column="AFTER_PGM"					property="sAFTER_PGM" />
+		<result column="PRJ_PLAN_STRT_DT"			property="sPRJ_PLAN_STRT_DT" />
+		<result column="PRJ_PLAN_END_DT"			property="sPRJ_PLAN_END_DT" />
+		<result column="PRJ_DEV_STRT_DT"			property="sPRJ_DEV_STRT_DT" />
+		<result column="PRJ_DEV_END_DT"				property="sPRJ_DEV_END_DT" />
+		<result column="TEST_PLAN_STRT_DT"			property="sTEST_PLAN_STRT_DT" />
+		<result column="TEST_PLAN_END_DT"			property="sTEST_PLAN_END_DT" />
+		<result column="TEST_DEV_STRT_DT"			property="sTEST_DEV_STRT_DT" />
+		<result column="TEST_DEV_END_DT"			property="sTEST_DEV_END_DT" />
+		<result column="PM_CNFM"					property="sPM_CNFM" />
+		<result column="CUS_CNFM"					property="sCUS_CNFM" />
+		<result column="DEV_USER_NM"				property="sDEV_USER_NM" />
+		<result column="PROGRESS_RT"				property="sPROGRESS_RT" />
+	</resultMap>
+
+	<select id="DV040111" parameterType="com.unique.model.In.DV040101IVO"  resultMap="DV040101OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , A.PRJT_STAGE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD
+			         WHERE  DOMAIN_ID = A.DOMAIN_ID
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE A.PRJT_ID END)
+			         AND    CODE_TYPE = 'PJST'
+			         AND    CODE      = A.PRJT_STAGE)              PRG_STAGE_NM
+			      ,	CONCAT(B.TASK_ID,
+					       CONCAT(CASE WHEN B.SEG_ID = '' THEN '' ELSE '.' END,
+					               CONCAT(B.SEG_ID, CONCAT(CASE WHEN B.SEG_SUB_ID = '' THEN '' ELSE '.' END,
+					              B.SEG_SUB_ID))))                 ACTIVITY_ID
+			      , B.TASK_ID
+			      , B.SEG_ID
+			      , B.SEG_SUB_ID
+			      , A.TASK_NM
+			      , B.PRG_ID
+			      , B.PRG_NM
+			      , B.PRG_EXTN
+			      , B.PRG_TYPE
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PRGT'
+			         AND    CODE      = B.PRG_TYPE)                PRG_TYPE_NM
+			      , B.DEV_USER_ID
+			      , ( SELECT USER_NM FROM   MEM_INFO
+			          WHERE  DOMAIN_ID = B.DOMAIN_ID
+			          AND USER_ID = B.DEV_USER_ID )                DEV_USER_NM
+			      , B.IMP_RT
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID
+			         AND    PRJT_ID   = (CASE WHEN #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PGIM'
+			         AND    CODE      = B.IMP_RT)                  IMP_RT_NM
+			      , B.BEFORE_PGM
+			      , B.AFTER_PGM
+			      , B.PRJ_PLAN_STRT_DT
+			      , B.PRJ_PLAN_END_DT
+			      , B.PRJ_DEV_STRT_DT
+			      , B.PRJ_DEV_END_DT
+			      , B.TEST_PLAN_STRT_DT
+			      , B.TEST_PLAN_END_DT
+			      , B.TEST_DEV_STRT_DT
+			      , B.TEST_DEV_END_DT
+			      , IFNULL(B.PM_CNFM, 'N')                         PM_CNFM
+			      , IFNULL(B.CUS_CNFM, 'N')                        CUS_CNFM
+			      , #{sDEV_CMPL_TYPE}                              DEV_CMPL_TYPE
+			      , B.PROGRESS_RT 								   PROGRESS_RT
+			FROM    PRJT_DEV_SCHL B
+			      , PRJT_TASK_INFO A
+			WHERE   B.DOMAIN_ID       = #{sDOMAIN_ID}
+			AND     B.PRJT_ID         = #{sPRJT_ID}
+			AND     B.TASK_ID         LIKE CONCAT('%', #{sTASK_ID}, '%')
+			AND     B.SEG_ID          LIKE CONCAT('%', #{sSEG_ID}, '%')
+		    AND     B.SEG_SUB_ID      LIKE CONCAT('%', #{sSEG_SUB_ID}, '%')
+			AND     B.PRG_TYPE        LIKE CONCAT('%', #{sPRG_TYPE}, '%')
+			AND     B.DEV_USER_ID     LIKE CONCAT('%', #{sDEV_USER_ID}, '%')
+			AND     B.DOMAIN_ID       = A.DOMAIN_ID
+			AND     B.PRJT_ID         = A.PRJT_ID
+			AND     B.TASK_ID         = A.TASK_ID
+			AND     A.PRJT_STAGE      LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+			AND     B.PRJ_DEV_END_DT  = (CASE WHEN #{sDEV_CMPL_TYPE} = '1' THEN 
+			                                     CASE WHEN B.PRJ_DEV_END_DT = '' THEN '1'
+			                                     ELSE B.PRJ_DEV_END_DT END
+			                             ELSE B.PRJ_DEV_END_DT END)
+			AND     B.TEST_DEV_END_DT = (CASE WHEN #{sDEV_CMPL_TYPE} = '2' THEN 
+			                                     CASE WHEN B.TEST_DEV_END_DT = '' THEN '2'
+			                                     ELSE B.TEST_DEV_END_DT END
+			                             ELSE B.TEST_DEV_END_DT END); 
+		]]>
+	</select>
+
+	<select id="DV040115" parameterType="com.unique.model.In.DV040101IVO"  resultMap="DV040102OVO">
+		<![CDATA[
+			SELECT  B.DOMAIN_ID
+			      , B.PRJT_ID
+			      , A.PRJT_STAGE
+			      , COUNT(B.PRJT_ID)                                               TOT_CNT
+	              , SUM(CASE WHEN B.PRJ_DEV_END_DT = '' THEN 0
+	                    ELSE 1 END)                                                COMPLETE_CNT
+	              , SUM(CASE WHEN B.PRJ_PLAN_END_DT <= CURDATE() + 0
+								AND B.PRJ_DEV_END_DT = ''
+	                         	THEN 1
+	                    ELSE 0 END)                                                DELAY_CNT
+	              , SUM(CASE WHEN CONCAT(SUBSTRING(B.PRJ_PLAN_STRT_DT, 1, 4), WEEK(CURDATE()))
+	                            BETWEEN CONCAT(SUBSTRING(B.PRJ_PLAN_STRT_DT, 1, 4), WEEK(B.PRJ_PLAN_STRT_DT))
+                                AND CONCAT(SUBSTRING(B.PRJ_PLAN_STRT_DT, 1, 4), WEEK(B.PRJ_PLAN_END_DT))
+	                            THEN 1 
+	                    ELSE 0 END)                                                CUR_WEEK_CNT
+	              , SUM(CASE WHEN CONCAT(SUBSTRING(B.PRJ_PLAN_STRT_DT, 1, 4), WEEK(CURDATE()) + 1) 
+	                            BETWEEN CONCAT(SUBSTRING(B.PRJ_PLAN_STRT_DT, 1, 4), WEEK(B.PRJ_PLAN_STRT_DT))
+                                AND CONCAT(SUBSTRING(B.PRJ_PLAN_STRT_DT, 1, 4), WEEK(B.PRJ_PLAN_END_DT))
+	                            THEN 1 
+	                    ELSE 0 END)                                                NEXT_WEEK_CNT
+	              , ROUND(SUM(CASE WHEN B.PRJ_DEV_END_DT = '' THEN 0
+	                          ELSE 1 END)  / COUNT(B.PRJT_ID), 2)*100   	       PROGRESS_RT
+			FROM    PRJT_DEV_SCHL B
+			      , PRJT_TASK_INFO A
+			WHERE   B.DOMAIN_ID       = #{sDOMAIN_ID}
+			AND     B.PRJT_ID         = #{sPRJT_ID}
+			AND     A.PRJT_STAGE      LIKE CONCAT('%', #{sPRJT_STAGE}, '%')
+			AND     B.TASK_ID         LIKE CONCAT('%', #{sTASK_ID}, '%')
+			AND     B.SEG_ID          LIKE CONCAT('%', #{sSEG_ID}, '%')
+			AND     B.SEG_SUB_ID      LIKE CONCAT('%', #{sSEG_SUB_ID}, '%')
+			AND     B.PRG_TYPE        LIKE CONCAT('%', #{sPRG_TYPE}, '%')
+			AND     B.DEV_USER_ID     LIKE CONCAT('%', #{sDEV_USER_ID}, '%')
+			AND     B.DOMAIN_ID       = A.DOMAIN_ID
+			AND     B.PRJT_ID         = A.PRJT_ID
+			AND     B.TASK_ID         = A.TASK_ID
+			AND     B.PRJ_DEV_END_DT  = (CASE WHEN #{sDEV_CMPL_TYPE} = '1' THEN 
+			                                     CASE WHEN B.PRJ_DEV_END_DT = '' THEN '1'
+			                                     ELSE B.PRJ_DEV_END_DT END
+			                             ELSE B.PRJ_DEV_END_DT END)
+			AND     B.TEST_DEV_END_DT = (CASE WHEN #{sDEV_CMPL_TYPE} = '2' THEN 
+			                                     CASE WHEN B.TEST_DEV_END_DT = '' THEN '2'
+			                                     ELSE B.TEST_DEV_END_DT END
+			                             ELSE B.TEST_DEV_END_DT END)
+			GROUP BY B.DOMAIN_ID, B.PRJT_ID, A.PRJT_STAGE;
+		]]>
+	</select>
+
+	<update id="DV040131" parameterType="com.unique.model.In.DV040101IVO">
+		<![CDATA[
+			UPDATE  PRJT_DEV_SCHL
+			SET     PRJ_DEV_STRT_DT   = #{sPRJ_DEV_STRT_DT}
+			      , PRJ_DEV_END_DT    = #{sPRJ_DEV_END_DT}
+			      , TEST_DEV_STRT_DT  = #{sTEST_DEV_STRT_DT}
+			      , TEST_DEV_END_DT   = #{sTEST_DEV_END_DT}
+			      , CUS_CNFM          = #{sCUS_CNFM}
+			      , PM_CNFM           = #{sPM_CNFM}
+			      , PROGRESS_RT		  = #{sPROGRESS_RT}
+			WHERE   DOMAIN_ID  = #{sDOMAIN_ID} 
+			AND     PRJT_ID    = #{sPRJT_ID} 
+			AND     TASK_ID    = #{sTASK_ID} 
+			AND     PRG_ID     = #{sPRG_ID};
+		]]>
+	</update>
+	
+	<select id="DV040154" parameterType="com.unique.model.In.DV040101IVO"  resultMap="DV040103OVO">
+		<![CDATA[
+			SELECT  CONCAT(B.TASK_ID, '.', B.SEG_ID, '.', B.SEG_SUB_ID)    ACTIVITY_ID
+			      , IFNULL((SELECT TASK_NM
+			                FROM   PRJT_TASK_INFO A
+			                WHERE  B.DOMAIN_ID  = A.DOMAIN_ID
+			                AND    B.PRJT_ID    = A.PRJT_ID
+			                AND    B.TASK_ID    = A.TASK_ID), '')          TASK_NM
+			      , IFNULL((SELECT SEG_NM
+			                FROM   PRJT_SEG_INFO A
+			                WHERE  B.DOMAIN_ID  = A.DOMAIN_ID
+			                AND    B.PRJT_ID    = A.PRJT_ID
+			                AND    B.TASK_ID    = A.TASK_ID
+			                AND    B.SEG_ID     = A.SEG_ID), '')           SEG_NM
+			      , IFNULL((SELECT SEG_SUB_NM
+			                FROM   PRJT_SEG_SUB_INFO A
+			                WHERE  B.DOMAIN_ID  = A.DOMAIN_ID
+			                AND    B.PRJT_ID    = A.PRJT_ID
+			                AND    B.TASK_ID    = A.TASK_ID
+			                AND    B.SEG_ID     = A.SEG_ID
+			                AND    B.SEG_SUB_ID = A.SEG_SUB_ID), '')       SEG_SUB_NM
+			      , B.PRG_ID
+			      , B.PRG_NM
+			      , B.PRG_EXTN
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID
+			         AND    PRJT_ID   = (CASE WHEN  #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PRGT'
+			         AND    CODE      = B.PRG_TYPE)                        PRG_TYPE_NM
+			      , (SELECT CODE_NAME FROM PMS_COMM_CD
+			         WHERE  DOMAIN_ID = B.DOMAIN_ID
+			         AND    PRJT_ID   = (CASE WHEN  #{sCODE_SETTING} = '1' THEN '00000000' ELSE B.PRJT_ID END)
+			         AND    CODE_TYPE = 'PGIM'
+			         AND    CODE      = B.IMP_RT)                          IMP_RT_NM
+			      , B.BEFORE_PGM
+			      , B.AFTER_PGM
+			      , B.PRJ_PLAN_STRT_DT
+			      , B.PRJ_PLAN_END_DT
+			      , B.PRJ_DEV_STRT_DT
+			      , B.PRJ_DEV_END_DT
+			      , B.TEST_PLAN_STRT_DT
+			      , B.TEST_PLAN_END_DT
+			      , B.TEST_DEV_STRT_DT
+			      , B.TEST_DEV_END_DT
+			      , IFNULL(B.PM_CNFM, 'N')                                 PM_CNFM
+			      , IFNULL(B.CUS_CNFM, 'N')                                CUS_CNFM
+			      , ( SELECT USER_NM FROM   MEM_INFO
+			          WHERE  DOMAIN_ID = B.DOMAIN_ID
+			          AND USER_ID = B.DEV_USER_ID )                        DEV_USER_NM
+			      , B.PROGRESS_RT                                          PROGRESS_RT
+			FROM    PRJT_DEV_SCHL B
+			WHERE   B.DOMAIN_ID       = #{sDOMAIN_ID}
+			AND     B.PRJT_ID         = #{sPRJT_ID};
+		]]>
+	</select>
+
+</mapper>
+
+
+
+
